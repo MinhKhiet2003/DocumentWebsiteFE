@@ -1,0 +1,42 @@
+.news-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  
+  .news-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .news-item {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding: 10px;
+    display: flex; /* Sử dụng flexbox để căn chỉnh ảnh và nội dung */
+    align-items: center; /* Căn chỉnh các item theo chiều dọc */
+  }
+  
+  .news-image {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 15px; /* Khoảng cách giữa ảnh và nội dung */
+  }
+  
+  .news-content {
+    /*  Để nội dung chiếm phần còn lại của item */
+  }
+  
+  .news-title {
+    margin-top: 0;
+  }
+  
+  .news-description {
+    color: #555;
+  }
+  
+  .news-date {
+    font-style: italic;
+    color: #777;
+  }

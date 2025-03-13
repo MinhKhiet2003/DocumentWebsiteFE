@@ -1,0 +1,106 @@
+.login-register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  background: var(--background-color);
+}
+
+/* Khung chứa form */
+.auth-container {
+  padding: 30px;
+  width: 400px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề form */
+.auth-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--primary-color);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Các nhóm form */
+.auth-container .form-group {
+  margin-bottom: 15px;
+}
+
+.auth-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.auth-container .form-group input {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+/* Nhóm chứa input password với icon */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #999;
+}
+
+/* Group chứa nút bấm */
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.auth-container .btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-container .btn:not(:last-child) {
+  margin-right: 10px;
+}
+
+.auth-container .btn.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.auth-container .btn.btn-primary:hover {
+  background-color: #27ae60;
+}
+
+.auth-container .btn.btn-secondary {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.auth-container .btn.btn-secondary:hover {
+  background-color: #2980b9;
+}

@@ -1,0 +1,58 @@
+:root {
+    --primary-color: #2ecc71; /* Màu xanh lá */
+    --secondary-color: #3498db; /* Màu xanh */
+    --accent-color: #e74c3c; /* Màu đỏ */
+    --background-color: #f4f4f4; /* Màu nền */
+    --background-color-hover: #cbf7dd; /* Màu nền hover */
+    --text-color: #2c3e50; /* Màu chữ */
+
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+  }
+  
+  .main-content {
+      
+      margin-top: 100px;
+      padding: 10px 0;
+      /* margin-left: 340px;
+      height: 100vh;
+      width: calc(100% - 340px); */
+    }
+  
+  @media (max-width: 768px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .sidebar {
+      display: none; /* Hide sidebar on smaller screens */
+    }
+  
+    .content {
+      padding: 10px;
+    }
+  
+    .cards {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust card width */
+    }
+  
+    .tab-navigation a {
+      padding: 8px 0;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .tab-navigation a {
+      font-size: 12px;
+    }
+  
+    .cards {
+      grid-template-columns: 1fr; /* Single column on small screens */
+    }
+  }
