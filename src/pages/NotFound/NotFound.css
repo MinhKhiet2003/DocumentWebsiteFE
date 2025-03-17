@@ -4,7 +4,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Chiều cao của container bằng chiều cao màn hình */
     text-align: center; /* Căn giữa văn bản */
     padding: 0 20px; /* Thêm padding cho các cạnh */
     background-color: #f7fafc; /* Màu nền */

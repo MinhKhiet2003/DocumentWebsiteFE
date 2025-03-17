@@ -7,19 +7,37 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Kế hoạch bài dạy",
-      subItems: ["Chương trình học", "Lịch dạy", "Tài liệu tham khảo"]
+      path: "/lesson-plans",
+      subItems: [
+        // { title: "Chương trình học", path: "/curriculum" },
+        // { title: "Lịch dạy", path: "/schedule" },
+        // { title: "Tài liệu tham khảo", path: "/references" },
+      ],
     },
     {
       title: "Game",
-      subItems: ["Game giáo dục", "Game giải trí"]
+      path: "/games",
+      subItems: [
+        // { title: "Game giáo dục", path: "/educational-games" },
+        // { title: "Game giải trí", path: "/entertainment-games" },
+      ],
     },
     {
       title: "Video thí nghiệm",
-      subItems: ["Video 1", "Video 2", "Video 3"]
+      path: "/experiment-videos",
+      subItems: [
+        // { title: "Video 1", path: "/video-1" },
+        // { title: "Video 2", path: "/video-2" },
+        // { title: "Video 3", path: "/video-3" },
+      ],
     },
     {
       title: "Bài tập",
-      subItems: ["Bài tập về nhà", "Bài tập nhóm"]
+      path: "/exercises",
+      subItems: [
+        // { title: "Bài tập về nhà", path: "/homework" },
+        // { title: "Bài tập nhóm", path: "/group-work" },
+      ],
     },
   ];
 
@@ -38,15 +56,19 @@ const Sidebar = () => {
         <ul className="list-group">
           {menuItems.map((item, index) => (
             <li className="list-group-item" key={index}>
-              <div className="menu-item" onClick={() => toggleMenu(index)}>
+              {/* Link cho mục menu chính */}
+              <Link to={item.path} className="menu-item" onClick={() => toggleMenu(index)}>
                 {item.title}
-              </div>
+              </Link>
+              {/* Submenu */}
               <ul className={`sub-menu ${expanded === index ? 'open' : ''}`}>
-                {item.subItems && item.subItems.map((subItem, subIndex) => (
-                  <li className="sub-menu-item" key={subIndex}>
-                    {subItem}
-                  </li>
-                ))}
+                {item.subItems &&
+                  item.subItems.map((subItem, subIndex) => (
+                    <li className="sub-menu-item" key={subIndex}>
+                      {/* Link cho mục submenu */}
+                      <Link to={subItem.path}>{subItem.title}</Link>
+                    </li>
+                  ))}
               </ul>
             </li>
           ))}

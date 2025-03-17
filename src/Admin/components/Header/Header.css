@@ -1,0 +1,34 @@
+.header--admin {
+    position: fixed;
+    width: 74%;
+    margin-left: 285px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-icon--admin {
+    font-size: 24px;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification-icon,
+  .user-avatar {
+    font-size: 20px;
+    margin-left: 15px;
+    cursor: pointer;
+  }
