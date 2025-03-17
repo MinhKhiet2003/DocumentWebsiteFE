@@ -1,12 +1,11 @@
 :root {
-    --primary-color: #2ecc71; /* Màu xanh lá */
-    --secondary-color: #3498db; /* Màu xanh */
-    --accent-color: #e74c3c; /* Màu đỏ */
-    --background-color: #f4f4f4; /* Màu nền */
-    --background-color-hover: #cbf7dd; /* Màu nền hover */
-    --text-color: #2c3e50; /* Màu chữ */
-
-  }
+  --primary-color: #27ae60;
+  --secondary-color: #2980b9;
+  --accent-color: #e74c3c; 
+  --background-color: #f9fafb;
+  --background-color-hover: #e1f7d5; 
+  --text-color: #2c3e50; 
+}
   
   body {
     font-family: Arial, sans-serif;

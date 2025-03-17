@@ -1,42 +1,121 @@
 .news-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    text-align: left;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.news-container h2 {
+  font-size: 2em;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color);
+  display: inline-block;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
   }
-  
-  .news-list {
-    list-style: none;
-    padding: 0;
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
+}
+
+.news-container h1, .news-container h2 {
+  animation: slideInFromLeft 1s ease-out;
+}
+.news-list {
+  list-style: none;
+  padding: 0;
+}
+
+.news-item {
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  background-color: #fff;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.news-image {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.news-item:hover .news-image {
+  transform: scale(1.05);
+}
+
+.news-content {
+  flex: 1;
+}
+
+.news-title {
+  font-size: 1.5em;
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.news-item:hover .news-title {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.news-description {
+  font-size: 1em;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.news-date {
+  font-size: 0.9em;
+  color: #777;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
   .news-item {
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-    padding: 10px;
-    display: flex; /* Sử dụng flexbox để căn chỉnh ảnh và nội dung */
-    align-items: center; /* Căn chỉnh các item theo chiều dọc */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  
+
   .news-image {
-    width: 200px;
-    height: 150px;
-    object-fit: cover;
-    margin-right: 15px; /* Khoảng cách giữa ảnh và nội dung */
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 15px;
   }
-  
-  .news-content {
-    /*  Để nội dung chiếm phần còn lại của item */
-  }
-  
+
   .news-title {
-    margin-top: 0;
+    font-size: 1.3em;
   }
-  
+
   .news-description {
-    color: #555;
+    font-size: 0.95em;
   }
-  
-  .news-date {
-    font-style: italic;
-    color: #777;
-  }
+}

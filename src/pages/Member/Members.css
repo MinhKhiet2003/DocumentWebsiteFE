@@ -1,62 +1,104 @@
 .title {
   text-align: center;
-  margin: 30px 0; 
-  font-size: 28px; 
-  color: #333;
+  margin: 40px 0;
+  font-size: 36px;
+  color: #2c3e50;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-
 .team-container {
-  max-width: 1000px; 
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 15px; 
+  padding: 0 20px;
 }
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
 }
-
 
 .team-member {
   background-color: #fff;
-  border-radius: 8px; 
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); 
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-align: center;
-  padding: 15px; 
+  padding: 20px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
 }
-
 
 .team-member:hover {
-  transform: translateY(-8px); 
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
-
 
 .member-photo {
-  width: 70%; 
-  height: auto;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  margin-bottom: 15px; 
+  margin-bottom: 20px;
+  object-fit: cover;
+  border: 4px solid var(--primary-color);
+  transition: border-color 0.3s ease;
 }
 
+.team-member:hover .member-photo {
+  border-color: var(--secondary-color);
+}
 
 .member-name {
-  font-size: 20px; 
-  color: #333;
-  margin-bottom: 8px; 
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .member-role {
-  font-size: 16px; 
-  color: #777;
-  margin-bottom: 8px; 
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-weight: bold;
+
 }
 
 .member-description {
-  font-size: 14px; 
+  font-size: 16px;
   color: #555;
+  line-height: 1.6;
+}
+
+/* Hiệu ứng hover cho background */
+.team-member::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--secondary-color), rgb(255, 0, 247));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.team-member:hover::before {
+  opacity: 0.1;
+}
+
+/* Hiệu ứng hover cho text */
+.team-member:hover .member-name,
+.team-member:hover .member-role,
+.team-member:hover .member-description {
+  color: #2c3e50;
+}
+
+/* Hiệu ứng hover cho shadow */
+.team-member:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
