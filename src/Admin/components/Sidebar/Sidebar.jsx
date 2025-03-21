@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -7,18 +8,25 @@ const Sidebar = () => {
     {
       title: "Thống kê",
       subItems: [],
+      path: "/admin",
     },
     {
       title: "Quản lý người dùng",
       subItems: [],
+      path: "/admin/user-management",
     },
     {
       title: "Quản lý tài liệu",
-      subItems: ["Kế hoạch bài dạy", "Game", "Video thí nghiệm"],
+      subItems: [
+        { title: "Kế hoạch bài dạy", path: "/admin/lesson-plans" },
+        { title: "Game", path: "/admin/games" },
+        { title: "Video thí nghiệm", path: "/admin/experiment-videos" },
+      ],
     },
     {
       title: "Quản lý bài tập",
       subItems: [],
+      path: "/admin/exercise-management",
     },
   ];
 
@@ -39,13 +47,17 @@ const Sidebar = () => {
         {menuItems.map((item, index) => (
           <li key={index} className="menu-item--admin">
             <div className="menu-title" onClick={() => toggleMenu(index)}>
-              {item.title}
+              {item.subItems.length > 0 ? (
+                item.title
+              ) : (
+                <Link to={item.path}>{item.title}</Link>
+              )}
             </div>
             {item.subItems.length > 0 && (
               <ul className={`submenu ${expanded === index ? "open" : ""}`}>
                 {item.subItems.map((subItem, subIndex) => (
                   <li key={subIndex} className="submenu-item">
-                    {subItem}
+                    <Link to={subItem.path}>{subItem.title}</Link>
                   </li>
                 ))}
               </ul>
