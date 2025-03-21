@@ -6,7 +6,8 @@ const CustomFormLoginRegister = ({
   isRegister,
   contentButton1,
   contentButton2,
-  handleOnSubmit
+  handleOnSubmit,
+  handleSwitchClick, 
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -27,12 +28,12 @@ const CustomFormLoginRegister = ({
           {isRegister && (
             <div className="form-group">
               <label htmlFor="nickname">Username:</label>
-              <input type="text" id="nickname" className="form-control" required />
+              <input type="text" id="nickname" name="nickname" className="form-control" required />
             </div>
           )}
           <div className="form-group">
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" className="form-control" required />
+            <input type="email" id="email" name="usernameOrEmail" className="form-control" required />
           </div>
           <div className="form-group password-group">
             <label htmlFor="password">Mật khẩu:</label>
@@ -40,6 +41,7 @@ const CustomFormLoginRegister = ({
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
+                name="password"
                 className="form-control"
                 required
               />
@@ -55,6 +57,7 @@ const CustomFormLoginRegister = ({
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   id="confirm-password"
+                  name="confirmPassword"
                   className="form-control"
                   required
                 />
@@ -68,7 +71,11 @@ const CustomFormLoginRegister = ({
             <button type="submit" className="btn btn-primary">
               {contentButton1}
             </button>
-            <button type="button" className="btn btn-secondary">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleSwitchClick} 
+            >
               {contentButton2}
             </button>
           </div>

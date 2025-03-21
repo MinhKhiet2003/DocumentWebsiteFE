@@ -12,11 +12,11 @@ const Navbar = () => {
   const [userInfo, setUserInfo] = useState({
     username: '',
     avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+    role: '', 
   });
-  const [showDropdown, setShowDropdown] = useState(false); // State để điều khiển dropdown
+  const [showDropdown, setShowDropdown] = useState(false); 
   const dropdownRef = useRef(null); // Ref để xử lý click bên ngoài dropdown
 
-  // Hàm để gọi API lấy thông tin profile
   const fetchProfile = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -37,6 +37,7 @@ const Navbar = () => {
       setUserInfo({
         username: data.nickname,
         avatar: data.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+        role: data.role, 
       });
       setIsLoggedIn(true);
     } catch (error) {
@@ -66,7 +67,6 @@ const Navbar = () => {
     }
   }, []);
 
-  // Hàm xử lý đăng xuất
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
@@ -75,6 +75,7 @@ const Navbar = () => {
     setUserInfo({
       username: '',
       avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+      role: '', 
     });
     window.location.href = '/';
   };
@@ -105,7 +106,10 @@ const Navbar = () => {
             </button>
             <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
               <li><Link className="dropdown-item" to="/profile">Thông tin cá nhân</Link></li>
-              <li><Link className="dropdown-item" to="/admin">Truy cập trang quản trị</Link></li>
+              {/* Hiển thị mục "Truy cập trang quản trị" nếu role là admin hoặc teacher */}
+              {(userInfo.role === 'admin' || userInfo.role === 'teacher') && (
+                <li><Link className="dropdown-item" to="/admin">Truy cập trang quản trị</Link></li>
+              )}
               <li><hr className="dropdown-divider" /></li>
               <li><Link className="dropdown-item" to="#" onClick={handleLogout}>Đăng xuất</Link></li>
             </ul>
