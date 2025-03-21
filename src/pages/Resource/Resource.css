@@ -130,3 +130,12 @@
     font-size: 0.8rem;
   }
 }
+/* Style cho liên kết card */
+.card-link {
+  text-decoration: none; /* Bỏ gạch chân */
+  color: inherit; /* Kế thừa màu chữ */
+}
+
+.card-link:hover {
+  text-decoration: none; /* Đảm bảo không có gạch chân khi hover */
+}

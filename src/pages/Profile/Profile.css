@@ -47,12 +47,14 @@
     border-radius: 5px;
     text-decoration: none;
     color: #fff;
-    background-color: #007bff;
+    font-weight: bold;
+    background-color: var(--primary-color);
     transition: background-color 0.3s;
   }
   
   .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
   }
 
 .profile-actions{
