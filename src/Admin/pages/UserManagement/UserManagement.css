@@ -1,0 +1,39 @@
+.user-management {
+  padding: 10px;
+  margin-top: 100px;
+  margin-left: 285px;
+}
+
+.user-management h1 {
+  margin-bottom: 20px;
+}
+
+.user-management .MuiTable-root {
+  width: 100%;
+  table-layout: auto; 
+}
+
+.user-management .MuiTableCell-root {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.user-management .MuiTableCell-id {
+  width: 5%; 
+}
+
+.user-management .MuiTableCell-actions {
+  width: 150px; 
+}
+
+.user-management .MuiButton-root {
+  margin: 5px;
+}
+
+.user-management img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover; 
+}

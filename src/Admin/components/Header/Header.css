@@ -1,6 +1,6 @@
 .header--admin {
     position: fixed;
-    width: 74%;
+    width: calc(100% - 360px);
     margin-left: 285px;
     display: flex;
     justify-content: space-between;
@@ -8,6 +8,7 @@
     background-color: #fff;
     padding: 15px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
   }
   
   .header-left {

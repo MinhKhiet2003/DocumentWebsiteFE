@@ -8,6 +8,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  z-index: 10000;
 }
 
 /* Header của sidebar */
@@ -86,6 +87,16 @@
   font-size: 14px;
   color: #7f8c8d;
   padding: 10px;
+}
+
+/* Loại bỏ gạch chân và đảm bảo màu chữ đồng nhất */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu-item--admin a {
+  color: inherit;
 }
 
 /* Responsive Design */

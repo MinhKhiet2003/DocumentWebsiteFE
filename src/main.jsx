@@ -25,9 +25,12 @@ import LessonPlansAdmin from "./Admin/pages/DocumentManagement/lesson-plans/less
 import UserManagement from "./Admin/pages/UserManagement/UserManagement";
 import GamesManagement from "./Admin/pages/DocumentManagement/GamesManagement/GamesManagement";
 import VideosManagement from "./Admin/pages/DocumentManagement/VideosManagement/VideosManagement";
+import CategoriesManagement from "./Admin/pages/CategoriesManagement/CategoriesManagement";
+import { AuthProvider } from "./Auth/AuthContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+    <AuthProvider>
       <Routes>
       <Route path="/" element={<App />}>
         <Route path="home" element={<Home />} />
@@ -53,7 +56,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/admin/user-management" element={<UserManagement />} />
             <Route path="/admin/lesson-plans" element={<LessonPlansAdmin />} />
             <Route path="/admin/experiment-videos" element={<VideosManagement />} />
+            <Route path="/admin/categories" element={<CategoriesManagement />} />
       </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

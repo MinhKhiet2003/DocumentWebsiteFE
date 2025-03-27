@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react'; 
 import CustomFormLoginRegister from '../../components/LoginRegister';
+import { AuthContext } from '../../Auth/AuthContext'; 
 
 const Login = () => {
-  const [isRegister, setIsRegister] = useState(false); // State để quản lý form hiện tại
+  const [isRegister, setIsRegister] = useState(false);
+  const { login } = useContext(AuthContext); // Sử dụng hàm login từ AuthContext
 
-  // Hàm chuyển đổi giữa đăng nhập và đăng ký
   const handleSwitchClick = () => {
-    setIsRegister((prev) => !prev); // Đảo ngược giá trị của isRegister
+    setIsRegister((prev) => !prev);
   };
 
-  // Hàm xử lý khi submit form đăng nhập
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,7 +35,11 @@ const Login = () => {
 
       const data = await response.json();
       console.log('Đăng nhập thành công:', data);
-      localStorage.setItem('token', data.token);
+
+      // Gọi hàm login từ AuthContext để lưu token và gọi API /profile
+      login(data.token);
+
+      // Chuyển hướng về trang chủ
       window.location.href = '/';
     } catch (error) {
       console.error('Lỗi đăng nhập:', error);
@@ -43,7 +47,6 @@ const Login = () => {
     }
   };
 
-  // Hàm xử lý khi submit form đăng ký
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,7 +75,7 @@ const Login = () => {
       const data = await response.json();
       console.log('Đăng ký thành công:', data);
       alert('Đăng ký thành công! Vui lòng đăng nhập.');
-      setIsRegister(false); 
+      setIsRegister(false);
     } catch (error) {
       console.error('Lỗi đăng ký:', error);
       alert('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.');
@@ -81,11 +84,11 @@ const Login = () => {
 
   return (
     <CustomFormLoginRegister
-      title={isRegister ? 'Đăng ký' : 'Đăng nhập'} 
+      title={isRegister ? 'Đăng ký' : 'Đăng nhập'}
       isRegister={isRegister}
-      contentButton1={isRegister ? 'Đăng ký' : 'Đăng nhập'} 
+      contentButton1={isRegister ? 'Đăng ký' : 'Đăng nhập'}
       contentButton2={isRegister ? 'Đăng nhập' : 'Đăng ký'}
-      handleOnSubmit={isRegister ? handleRegisterSubmit : handleLoginSubmit} 
+      handleOnSubmit={isRegister ? handleRegisterSubmit : handleLoginSubmit}
       handleSwitchClick={handleSwitchClick}
     />
   );

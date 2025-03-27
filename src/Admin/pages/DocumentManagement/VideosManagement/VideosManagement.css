@@ -1,0 +1,52 @@
+.videos-management {
+  padding: 20px;
+  margin-top: 100px;
+  margin-left: 285px;
+}
+
+.videos-management h1 {
+  margin-bottom: 20px;
+}
+
+.videos-management .MuiButton-root {
+  margin-right: 10px;
+}
+
+.videos-management a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.videos-management a:hover {
+  text-decoration: underline;
+}
+
+.videos-management .MuiTable-root {
+  width: 100%;
+  table-layout: auto;
+}
+
+.videos-management .MuiTableCell-root {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; 
+}
+
+.videos-management .MuiTableCell-root.action-cell {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.videos-management .MuiButton-root.action-button {
+  min-width: 70px;
+  padding: 6px 12px;
+  margin: 0;
+}
+
+.videos-management .MuiTableBody-root .MuiTableRow-root .MuiTableCell-root:not(.action-cell) {
+  vertical-align: middle;
+}

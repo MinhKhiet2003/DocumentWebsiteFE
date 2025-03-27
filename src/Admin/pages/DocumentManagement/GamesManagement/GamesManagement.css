@@ -1,0 +1,54 @@
+.games-management {
+  padding: 20px 0px ;
+  margin-top: 100px;
+  margin-left: 285px;
+}
+
+.games-management h1 {
+  margin-bottom: 20px;
+}
+
+.games-management .MuiButton-root {
+  margin-right: 10px;
+}
+
+.games-management a {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+.games-management a:hover {
+  text-decoration: underline;
+}
+
+/* CSS cho bảng và các nút hành động */
+.games-management .MuiTable-root {
+  width: 100%;
+  table-layout: auto;
+}
+
+.games-management .MuiTableCell-root {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.games-management .MuiTableCell-root.action-cell {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.games-management .MuiButton-root.action-button {
+  min-width: 70px;
+  padding: 6px 12px;
+  margin: 0;
+}
+
+/* Đảm bảo các ô khác không bị ảnh hưởng */
+.games-management .MuiTableBody-root .MuiTableRow-root .MuiTableCell-root:not(.action-cell) {
+  vertical-align: middle;
+}

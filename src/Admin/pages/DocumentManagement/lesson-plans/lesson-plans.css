@@ -1,0 +1,52 @@
+.lesson-plans-admin{
+    margin-top: 100px;
+    margin-left: 285px;
+    padding: 20px;
+}
+  
+  .lesson-plans-admin h1 {
+    margin-bottom: 20px;
+  }
+  
+  .lesson-plans-admin .MuiButton-root {
+    margin-right: 10px;
+  }
+  
+  .lesson-plans-admin a {
+    color: #1976d2;
+    text-decoration: none;
+  }
+  
+  .lesson-plans-admin a:hover {
+    text-decoration: underline;
+  }
+  
+  .lesson-plans-admin .MuiTable-root {
+    width: 100%;
+    table-layout: auto;
+  }
+  
+  .lesson-plans-admin .MuiTableCell-root {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px; 
+  }
+  
+  .lesson-plans-admin .MuiTableCell-root.action-cell {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px;
+    white-space: nowrap;
+    overflow: visible;
+  }
+  
+  .lesson-plans-admin .MuiButton-root.action-button {
+    min-width: 70px;
+    padding: 6px 12px;
+    margin: 0;
+  }
+  
+  .lesson-plans-admin .MuiTableBody-root .MuiTableRow-root .MuiTableCell-root:not(.action-cell) {
+    vertical-align: middle;
+  }
