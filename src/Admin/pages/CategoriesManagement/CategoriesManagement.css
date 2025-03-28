@@ -28,3 +28,23 @@
     flex: 1;
     height: 10px;
 }
+
+.select-container {
+    min-width: 200px;
+}
+
+.MuiFormControl-root {
+    min-width: 200px;
+}
+
+.MuiInputLabel-root {
+    top: -5px;
+    font-size: 14px;
+}
+
+.MuiSelect-root {
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+

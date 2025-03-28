@@ -28,7 +28,12 @@ const Sidebar = () => {
         { title: "Video thí nghiệm", path: "/admin/experiment-videos" },
       ],
     },
-    { title: "Quản lý bài tập", path: "/admin/exercise-management", subItems: [] },
+    { title: "Quản lý bài tập",
+      subItems: [
+        { title: "Hóa học đời sống", path: "/admin/chemistry-of-life" },
+        { title: "Truyện tranh hóa học", path: "/admin/chemistry-comics" },
+      ],
+     },
   ];
 
   const toggleMenu = (index) => {
