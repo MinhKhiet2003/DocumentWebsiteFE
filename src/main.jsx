@@ -26,6 +26,8 @@ import UserManagement from "./Admin/pages/UserManagement/UserManagement";
 import GamesManagement from "./Admin/pages/DocumentManagement/GamesManagement/GamesManagement";
 import VideosManagement from "./Admin/pages/DocumentManagement/VideosManagement/VideosManagement";
 import CategoriesManagement from "./Admin/pages/CategoriesManagement/CategoriesManagement";
+import LifeManagement from "./Admin/pages/ExerciseManagement/LifeManagement/LifeManagement";
+import ComicManagement from "./Admin/pages/ExerciseManagement/ComicManagement/ComicManagement";
 import { AuthProvider } from "./Auth/AuthContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -57,6 +59,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/admin/lesson-plans" element={<LessonPlansAdmin />} />
             <Route path="/admin/experiment-videos" element={<VideosManagement />} />
             <Route path="/admin/categories" element={<CategoriesManagement />} />
+            <Route path="/admin/chemistry-of-life" element={<LifeManagement />} />
+            <Route path="/admin/chemistry-comics" element={<ComicManagement />} />
+
       </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -1,53 +1,174 @@
-/* Căn giữa nội dung với Flexbox */
+:root {
+  --primary-color: #27ae60;
+  --secondary-color: #2980b9;
+  --accent-color: #e74c3c;
+  --background-color: #f9fafb;
+  --background-color-hover: #e1f7d5;
+  --text-color: #2c3e50;
+  --text-light: #7f8c8d;
+  --border-color: #ecf0f1;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .notfound-container {
-    display: flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--background-color);
+  padding: 2rem;
+}
+
+.notfound-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  background: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  line-height: 1;
+}
+
+.error-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 1.25rem;
+}
+
+.error-message {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.home-button, .contact-button {
+  padding: 0.85rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+}
+
+.home-button {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+}
+
+.home-button:hover {
+  background-color: #219653;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.contact-button {
+  background-color: white;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+}
+
+.contact-button:hover {
+  background-color: rgba(41, 128, 185, 0.05);
+  transform: translateY(-2px);
+}
+
+.search-box {
+  display: flex;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-box input {
+  flex: 1;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid var(--border-color);
+  border-right: none;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s;
+  color: var(--text-color);
+}
+
+.search-box input:focus {
+  border-color: var(--primary-color);
+}
+
+.search-box button {
+  padding: 0 1.5rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.search-box button:hover {
+  background-color: #2472a4;
+}
+
+/* Animation */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.error-code {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .error-code {
+    font-size: 5.5rem;
+  }
+  
+  .error-title {
+    font-size: 1.6rem;
+  }
+  
+  .action-buttons {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* Căn giữa văn bản */
-    padding: 0 20px; /* Thêm padding cho các cạnh */
-    background-color: #f7fafc; /* Màu nền */
+    gap: 1rem;
   }
   
-  .notfound-container h1 {
-    font-size: 6rem;
-    font-weight: bold;
-    color: #f56565; 
-    display: flex;
-    align-items: center;
+  .home-button, .contact-button {
+    width: 100%;
     justify-content: center;
   }
   
-  .notfound-container .fas {
-    margin-left: 10px;
+  .notfound-content {
+    padding: 2rem 1.5rem;
   }
-  
-  .notfound-container p {
-    font-size: 1.25rem;
-    color: #718096; 
-    margin-top: 20px;
-  }
-  
-  .notfound-container .admin-link {
-    color: #3b82f6; 
-    font-size: 1rem;
-    margin-top: 20px;
-    text-decoration: underline;
-    display: inline-block;
-  }
-  
-  .notfound-container .home-link {
-    margin-top: 30px;
-    padding: 12px 30px;
-    background-color: #48bb78;
-    color: white;
-    font-weight: 600;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
-  }
-  
-  .notfound-container .home-link:hover {
-    background-color: #38a169;
-  }
-  
+}

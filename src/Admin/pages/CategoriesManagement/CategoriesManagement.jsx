@@ -139,7 +139,7 @@ const CategoriesManagement = () => {
   const handleSave = async () => {
     try {
       setErrorMessage(""); 
-  
+      
       if (!editingCategory.name || !editingCategory.classId) {
         setErrorMessage("Tên danh mục và Lớp không được để trống!");
         return;
@@ -150,23 +150,27 @@ const CategoriesManagement = () => {
         headers: { Authorization: `Bearer ${token}` },
       };
   
-      const newCategory = {
+      const categoryData = {
         name: editingCategory.name,
         description: editingCategory.description,
         classId: editingCategory.classId,
         uploadedBy: user.id,
+        updatedAt: new Date().toISOString()
       };
   
       if (isAdding) {
-        await axios.post(API_URL, newCategory, config);
+        await axios.post(API_URL, {
+          ...categoryData,
+          createdAt: new Date().toISOString() 
+        }, config);
         alert("Thêm danh mục thành công!");
       } else {
-        await axios.put(`${API_URL}/${editingCategory.id}`, newCategory, config);
+        await axios.put(`${API_URL}/${editingCategory.id}`, categoryData, config);
         alert("Cập nhật danh mục thành công!");
       }
   
-      fetchCategories(); 
-      setOpenDialog(false); 
+      fetchCategories();
+      setOpenDialog(false);
     } catch (error) {
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message || "Lỗi khi lưu danh mục!");
@@ -252,8 +256,8 @@ const CategoriesManagement = () => {
                   <TableCell>{cat.description}</TableCell>
                   <TableCell>{cat.classId}</TableCell>
                   <TableCell>{cat.uploadedByUsername}</TableCell>
-                  <TableCell>{formatDateTime(user.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(user.updatedAt)}</TableCell>
+                  <TableCell>{formatDateTime(cat.createdAt)}</TableCell>
+                  <TableCell>{formatDateTime(cat.updatedAt)}</TableCell>
                   <TableCell>
                     <Button variant="contained" color="secondary" onClick={() => handleEdit(cat)}>
                       Sửa

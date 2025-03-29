@@ -11,9 +11,8 @@ const MainContent = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       const token = localStorage.getItem('token');
-      if (!token) {
-        window.location.href = '/';
-        return;
+      if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
+        window.location.href = "/";
       }
 
       try {

@@ -64,7 +64,6 @@
 }
 
 .user-avatar:after {
-  content: "▼";
   position: absolute;
   bottom: -5px;
   right: -20px;
