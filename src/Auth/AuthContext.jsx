@@ -1,15 +1,31 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode'; 
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const isTokenExpired = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      return decoded.exp * 1000 < Date.now();
+    } catch (error) {
+      return true;
+    }
+  };
 
   const fetchProfile = async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
+    
+    if (!token || isTokenExpired(token)) {
+      localStorage.removeItem('token');
+      setUser(null);
       setLoading(false);
+      navigate('/');
       return;
     }
 
@@ -26,19 +42,20 @@ export const AuthProvider = ({ children }) => {
       }
 
       const userInfo = await response.json();
-      setUser(userInfo);
+      setUser({
+        ...userInfo,
+        userId: userInfo.id,
+        role: userInfo.role
+      });
     } catch (error) {
       console.error('Lỗi khi lấy thông tin người dùng:', error);
       localStorage.removeItem('token');
       setUser(null);
+      navigate('/');
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
 
   const login = (token) => {
     localStorage.setItem('token', token);
@@ -48,11 +65,16 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    navigate('/');
   };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {!loading && children} 
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

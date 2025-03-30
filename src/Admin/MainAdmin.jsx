@@ -1,34 +1,39 @@
-import React, { useContext, useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar/Sidebar";
+import React from "react";
+import { Outlet } from "react-router-dom";
+import SidebarAdmin from "./components/Sidebar/SidebarAdmin";
 import Header from "./components/Header/Header";
-import MainContent from "./pages/MainContent/MainContent";
 import { AuthContext } from "../Auth/AuthContext";
 import "./styles.css";
 
 const MainAdmin = () => {
-  const { user } = useContext(AuthContext);
-  const [isSidebarVisible, setSidebarVisible] = useState(true); 
+  const [isSidebarVisible, setSidebarVisible] = React.useState(true);
+  const { user } = React.useContext(AuthContext);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
-  useEffect(() => {
-    if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
-      window.location.href = '/';
-    }
-  }, [user]);
-
-  if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
-    return null; 
-  }
+  const canAccess = (requiredRole) => {
+    return user?.role === 'admin' || user?.role === requiredRole;
+  };
 
   return (
     <div className="admin-dashboard">
-      {isSidebarVisible && <Sidebar user={user} />} 
+      {isSidebarVisible && (
+        <SidebarAdmin 
+          user={user} 
+          canAccess={canAccess} 
+        />
+      )}
       <div className={`content--admin ${!isSidebarVisible ? "content-full-width" : ""}`}>
-        <Header user={user} toggleSidebar={toggleSidebar} /> 
-        <MainContent />
+      <Header 
+        user={user} 
+        toggleSidebar={toggleSidebar} 
+        isSidebarVisible={isSidebarVisible} 
+      />
+      <div className={`main-content--admin ${!isSidebarVisible ? "main-content--admin-full-width" : ""}`}>
+        <Outlet />
+      </div>
       </div>
     </div>
   );

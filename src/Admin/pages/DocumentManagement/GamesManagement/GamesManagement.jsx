@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import Sidebar from "../../../components/Sidebar/Sidebar";
-import Header from "../../../components/Header/Header";
 import "./GamesManagement.css";
 import moment from "moment";
 import { AuthContext } from "../../../../Auth/AuthContext";
@@ -174,7 +172,10 @@ const GamesManagement = () => {
 
   const handleEdit = async (game) => {
     setIsAdding(false);
-    
+    if (!hasPermission(game)) {
+      alert("Bạn không có quyền sửa game này!");
+      return;
+    }
     const category = categories.find(cat => cat.id === game.category_id);
     const classId = category?.classId || "";
     if (category) {
@@ -226,20 +227,21 @@ const GamesManagement = () => {
         description: editingGame.description,
         gameUrl: editingGame.gameUrl,  
         category_id: parseInt(editingGame.categoryId),
-        uploaded_by: parseInt(editingGame.uploadedBy)
       };
       
       if (!gameData.title || !gameData.gameUrl || !gameData.category_id) {
         alert("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
         return;
       }
-  
+      
       if (isAdding) {
+        gameData.uploaded_by = user.userId;
         await axios.post(API_URL, gameData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Thêm game thành công!");
       } else {
+        gameData.uploaded_by = editingGame.uploadedBy;
         await axios.put(`${API_URL}/${editingGame.id}`, gameData, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -282,120 +284,121 @@ const GamesManagement = () => {
       setSearchParams(prev => ({ ...prev, [name]: value }));
     }
   };
-
+  const hasPermission = (game) => {
+    if (!user) return false;
+    return user.role === 'admin' || user.userId === game.uploaded_by;
+  };
   return (
-    <div className="admin-dashboard">
-      <Sidebar />
-      <div className="content--admin">
-        <Header />
-        <div className="games-management">
-          <h1>Quản lý Games</h1>
-          
-          <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <TextField
-                label="Tìm theo tiêu đề"
-                name="title"
-                value={searchParams.title}
-                onChange={handleSearchParamChange}
-                size="small"
-                fullWidth
-              />
-            </FormControl>
+    <div className="">
+      <h1>Quản lý Games</h1>
+      
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <TextField
+            label="Tìm theo tiêu đề"
+            name="title"
+            value={searchParams.title}
+            onChange={handleSearchParamChange}
+            size="small"
+            fullWidth
+          />
+        </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Lớp học</InputLabel>
-              <Select
-                name="classId"
-                value={searchParams.classId}
-                onChange={handleSearchParamChange}
-                label="Lớp học"
-              >
-                <MenuItem value="">Tất cả lớp</MenuItem>
-                {usedClasses.map((classItem) => (
-                  <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Danh mục</InputLabel>
-              <Select
-                name="categoryId"
-                value={searchParams.categoryId}
-                onChange={handleSearchParamChange}
-                label="Danh mục"
-                disabled={!searchParams.classId || isLoadingCategories}
-              >
-                <MenuItem value="">Tất cả danh mục</MenuItem>
-                {isLoadingCategories ? (
-                  <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                ) : searchParams.classId ? (
-                  filteredCategories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                ) : (
-                  categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                )}
-              </Select>
-            </FormControl>
-            
-            <Button 
-              variant="contained" 
-              onClick={handleSearch}
-              sx={{ height: 40 }}
-            >
-              Tìm kiếm
-            </Button>
-            <Button 
-              variant="outlined" 
-              onClick={handleResetSearch}
-              sx={{ height: 40 }}
-            >
-              Đặt lại
-            </Button>
-          </Box>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Lớp học</InputLabel>
+          <Select
+            name="classId"
+            value={searchParams.classId}
+            onChange={handleSearchParamChange}
+            label="Lớp học"
+          >
+            <MenuItem value="">Tất cả lớp</MenuItem>
+            {usedClasses.map((classItem) => (
+              <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Danh mục</InputLabel>
+          <Select
+            name="categoryId"
+            value={searchParams.categoryId}
+            onChange={handleSearchParamChange}
+            label="Danh mục"
+            disabled={!searchParams.classId || isLoadingCategories}
+          >
+            <MenuItem value="">Tất cả danh mục</MenuItem>
+            {isLoadingCategories ? (
+              <MenuItem disabled>Đang tải danh mục...</MenuItem>
+            ) : searchParams.classId ? (
+              filteredCategories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            ) : (
+              categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            )}
+          </Select>
+        </FormControl>
+        
+        <Button 
+          variant="contained" 
+          onClick={handleSearch}
+          sx={{ height: 40 }}
+        >
+          Tìm kiếm
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={handleResetSearch}
+          sx={{ height: 40 }}
+        >
+          Đặt lại
+        </Button>
+      </Box>
 
-          <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
-            Thêm Game
-          </Button>
+      <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
+        Thêm Game
+      </Button>
 
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Tiêu đề</TableCell>
-                <TableCell>Mô tả</TableCell>
-                <TableCell>Đường dẫn Game</TableCell>
-                <TableCell>Danh mục</TableCell>
-                <TableCell>Người tải lên</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>Ngày cập nhật</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {games.map((game) => (
-                <TableRow key={game.id}>
-                  <TableCell>{game.id}</TableCell>
-                  <TableCell>{game.title}</TableCell>
-                  <TableCell>{game.description}</TableCell>
-                  <TableCell>
-                    <a href={game.gameUrl} target="_blank" rel="noopener noreferrer">
-                      Chơi game
-                    </a>
-                  </TableCell>
-                  <TableCell>{game.category_name}</TableCell>
-                  <TableCell>{game.uploadedByUsername}</TableCell>
-                  <TableCell>{formatDateTime(game.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(game.updatedAt)}</TableCell>
-                  <TableCell className="action-cell">
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Tiêu đề</TableCell>
+            <TableCell>Mô tả</TableCell>
+            <TableCell>Đường dẫn Game</TableCell>
+            <TableCell>Danh mục</TableCell>
+            <TableCell>Người tải lên</TableCell>
+            <TableCell>Ngày tạo</TableCell>
+            <TableCell>Ngày cập nhật</TableCell>
+            <TableCell>Hành động</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {games.map((game) => (
+            <TableRow key={game.id}>
+              <TableCell>{game.id}</TableCell>
+              <TableCell>{game.title}</TableCell>
+              <TableCell>{game.description}</TableCell>
+              <TableCell>
+                <a href={game.gameUrl} target="_blank" rel="noopener noreferrer">
+                  Chơi game
+                </a>
+              </TableCell>
+              <TableCell>{game.category_name}</TableCell>
+              <TableCell>{game.uploadedByUsername}</TableCell>
+              <TableCell>{formatDateTime(game.createdAt)}</TableCell>
+              <TableCell>{formatDateTime(game.updatedAt)}</TableCell>
+              <TableCell className="action-cell" >
+                {hasPermission(game) && (
+                  <>
                     <Button 
                       variant="contained" 
                       color="secondary" 
@@ -412,93 +415,103 @@ const GamesManagement = () => {
                     >
                       Xóa
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </>
+                )}
+                {!hasPermission(game) && (
+                  <Button
+                    variant="contained"
+                    disabled
+                    className="action-button"
+                    sx={{ opacity: 0.7 }}
+                  >
+                    Không có quyền
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>{isAdding ? "Thêm Game" : "Sửa Game"}</DialogTitle>
-            <DialogContent>
-              <TextField 
-                fullWidth 
-                label="Tiêu đề" 
-                name="title" 
-                value={editingGame?.title || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                required
-              />
-              <TextField 
-                fullWidth 
-                label="Mô tả" 
-                name="description" 
-                value={editingGame?.description || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                multiline
-                rows={4}
-              />
-              <TextField 
-                fullWidth 
-                label="Đường dẫn Game" 
-                name="gameUrl" 
-                value={editingGame?.gameUrl || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                required
-                helperText="Nhập URL game"
-              />
-              
-              <FormControl fullWidth margin="normal" required>
-                <InputLabel>Lớp học</InputLabel>
-                <Select
-                  value={selectedClassId}
-                  onChange={handleClassChange}
-                  label="Lớp học"
-                >
-                  <MenuItem value="">Chọn lớp học</MenuItem>
-                  {usedClasses.map((classItem) => (
-                    <MenuItem key={classItem.id} value={classItem.id}>
-                      {classItem.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              
-              <FormControl fullWidth margin="normal" required>
-                <InputLabel>Danh mục</InputLabel>
-                <Select
-                  name="categoryId"
-                  value={editingGame?.categoryId || ""}
-                  onChange={handleChange}
-                  label="Danh mục"
-                  disabled={!selectedClassId || isLoadingCategories}
-                >
-                  {isLoadingCategories ? (
-                    <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                  ) : filteredCategories.length > 0 ? (
-                    filteredCategories.map((category) => (
-                      <MenuItem key={category.id} value={category.id}>
-                        {category.name}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem disabled value="">
-                      {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
-                    </MenuItem>
-                  )}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
-              <Button onClick={handleSave} color="primary">Lưu</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{isAdding ? "Thêm Game" : "Sửa Game"}</DialogTitle>
+        <DialogContent>
+          <TextField 
+            fullWidth 
+            label="Tiêu đề" 
+            name="title" 
+            value={editingGame?.title || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            required
+          />
+          <TextField 
+            fullWidth 
+            label="Mô tả" 
+            name="description" 
+            value={editingGame?.description || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            multiline
+            rows={4}
+          />
+          <TextField 
+            fullWidth 
+            label="Đường dẫn Game" 
+            name="gameUrl" 
+            value={editingGame?.gameUrl || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            required
+            helperText="Nhập URL game"
+          />
+          
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Lớp học</InputLabel>
+            <Select
+              value={selectedClassId}
+              onChange={handleClassChange}
+              label="Lớp học"
+            >
+              <MenuItem value="">Chọn lớp học</MenuItem>
+              {usedClasses.map((classItem) => (
+                <MenuItem key={classItem.id} value={classItem.id}>
+                  {classItem.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          
+          <FormControl fullWidth margin="normal" required>
+            <InputLabel>Danh mục</InputLabel>
+            <Select
+              name="categoryId"
+              value={editingGame?.categoryId || ""}
+              onChange={handleChange}
+              label="Danh mục"
+              disabled={!selectedClassId || isLoadingCategories}
+            >
+              {isLoadingCategories ? (
+                <MenuItem disabled>Đang tải danh mục...</MenuItem>
+              ) : filteredCategories.length > 0 ? (
+                filteredCategories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled value="">
+                  {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
+          <Button onClick={handleSave} color="primary">Lưu</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

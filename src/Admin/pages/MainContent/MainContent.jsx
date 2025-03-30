@@ -11,9 +11,7 @@ const MainContent = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       const token = localStorage.getItem('token');
-      if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
-        window.location.href = "/";
-      }
+      
 
       try {
         setLoading(true);
@@ -75,7 +73,7 @@ const MainContent = () => {
   }
 
   return (
-    <div className="main-content--admin">
+    <div className="">
       <h3>Thống kê tổng quan</h3>
       
       <div className="dashboard-stats">

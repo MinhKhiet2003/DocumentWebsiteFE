@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";  
+import { Link, useNavigate } from "react-router-dom";  
 import "./Header.css";
 
-const Header = ({ user, toggleSidebar }) => {
+const Header = ({ user, toggleSidebar, isSidebarVisible }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  
+  const navigate = useNavigate();
 
   const handleAvatarClick = () => {
     setDropdownOpen(!isDropdownOpen); 
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("user");
+    
+    navigate("/login");
+    setDropdownOpen(false);
+  };
+
   return (
-    <div className="header--admin">
+    <div className={`header--admin ${isSidebarVisible ? "sidebar-visible" : ""}`}>
       <div className="header-left">
         <span className="menu-icon--admin" onClick={toggleSidebar}>
           &#9776;
@@ -23,7 +33,8 @@ const Header = ({ user, toggleSidebar }) => {
           👤
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <Link to="/" onClick={() => setDropdownOpen(false)}>Go to Home</Link> 
+              <Link to="/" onClick={() => setDropdownOpen(false)}>Go to Home</Link>
+              <button onClick={handleLogout} className="logout-button">Logout</button>
             </div>
           )}
         </div>

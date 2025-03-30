@@ -1,7 +1,7 @@
 .categories-management {
     padding: 20px;
     margin-top: 100px;
-    margin-left: 285px;
+    margin-left: 310px;
 }
 
 .search-add-container {
@@ -15,7 +15,8 @@
     display: flex;
     flex: 1;
     gap: 10px;
-    align-items: center;
+    margin-left: 0px;
+    padding: 5px;
 }
 
 .search-box input,

@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import Sidebar from "../../../Admin/components/Sidebar/Sidebar";
-import Header from "../../../Admin/components/Header/Header";
 import { AuthContext } from "../../../Auth/AuthContext";
 import "./CategoriesManagement.css";
 import moment from "moment";
@@ -16,7 +14,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  FormControl, InputLabel, Select, MenuItem
+  FormControl, InputLabel, Select, MenuItem,
+  Alert
 } from "@mui/material";
 import axios from "axios";
 
@@ -55,7 +54,7 @@ const CategoriesManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      alert("Lỗi khi lấy danh mục! Vui lòng thử lại.");
+      Alert("Lỗi khi lấy danh mục! Vui lòng thử lại.");
     }
   };
 
@@ -138,8 +137,8 @@ const CategoriesManagement = () => {
 
   const handleSave = async () => {
     try {
-      setErrorMessage(""); 
-      
+      setErrorMessage("");
+  
       if (!editingCategory.name || !editingCategory.classId) {
         setErrorMessage("Tên danh mục và Lớp không được để trống!");
         return;
@@ -150,22 +149,26 @@ const CategoriesManagement = () => {
         headers: { Authorization: `Bearer ${token}` },
       };
   
+      // Chuẩn bị dữ liệu cơ bản
       const categoryData = {
         name: editingCategory.name,
         description: editingCategory.description,
         classId: editingCategory.classId,
-        uploadedBy: user.id,
         updatedAt: new Date().toISOString()
       };
   
       if (isAdding) {
         await axios.post(API_URL, {
           ...categoryData,
-          createdAt: new Date().toISOString() 
+          uploadedBy: user.id, 
+          createdAt: new Date().toISOString()
         }, config);
         alert("Thêm danh mục thành công!");
       } else {
-        await axios.put(`${API_URL}/${editingCategory.id}`, categoryData, config);
+        await axios.put(`${API_URL}/${editingCategory.id}`, {
+          ...categoryData,
+          uploadedBy: editingCategory.uploadedBy 
+        }, config);
         alert("Cập nhật danh mục thành công!");
       }
   
@@ -186,80 +189,87 @@ const CategoriesManagement = () => {
     setEditingCategory((prev) => ({ ...prev, [name]: value }));
   };
 
+  const hasPermission = (category) => {
+    if (!user) return false;
+    return user.role === 'admin' || user.id === category.uploadedBy;
+  };
+
   return (
-    <div className="admin-dashboard">
-      <Sidebar />
-      <div className="content--admin">
-        <Header />
-        <div className="categories-management">
-          <h1>Quản lý Danh mục</h1>
+    <div className="">
+      <h1>Quản lý Danh mục</h1>
 
-          <div className="search-add-container">
-            <div className="search-box">
-              <TextField
-                label="Tìm kiếm danh mục"
-                variant="outlined"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              />
-              <Button variant="contained" color="primary" onClick={handleSearch}>
-                Tìm kiếm
-              </Button>
-            </div>
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Lọc theo lớp học</InputLabel>
-              <Select name="classId" label="Lọc theo lớp học"
-                value={selectedClassId}
-                onChange={(e) => {
-                  setSelectedClassId(e.target.value);
-                  handleFilterByClass(e.target.value);
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: 200,
-                      overflowY: "auto", 
-                    },
-                  },
-                }}
-              >
-                <MenuItem value="">Tất cả</MenuItem>
-                {classes.map((cls) => (
-                  <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button variant="contained" color="primary" onClick={handleAdd}>
-              Thêm danh mục
-            </Button>
-          </div>
+      <div className="search-add-container">
+        <div className="search-box" >
+          <TextField
+            label="Tìm kiếm danh mục"
+            variant="outlined"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <Button variant="contained" color="primary" onClick={handleSearch}>
+            Tìm kiếm
+          </Button>
+        </div>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Lọc theo lớp học</InputLabel>
+          <Select name="classId" label="Lọc theo lớp học"
+            value={selectedClassId}
+            onChange={(e) => {
+              setSelectedClassId(e.target.value);
+              handleFilterByClass(e.target.value);
+            }}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 200,
+                  overflowY: "auto", 
+                },
+              },
+            }}
+          >
+            <MenuItem value="">Tất cả</MenuItem>
+            {classes.map((cls) => (
+              <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button variant="contained" color="primary" onClick={handleAdd}>
+          Thêm danh mục
+        </Button>
+      </div>
 
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Tên danh mục</TableCell>
-                <TableCell>Mô tả</TableCell>
-                <TableCell>Lớp</TableCell>
-                <TableCell>Người tạo</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>ngày cập nhật</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {categories.map((cat) => (
-                <TableRow key={cat.id}>
-                  <TableCell>{cat.id}</TableCell>
-                  <TableCell>{cat.name}</TableCell>
-                  <TableCell>{cat.description}</TableCell>
-                  <TableCell>{cat.classId}</TableCell>
-                  <TableCell>{cat.uploadedByUsername}</TableCell>
-                  <TableCell>{formatDateTime(cat.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(cat.updatedAt)}</TableCell>
-                  <TableCell>
-                    <Button variant="contained" color="secondary" onClick={() => handleEdit(cat)}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Tên danh mục</TableCell>
+            <TableCell>Mô tả</TableCell>
+            <TableCell>Lớp</TableCell>
+            <TableCell>Người tạo</TableCell>
+            <TableCell>Ngày tạo</TableCell>
+            <TableCell>ngày cập nhật</TableCell>
+            <TableCell>Hành động</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {categories.map((cat) => (
+            <TableRow key={cat.id}>
+              <TableCell>{cat.id}</TableCell>
+              <TableCell>{cat.name}</TableCell>
+              <TableCell>{cat.description}</TableCell>
+              <TableCell>{cat.classId}</TableCell>
+              <TableCell>{cat.uploadedByUsername}</TableCell>
+              <TableCell>{formatDateTime(cat.createdAt)}</TableCell>
+              <TableCell>{formatDateTime(cat.updatedAt)}</TableCell>
+              <TableCell>
+                {hasPermission(cat) && (
+                  <>
+                    <Button 
+                      variant="contained" 
+                      color="secondary" 
+                      onClick={() => handleEdit(cat)}
+                    >
                       Sửa
                     </Button>
                     <Button
@@ -270,42 +280,52 @@ const CategoriesManagement = () => {
                     >
                       Xóa
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </>
+                )}
+                {!hasPermission(cat) && (
+                  <Button
+                    variant="contained"
+                    disabled
+                    className="action-button"
+                    sx={{ opacity: 0.7 }}
+                  >
+                    Không có quyền
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>{isAdding ? "Thêm danh mục" : "Sửa danh mục"}</DialogTitle>
-            <DialogContent>
-              {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-              <TextField fullWidth label="Tên danh mục" name="name" value={editingCategory?.name || ""} onChange={handleChange} margin="normal" />
-              <TextField fullWidth label="Mô tả" name="description" value={editingCategory?.description || ""} onChange={handleChange} margin="normal" />
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Lớp học</InputLabel>
-                <Select name="classId" label="Lớp học" value={editingCategory?.classId || ""} onChange={handleChange}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200,
-                        overflowY: "auto", 
-                      },
-                    },
-                  }}>
-                  {classes.map((cls) => (
-                    <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
-              <Button onClick={handleSave} color="primary">Lưu</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{isAdding ? "Thêm danh mục" : "Sửa danh mục"}</DialogTitle>
+        <DialogContent>
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          <TextField fullWidth label="Tên danh mục" name="name" value={editingCategory?.name || ""} onChange={handleChange} margin="normal" />
+          <TextField fullWidth label="Mô tả" name="description" value={editingCategory?.description || ""} onChange={handleChange} margin="normal" />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Lớp học</InputLabel>
+            <Select name="classId" label="Lớp học" value={editingCategory?.classId || ""} onChange={handleChange}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                    overflowY: "auto", 
+                  },
+                },
+              }}>
+              {classes.map((cls) => (
+                <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
+          <Button onClick={handleSave} color="primary">Lưu</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

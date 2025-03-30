@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import Sidebar from "../../../Admin/components/Sidebar/Sidebar";
-import Header from "../../../Admin/components/Header/Header";
 import { AuthContext } from "../../../Auth/AuthContext"; 
 import "./UserManagement.css";
 import {
@@ -165,143 +163,137 @@ const UserManagement = () => {
   }
 
   return (
-    <div className="admin-dashboard">
-      <Sidebar />
-      <div className="content--admin">
-        <Header />
-        <div className="user-management">
-          <h1>Quản lý người dùng</h1>
-          <div className="search-add-container">
-          <div className="search-box">
-            <TextField
-              label="Tìm kiếm người dùng" 
-              variant="outlined"
-              value={searchKeyword}
-              onChange={handleChangeSearch}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <Button variant="contained" color="primary" onClick={handleSearch}>
-              Tìm kiếm
-            </Button>
-          </div>
-          <Button variant="contained" color="primary" onClick={handleAdd}>
-            Thêm người dùng 
-          </Button>
-        </div>
-
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Tên đăng nhập</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Vai trò</TableCell>
-                <TableCell>Avatar</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>Ngày cập nhật</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-            {filteredUsers.map((user) => (
-                <TableRow key={user.user_id}>
-                  <TableCell>{user.user_id}</TableCell>
-                  <TableCell>{user.username}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
-                  <TableCell>
-                    <img
-                      src={user.profilePicturePath}
-                      alt="Profile"
-                      style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                    />
-                  </TableCell>
-                  <TableCell>{formatDateTime(user.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(user.updatedAt)}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleEdit(user)}
-                    >
-                      Sửa
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => handleDelete(user.user_id)}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Xóa
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle>
-              {isAdding ? "Thêm người dùng" : "Sửa thông tin người dùng"}
-            </DialogTitle>
-            <DialogContent>
-              <TextField
-                fullWidth
-                label="Tên đăng nhập"
-                name="username"
-                value={editingUser?.username || ""}
-                onChange={handleChange}
-                margin="normal"
-              />
-              <TextField
-                fullWidth
-                label="Mật khẩu (hash)"
-                name="password_hash"
-                type="password"
-                value={editingUser?.password_hash || ""}
-                onChange={handleChange}
-                margin="normal"
-              />
-              <TextField
-                fullWidth
-                label="Email"
-                name="email"
-                value={editingUser?.email || ""}
-                onChange={handleChange}
-                margin="normal"
-              />
-              <Select
-                fullWidth
-                label="Vai trò"
-                name="role"
-                value={editingUser?.role || "user"}
-                onChange={handleChange}
-                margin="dense"
-              >
-                <MenuItem value="admin">Admin</MenuItem>
-                <MenuItem value="user">User</MenuItem>
-                <MenuItem value="teacher">Teacher</MenuItem>
-              </Select>
-              <TextField
-                fullWidth
-                label="Đường dẫn ảnh đại diện"
-                name="profilePicturePath"
-                value={editingUser?.profilePicturePath || ""}
-                onChange={handleChange}
-                margin="normal"
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} color="secondary">
-                Hủy
-              </Button>
-              <Button onClick={handleSave} color="primary">
-                Lưu
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
+    <div className="">
+      <h1>Quản lý người dùng</h1>
+      <div className="search-add-container">
+      <div className="search-box">
+        <TextField
+          label="Tìm kiếm người dùng" 
+          variant="outlined"
+          value={searchKeyword}
+          onChange={handleChangeSearch}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
       </div>
+      <Button variant="contained" color="primary" onClick={handleAdd}>
+        Thêm người dùng 
+      </Button>
+    </div>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Tên đăng nhập</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Vai trò</TableCell>
+            <TableCell>Avatar</TableCell>
+            <TableCell>Ngày tạo</TableCell>
+            <TableCell>Ngày cập nhật</TableCell>
+            <TableCell>Hành động</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {filteredUsers.map((user) => (
+            <TableRow key={user.user_id}>
+              <TableCell>{user.user_id}</TableCell>
+              <TableCell>{user.username}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell>{user.role}</TableCell>
+              <TableCell>
+                <img
+                  src={user.profilePicturePath}
+                  alt="Profile"
+                  style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                />
+              </TableCell>
+              <TableCell>{formatDateTime(user.createdAt)}</TableCell>
+              <TableCell>{formatDateTime(user.updatedAt)}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleEdit(user)}
+                >
+                  Sửa
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDelete(user.user_id)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Xóa
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>
+          {isAdding ? "Thêm người dùng" : "Sửa thông tin người dùng"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Tên đăng nhập"
+            name="username"
+            value={editingUser?.username || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Mật khẩu (hash)"
+            name="password_hash"
+            type="password"
+            value={editingUser?.password_hash || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Email"
+            name="email"
+            value={editingUser?.email || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <Select
+            fullWidth
+            label="Vai trò"
+            name="role"
+            value={editingUser?.role || "user"}
+            onChange={handleChange}
+            margin="dense"
+          >
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="user">User</MenuItem>
+            <MenuItem value="teacher">Teacher</MenuItem>
+          </Select>
+          <TextField
+            fullWidth
+            label="Đường dẫn ảnh đại diện"
+            name="profilePicturePath"
+            value={editingUser?.profilePicturePath || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="secondary">
+            Hủy
+          </Button>
+          <Button onClick={handleSave} color="primary">
+            Lưu
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

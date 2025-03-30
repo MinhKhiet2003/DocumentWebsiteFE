@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import Sidebar from "../../../components/Sidebar/Sidebar";
-import Header from "../../../components/Header/Header";
 import "./ComicManagement.css";
 import moment from "moment";
 import { AuthContext } from "../../../../Auth/AuthContext";
@@ -224,15 +222,20 @@ const ComicManagement = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
+      
+      if (!user) {
+        alert("Vui lòng đăng nhập để thực hiện thao tác này");
+        return;
+      }
+  
       const comicData = {
         title: editingComic.title,
         description: editingComic.description,
         comic_url: editingComic.comic_url,
         category_id: parseInt(editingComic.categoryId),
-        uploaded_by: parseInt(user?.userId || 1),
-        updatedAt: new Date().toISOString() 
+        updatedAt: new Date().toISOString()
       };
-
+  
       if (!comicData.title || !comicData.comic_url || !comicData.category_id) {
         alert("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
         return;
@@ -241,13 +244,18 @@ const ComicManagement = () => {
       if (isAdding) {
         await axios.post(API_URL, {
           ...comicData,
+          uploaded_by: user.userId,
           createdAt: new Date().toISOString()
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Thêm truyện tranh thành công!");
       } else {
-        await axios.put(`${API_URL}/${editingComic.id}`, comicData, {
+        await axios.put(`${API_URL}/${editingComic.id}`, {
+          ...comicData,
+          uploaded_by: editingComic.uploadedBy,
+          createdAt: editingComic.createdAt
+        }, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Cập nhật truyện tranh thành công!");
@@ -286,124 +294,128 @@ const ComicManagement = () => {
     }
   };
 
+  const hasPermission = (comic) => {
+    if (!user) return false;
+    return user.role === 'admin' || user.userId === comic.uploaded_by;
+  };
+
   return (
-    <div className="admin-dashboard">
-      <Sidebar />
-      <div className="content--admin">
-        <Header />
-        <div className="comic-management">
-          <h1>Quản lý Truyện tranh</h1>
-          
-          <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <TextField
-                label="Tìm theo tiêu đề"
-                name="title"
-                value={searchParams.title}
-                onChange={handleSearchParamChange}
-                size="small"
-                fullWidth
-              />
-            </FormControl>
+    <div className="">
+      <h1>Quản lý Truyện tranh</h1>
+      
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <TextField
+            label="Tìm theo tiêu đề"
+            name="title"
+            value={searchParams.title}
+            onChange={handleSearchParamChange}
+            size="small"
+            fullWidth
+          />
+        </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Lớp học</InputLabel>
-              <Select
-                name="classId"
-                value={searchParams.classId}
-                onChange={handleSearchParamChange}
-                label="Lớp học"
-              >
-                <MenuItem value="">Tất cả lớp</MenuItem>
-                {usedClasses.map((classItem) => (
-                  <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Danh mục</InputLabel>
-              <Select
-                name="categoryId"
-                value={searchParams.categoryId}
-                onChange={handleSearchParamChange}
-                label="Danh mục"
-                disabled={!searchParams.classId || isLoadingCategories}
-              >
-                <MenuItem value="">Tất cả danh mục</MenuItem>
-                {isLoadingCategories ? (
-                  <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                ) : searchParams.classId ? (
-                  filteredCategories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                ) : (
-                  categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                )}
-              </Select>
-            </FormControl>
-            
-            <Button 
-              variant="contained" 
-              onClick={handleSearch}
-              sx={{ height: 40 }}
-            >
-              Tìm kiếm
-            </Button>
-            <Button 
-              variant="outlined" 
-              onClick={handleResetSearch}
-              sx={{ height: 40 }}
-            >
-              Đặt lại
-            </Button>
-          </Box>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Lớp học</InputLabel>
+          <Select
+            name="classId"
+            value={searchParams.classId}
+            onChange={handleSearchParamChange}
+            label="Lớp học"
+          >
+            <MenuItem value="">Tất cả lớp</MenuItem>
+            {usedClasses.map((classItem) => (
+              <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Danh mục</InputLabel>
+          <Select
+            name="categoryId"
+            value={searchParams.categoryId}
+            onChange={handleSearchParamChange}
+            label="Danh mục"
+            disabled={!searchParams.classId || isLoadingCategories}
+          >
+            <MenuItem value="">Tất cả danh mục</MenuItem>
+            {isLoadingCategories ? (
+              <MenuItem disabled>Đang tải danh mục...</MenuItem>
+            ) : searchParams.classId ? (
+              filteredCategories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            ) : (
+              categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            )}
+          </Select>
+        </FormControl>
+        
+        <Button 
+          variant="contained" 
+          onClick={handleSearch}
+          sx={{ height: 40 }}
+        >
+          Tìm kiếm
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={handleResetSearch}
+          sx={{ height: 40 }}
+        >
+          Đặt lại
+        </Button>
+      </Box>
 
-          <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
-            Thêm Truyện tranh
-          </Button>
+      <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
+        Thêm Truyện tranh
+      </Button>
 
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Tiêu đề</TableCell>
-                <TableCell>Mô tả</TableCell>
-                <TableCell>Đường dẫn</TableCell>
-                <TableCell>Danh mục</TableCell>
-                <TableCell>Người tải lên</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>Ngày cập nhật</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {comics.map((comic) => (
-                <TableRow key={comic.id}>
-                  <TableCell>{comic.id}</TableCell>
-                  <TableCell>{comic.title}</TableCell>
-                  <TableCell>{comic.description}</TableCell>
-                  <TableCell>
-                    <a href={comic.comic_url} target="_blank" rel="noopener noreferrer">
-                      Xem truyện
-                    </a>
-                  </TableCell>
-                  <TableCell>{comic.categoryName}</TableCell>
-                  <TableCell>{comic.username}</TableCell>
-                  <TableCell>{formatDateTime(comic.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(comic.updatedAt)}</TableCell>
-                  <TableCell className="action-cell">
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Tiêu đề</TableCell>
+            <TableCell>Mô tả</TableCell>
+            <TableCell>Đường dẫn</TableCell>
+            <TableCell>Danh mục</TableCell>
+            <TableCell>Người tải lên</TableCell>
+            <TableCell>Ngày tạo</TableCell>
+            <TableCell>Ngày cập nhật</TableCell>
+            <TableCell>Hành động</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {comics.map((comic) => (
+            <TableRow key={comic.id}>
+              <TableCell>{comic.id}</TableCell>
+              <TableCell>{comic.title}</TableCell>
+              <TableCell>{comic.description}</TableCell>
+              <TableCell>
+                <a href={comic.comic_url} target="_blank" rel="noopener noreferrer">
+                  Xem truyện
+                </a>
+              </TableCell>
+              <TableCell>{comic.categoryName}</TableCell>
+              <TableCell>{comic.username}</TableCell>
+              <TableCell>{formatDateTime(comic.createdAt)}</TableCell>
+              <TableCell>{formatDateTime(comic.updatedAt)}</TableCell>
+              <TableCell className="action-cell">
+                {hasPermission(comic) ? (
+                  <>
                     <Button 
                       variant="contained" 
                       color="secondary" 
                       onClick={() => handleEdit(comic)}
                       className="action-button"
+                      sx={{ mr: 1 }}
                     >
                       Sửa
                     </Button>
@@ -412,98 +424,106 @@ const ComicManagement = () => {
                       color="error"
                       onClick={() => handleDelete(comic.id)}
                       className="action-button"
-                      style={{ marginLeft: "10px" }}
                     >
                       Xóa
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </>
+                ) : (
+                  <Button
+                    variant="contained"
+                    disabled
+                    className="action-button"
+                    sx={{ opacity: 0.7 }}
+                  >
+                    Không có quyền
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>{isAdding ? "Thêm Truyện tranh" : "Sửa Truyện tranh"}</DialogTitle>
-            <DialogContent>
-              <TextField 
-                fullWidth 
-                label="Tiêu đề" 
-                name="title" 
-                value={editingComic?.title || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                required
-              />
-              <TextField 
-                fullWidth 
-                label="Mô tả" 
-                name="description" 
-                value={editingComic?.description || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                multiline
-                rows={4}
-              />
-              <TextField 
-                fullWidth 
-                label="Đường dẫn truyện" 
-                name="comic_url" 
-                value={editingComic?.comic_url || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                helperText="Nhập URL truyện tranh"
-                required
-              />
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Lớp học</InputLabel>
-                <Select
-                  value={selectedClassId}
-                  onChange={handleClassChange}
-                  label="Lớp học"
-                  required
-                >
-                  {usedClasses.map((classItem) => (
-                    <MenuItem key={classItem.id} value={classItem.id}>
-                      {classItem.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Danh mục</InputLabel>
-                <Select
-                  name="categoryId"
-                  value={editingComic?.categoryId || ""}
-                  onChange={handleChange}
-                  label="Danh mục"
-                  required
-                  disabled={!selectedClassId || isLoadingCategories}
-                >
-                  {isLoadingCategories ? (
-                    <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                  ) : filteredCategories.length > 0 ? (
-                    filteredCategories.map((category) => (
-                      <MenuItem key={category.id} value={category.id}>
-                        {category.name}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem disabled value="">
-                      {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
-                    </MenuItem>
-                  )}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
-              <Button onClick={handleSave} color="primary">Lưu</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{isAdding ? "Thêm Truyện tranh" : "Sửa Truyện tranh"}</DialogTitle>
+        <DialogContent>
+          <TextField 
+            fullWidth 
+            label="Tiêu đề" 
+            name="title" 
+            value={editingComic?.title || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            required
+          />
+          <TextField 
+            fullWidth 
+            label="Mô tả" 
+            name="description" 
+            value={editingComic?.description || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            multiline
+            rows={4}
+          />
+          <TextField 
+            fullWidth 
+            label="Đường dẫn truyện" 
+            name="comic_url" 
+            value={editingComic?.comic_url || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            helperText="Nhập URL truyện tranh"
+            required
+          />
+          
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Lớp học</InputLabel>
+            <Select
+              value={selectedClassId}
+              onChange={handleClassChange}
+              label="Lớp học"
+              required
+            >
+              {usedClasses.map((classItem) => (
+                <MenuItem key={classItem.id} value={classItem.id}>
+                  {classItem.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Danh mục</InputLabel>
+            <Select
+              name="categoryId"
+              value={editingComic?.categoryId || ""}
+              onChange={handleChange}
+              label="Danh mục"
+              required
+              disabled={!selectedClassId || isLoadingCategories}
+            >
+              {isLoadingCategories ? (
+                <MenuItem disabled>Đang tải danh mục...</MenuItem>
+              ) : filteredCategories.length > 0 ? (
+                filteredCategories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled value="">
+                  {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
+          <Button onClick={handleSave} color="primary">Lưu</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

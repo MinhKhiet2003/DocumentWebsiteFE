@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import Sidebar from "../../../components/Sidebar/Sidebar";
-import Header from "../../../components/Header/Header";
 import "./LifeManagement.css";
 import moment from "moment";
 import { AuthContext } from "../../../../Auth/AuthContext";
@@ -222,33 +220,39 @@ const LifeManagement = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
+      
+      if (!user) {
+        alert("Vui lòng đăng nhập để thực hiện thao tác này");
+        return;
+      }
+  
       const lifeData = {
         question: editingLife.question,
         answer: editingLife.answer,
         category_id: parseInt(editingLife.categoryId),
-        uploaded_by: parseInt(user?.userId || 1),
         updatedAt: new Date().toISOString()
       };
-      
-      if (isAdding) {
-        lifeData.createdAt = new Date().toISOString();
-      } else {
-        lifeData.createdAt = editingLife.createdAt;
-      }
-      
-      // Validate required fields
+  
       if (!lifeData.question || !lifeData.answer || !lifeData.category_id) {
         alert("Vui lòng điền đầy đủ các trường bắt buộc (Câu hỏi, Câu trả lời, Danh mục)");
         return;
       }
   
       if (isAdding) {
-        await axios.post(API_URL, lifeData, {
+        await axios.post(API_URL, {
+          ...lifeData,
+          uploaded_by: user.userId, 
+          createdAt: new Date().toISOString()
+        }, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Thêm câu hỏi thành công!");
       } else {
-        await axios.put(`${API_URL}/${editingLife.id}`, lifeData, {
+        await axios.put(`${API_URL}/${editingLife.id}`, {
+          ...lifeData,
+          uploaded_by: editingLife.uploadedBy, 
+          createdAt: editingLife.createdAt 
+        }, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Cập nhật câu hỏi thành công!");
@@ -262,7 +266,9 @@ const LifeManagement = () => {
       let errorMessage = "Có lỗi xảy ra khi lưu câu hỏi";
       if (error.response) {
         if (error.response.data) {
-          errorMessage = error.response.data.message || JSON.stringify(error.response.data);
+          errorMessage = error.response.data.message || 
+                        (error.response.data.errors ? JSON.stringify(error.response.data.errors) : 
+                        JSON.stringify(error.response.data));
         }
       }
       alert(errorMessage);
@@ -294,113 +300,116 @@ const LifeManagement = () => {
     }
   };
 
+  const hasPermission = (life) => {
+    if (!user) return false;
+    return user.role === 'admin' || user.userId === life.uploaded_by;
+  };
+
   return (
-    <div className="admin-dashboard">
-      <Sidebar />
-      <div className="content--admin">
-        <Header />
-        <div className="life-management">
-          <h1>Quản lý Câu hỏi cuộc sống</h1>
-          
-          <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <TextField
-                label="Tìm theo câu hỏi"
-                name="question"
-                value={searchParams.question}
-                onChange={handleSearchParamChange}
-                size="small"
-                fullWidth
-              />
-            </FormControl>
+    <div className="">
+      <h1>Quản lý Câu hỏi cuộc sống</h1>
+      
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <TextField
+            label="Tìm theo câu hỏi"
+            name="question"
+            value={searchParams.question}
+            onChange={handleSearchParamChange}
+            size="small"
+            fullWidth
+          />
+        </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Lớp học</InputLabel>
-              <Select
-                name="classId"
-                value={searchParams.classId}
-                onChange={handleSearchParamChange}
-                label="Lớp học"
-              >
-                <MenuItem value="">Tất cả lớp</MenuItem>
-                {usedClasses.map((classItem) => (
-                  <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Danh mục</InputLabel>
-              <Select
-                name="categoryId"
-                value={searchParams.categoryId}
-                onChange={handleSearchParamChange}
-                label="Danh mục"
-                disabled={!searchParams.classId || isLoadingCategories}
-              >
-                <MenuItem value="">Tất cả danh mục</MenuItem>
-                {isLoadingCategories ? (
-                  <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                ) : searchParams.classId ? (
-                  filteredCategories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                ) : (
-                  categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                )}
-              </Select>
-            </FormControl>
-            
-            <Button 
-              variant="contained" 
-              onClick={handleSearch}
-              sx={{ height: 40 }}
-            >
-              Tìm kiếm
-            </Button>
-            <Button 
-              variant="outlined" 
-              onClick={handleResetSearch}
-              sx={{ height: 40 }}
-            >
-              Đặt lại
-            </Button>
-          </Box>
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Lớp học</InputLabel>
+          <Select
+            name="classId"
+            value={searchParams.classId}
+            onChange={handleSearchParamChange}
+            label="Lớp học"
+          >
+            <MenuItem value="">Tất cả lớp</MenuItem>
+            {usedClasses.map((classItem) => (
+              <MenuItem key={classItem.id} value={classItem.id}>{classItem.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Danh mục</InputLabel>
+          <Select
+            name="categoryId"
+            value={searchParams.categoryId}
+            onChange={handleSearchParamChange}
+            label="Danh mục"
+            disabled={!searchParams.classId || isLoadingCategories}
+          >
+            <MenuItem value="">Tất cả danh mục</MenuItem>
+            {isLoadingCategories ? (
+              <MenuItem disabled>Đang tải danh mục...</MenuItem>
+            ) : searchParams.classId ? (
+              filteredCategories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            ) : (
+              categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))
+            )}
+          </Select>
+        </FormControl>
+        
+        <Button 
+          variant="contained" 
+          onClick={handleSearch}
+          sx={{ height: 40 }}
+        >
+          Tìm kiếm
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={handleResetSearch}
+          sx={{ height: 40 }}
+        >
+          Đặt lại
+        </Button>
+      </Box>
 
-          <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
-            Thêm Câu hỏi
-          </Button>
+      <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
+        Thêm Câu hỏi
+      </Button>
 
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Câu hỏi</TableCell>
-                <TableCell>Câu trả lời</TableCell>
-                <TableCell>Danh mục</TableCell>
-                <TableCell>Người tạo</TableCell>
-                <TableCell>Ngày tạo</TableCell>
-                <TableCell>Ngày cập nhật</TableCell>
-                <TableCell>Hành động</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {lives.map((life) => (
-                <TableRow key={life.id}>
-                  <TableCell>{life.id}</TableCell>
-                  <TableCell>{life.question}</TableCell>
-                  <TableCell>{life.answer}</TableCell>
-                  <TableCell>{life.categoryName}</TableCell>
-                  <TableCell>{life.username}</TableCell>
-                  <TableCell>{formatDateTime(life.createdAt)}</TableCell>
-                  <TableCell>{formatDateTime(life.updatedAt)}</TableCell>
-                  <TableCell className="action-cell">
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Câu hỏi</TableCell>
+            <TableCell>Câu trả lời</TableCell>
+            <TableCell>Danh mục</TableCell>
+            <TableCell>Người tạo</TableCell>
+            <TableCell>Ngày tạo</TableCell>
+            <TableCell>Ngày cập nhật</TableCell>
+            <TableCell>Hành động</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {lives.map((life) => (
+            <TableRow key={life.id}>
+              <TableCell>{life.id}</TableCell>
+              <TableCell>{life.question}</TableCell>
+              <TableCell>{life.answer}</TableCell>
+              <TableCell>{life.categoryName}</TableCell>
+              <TableCell>{life.username}</TableCell>
+              <TableCell>{formatDateTime(life.createdAt)}</TableCell>
+              <TableCell>{formatDateTime(life.updatedAt)}</TableCell>
+              <TableCell className="action-cell">
+                {hasPermission(life) ? (
+                  <>
                     <Button 
                       variant="contained" 
                       color="secondary" 
@@ -414,89 +423,98 @@ const LifeManagement = () => {
                       color="error"
                       onClick={() => handleDelete(life.id)}
                       className="action-button"
-                      style={{ marginLeft: "10px" }}
+                      sx={{ ml: 1 }} // Thay style bằng sx prop
                     >
                       Xóa
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </>
+                ) : (
+                  <Button
+                    variant="contained"
+                    disabled
+                    className="action-button"
+                    sx={{ opacity: 0.7 }}
+                  >
+                    Không có quyền
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-            <DialogTitle>{isAdding ? "Thêm Câu hỏi" : "Sửa Câu hỏi"}</DialogTitle>
-            <DialogContent>
-              <TextField 
-                fullWidth 
-                label="Câu hỏi" 
-                name="question" 
-                value={editingLife?.question || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                required
-              />
-              <TextField 
-                fullWidth 
-                label="Câu trả lời" 
-                name="answer" 
-                value={editingLife?.answer || ""} 
-                onChange={handleChange} 
-                margin="normal" 
-                multiline
-                rows={4}
-                required
-              />
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Lớp học</InputLabel>
-                <Select
-                  value={selectedClassId}
-                  onChange={handleClassChange}
-                  label="Lớp học"
-                  required
-                >
-                  {usedClasses.map((classItem) => (
-                    <MenuItem key={classItem.id} value={classItem.id}>
-                      {classItem.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Danh mục</InputLabel>
-                <Select
-                  name="categoryId"
-                  value={editingLife?.categoryId || ""}
-                  onChange={handleChange}
-                  label="Danh mục"
-                  required
-                  disabled={!selectedClassId || isLoadingCategories}
-                >
-                  {isLoadingCategories ? (
-                    <MenuItem disabled>Đang tải danh mục...</MenuItem>
-                  ) : filteredCategories.length > 0 ? (
-                    filteredCategories.map((category) => (
-                      <MenuItem key={category.id} value={category.id}>
-                        {category.name}
-                      </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem disabled value="">
-                      {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
-                    </MenuItem>
-                  )}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
-              <Button onClick={handleSave} color="primary">Lưu</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </div>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{isAdding ? "Thêm Câu hỏi" : "Sửa Câu hỏi"}</DialogTitle>
+        <DialogContent>
+          <TextField 
+            fullWidth 
+            label="Câu hỏi" 
+            name="question" 
+            value={editingLife?.question || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            required
+          />
+          <TextField 
+            fullWidth 
+            label="Câu trả lời" 
+            name="answer" 
+            value={editingLife?.answer || ""} 
+            onChange={handleChange} 
+            margin="normal" 
+            multiline
+            rows={4}
+            required
+          />
+          
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Lớp học</InputLabel>
+            <Select
+              value={selectedClassId}
+              onChange={handleClassChange}
+              label="Lớp học"
+              required
+            >
+              {usedClasses.map((classItem) => (
+                <MenuItem key={classItem.id} value={classItem.id}>
+                  {classItem.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Danh mục</InputLabel>
+            <Select
+              name="categoryId"
+              value={editingLife?.categoryId || ""}
+              onChange={handleChange}
+              label="Danh mục"
+              required
+              disabled={!selectedClassId || isLoadingCategories}
+            >
+              {isLoadingCategories ? (
+                <MenuItem disabled>Đang tải danh mục...</MenuItem>
+              ) : filteredCategories.length > 0 ? (
+                filteredCategories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled value="">
+                  {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
+          <Button onClick={handleSave} color="primary">Lưu</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
