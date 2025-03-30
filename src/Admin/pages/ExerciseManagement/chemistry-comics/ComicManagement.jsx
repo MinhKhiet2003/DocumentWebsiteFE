@@ -21,6 +21,7 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:5168/api/Comic";
 const CATEGORIES_API_URL = "http://localhost:5168/api/Categories";
@@ -134,7 +135,7 @@ const ComicManagement = () => {
       }
     } catch (error) {
       console.error("Lỗi khi tìm kiếm truyện tranh:", error);
-      alert("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
+      toast.error("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
     }
   };
 
@@ -224,7 +225,7 @@ const ComicManagement = () => {
       const token = localStorage.getItem("token");
       
       if (!user) {
-        alert("Vui lòng đăng nhập để thực hiện thao tác này");
+        toast.error("Vui lòng đăng nhập để thực hiện thao tác này");
         return;
       }
   
@@ -237,7 +238,7 @@ const ComicManagement = () => {
       };
   
       if (!comicData.title || !comicData.comic_url || !comicData.category_id) {
-        alert("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
+        toast.warning("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
         return;
       }
   
@@ -249,7 +250,7 @@ const ComicManagement = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Thêm truyện tranh thành công!");
+        toast.success("Thêm truyện tranh thành công!");
       } else {
         await axios.put(`${API_URL}/${editingComic.id}`, {
           ...comicData,
@@ -258,14 +259,14 @@ const ComicManagement = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Cập nhật truyện tranh thành công!");
+        toast.success("Cập nhật truyện tranh thành công!");
       }
   
       fetchComics();
       setOpenDialog(false);
     } catch (error) {
       console.error("Lỗi khi lưu truyện tranh:", error);
-      alert(error.response?.data?.message || "Có lỗi xảy ra khi lưu truyện tranh");
+      toast.error(error.response?.data?.message || "Có lỗi xảy ra khi lưu truyện tranh");
     }
   };
 

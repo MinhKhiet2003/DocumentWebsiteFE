@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./GamesManagement.css";
 import moment from "moment";
 import { AuthContext } from "../../../../Auth/AuthContext";
+import { toast } from "react-toastify";
 import {
   Button,
   Dialog,
@@ -128,7 +129,7 @@ const GamesManagement = () => {
       setGames(response.data);
     } catch (error) {
       console.error("Lỗi khi tìm kiếm game:", error);
-      alert(error.response?.data?.message || "Có lỗi xảy ra khi tìm kiếm");
+      toast.error(error.response?.data?.message || "Có lỗi xảy ra khi tìm kiếm");
     }
   };
 
@@ -173,7 +174,7 @@ const GamesManagement = () => {
   const handleEdit = async (game) => {
     setIsAdding(false);
     if (!hasPermission(game)) {
-      alert("Bạn không có quyền sửa game này!");
+      toast.warning("Bạn không có quyền sửa game này!");
       return;
     }
     const category = categories.find(cat => cat.id === game.category_id);
@@ -215,7 +216,7 @@ const GamesManagement = () => {
       fetchGames();
     } catch (error) {
       console.error("Lỗi khi xóa game:", error);
-      alert(error.response?.data?.message || "Có lỗi xảy ra khi xóa game");
+      toast.error(error.response?.data?.message || "Có lỗi xảy ra khi xóa game");
     }
   };
 
@@ -230,7 +231,7 @@ const GamesManagement = () => {
       };
       
       if (!gameData.title || !gameData.gameUrl || !gameData.category_id) {
-        alert("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
+        toast.warning("Vui lòng điền đầy đủ các trường bắt buộc (Tiêu đề, Đường dẫn, Danh mục)");
         return;
       }
       
@@ -239,13 +240,13 @@ const GamesManagement = () => {
         await axios.post(API_URL, gameData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Thêm game thành công!");
+        toast.success("Thêm game thành công!");
       } else {
         gameData.uploaded_by = editingGame.uploadedBy;
         await axios.put(`${API_URL}/${editingGame.id}`, gameData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Cập nhật game thành công!");
+        toast.success("Cập nhật game thành công!");
       }
   
       fetchGames();
@@ -253,9 +254,9 @@ const GamesManagement = () => {
     } catch (error) {
       console.error("Lỗi khi lưu game:", error);
       if (error.response?.data?.message) {
-        alert(error.response.data.message); 
+        toast.error(error.response.data.message); 
       } else {
-        alert("Có lỗi xảy ra khi lưu game");
+        toast.error("Có lỗi xảy ra khi lưu game");
       }
     }
   };

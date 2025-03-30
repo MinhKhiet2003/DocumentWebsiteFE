@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";  
+import { toast } from "react-toastify";
 import "./Header.css";
 
 const Header = ({ user, toggleSidebar, isSidebarVisible }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
   const navigate = useNavigate();
 
   const handleAvatarClick = () => {
@@ -14,7 +14,7 @@ const Header = ({ user, toggleSidebar, isSidebarVisible }) => {
   const handleLogout = () => {
     localStorage.removeItem("token"); 
     localStorage.removeItem("user");
-    
+    toast.success("Đăng xuất thành công!");
     navigate("/login");
     setDropdownOpen(false);
   };

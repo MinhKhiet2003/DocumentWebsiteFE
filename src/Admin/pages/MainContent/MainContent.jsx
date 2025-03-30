@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../Auth/AuthContext";
+import { toast } from "react-toastify";
 import "./MainContent.css";
 
 const MainContent = () => {
@@ -56,6 +57,7 @@ const MainContent = () => {
         setCategoryCounts(countsArray);
       } catch (error) {
         console.error('Lỗi khi lấy dữ liệu:', error);
+        toast.error("Lỗi khi tải dữ liệu thống kê");
       } finally {
         setLoading(false);
       }

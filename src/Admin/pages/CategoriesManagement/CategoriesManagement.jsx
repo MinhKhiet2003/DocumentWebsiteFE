@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../../Auth/AuthContext";
 import "./CategoriesManagement.css";
+import { toast } from "react-toastify";
 import moment from "moment";
 import {
   Button,
@@ -15,7 +16,6 @@ import {
   TableRow,
   TableCell,
   FormControl, InputLabel, Select, MenuItem,
-  Alert
 } from "@mui/material";
 import axios from "axios";
 
@@ -54,7 +54,7 @@ const CategoriesManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      Alert("Lỗi khi lấy danh mục! Vui lòng thử lại.");
+      toast.error("Lỗi khi lấy danh mục! Vui lòng thử lại.");
     }
   };
 
@@ -66,7 +66,7 @@ const CategoriesManagement = () => {
       });
       setClasses(response.data);
     } catch (error) {
-      alert("Lỗi khi lấy danh sách lớp!");
+      toast.error("Lỗi khi lấy danh sách lớp!");
     }
   };
 
@@ -103,7 +103,7 @@ const CategoriesManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      alert("Lỗi khi tìm kiếm danh mục!");
+      toast.error("Lỗi khi tìm kiếm danh mục!");
     }
   };
 
@@ -128,10 +128,10 @@ const CategoriesManagement = () => {
       await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("Xóa danh mục thành công!");
+      toast.success("Xóa danh mục thành công!");
       fetchCategories();
     } catch (error) {
-      alert("Lỗi khi xóa danh mục!");
+      toast.error("Lỗi khi xóa danh mục!");
     }
   };
 
@@ -163,13 +163,13 @@ const CategoriesManagement = () => {
           uploadedBy: user.id, 
           createdAt: new Date().toISOString()
         }, config);
-        alert("Thêm danh mục thành công!");
+        toast.success("Thêm danh mục thành công!");
       } else {
         await axios.put(`${API_URL}/${editingCategory.id}`, {
           ...categoryData,
           uploadedBy: editingCategory.uploadedBy 
         }, config);
-        alert("Cập nhật danh mục thành công!");
+        toast.success("Cập nhật danh mục thành công!");
       }
   
       fetchCategories();
@@ -178,7 +178,7 @@ const CategoriesManagement = () => {
       if (error.response && error.response.data) {
         setErrorMessage(error.response.data.message || "Lỗi khi lưu danh mục!");
       } else {
-        alert("Lỗi khi lưu danh mục! Kiểm tra lại thông tin nhập vào.");
+        toast.error("Lỗi khi lưu danh mục! Kiểm tra lại thông tin nhập vào.");
       }
     }
   };

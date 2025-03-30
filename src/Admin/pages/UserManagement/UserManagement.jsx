@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
 import { AuthContext } from "../../../Auth/AuthContext"; 
 import "./UserManagement.css";
+import { toast } from "react-toastify";
 import {
   Button,
   Dialog,
@@ -84,10 +85,10 @@ const UserManagement = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      alert("Xóa người dùng thành công!");
+      toast.success("Xóa người dùng thành công!");
       fetchUsers(); 
     } catch (error) {
-      alert("Lỗi khi xóa người dùng!");
+      toast.error("Lỗi khi xóa người dùng!");
       console.error("Error deleting user:", error);
     }
   };
@@ -101,21 +102,21 @@ const UserManagement = () => {
             'Authorization': `Bearer ${token}`, 
           },
         });
-        alert("Thêm người dùng thành công!");
+        toast.success("Thêm người dùng thành công!");
       } else {
         await axios.put(`http://localhost:5168/api/User/${editingUser.user_id}`, editingUser, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },
         });
-        alert("Cập nhật người dùng thành công!");
+        toast.success("Cập nhật người dùng thành công!");
       }
       fetchUsers(); 
       setOpenDialog(false);
     } catch (error) {if (error.response && error.response.status === 400) {
-      alert(error.response.data); 
+      toast.error(error.response.data); 
     } else {
-      alert("Đã xảy ra lỗi khi lưu thông tin người dùng.");
+      toast.error("Đã xảy ra lỗi khi lưu thông tin người dùng.");
     }
     }
   };

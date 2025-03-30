@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./LifeManagement.css";
 import moment from "moment";
 import { AuthContext } from "../../../../Auth/AuthContext";
+import { toast } from "react-toastify";
 import {
   Button,
   Dialog,
@@ -134,7 +135,7 @@ const LifeManagement = () => {
       }
     } catch (error) {
       console.error("Lỗi khi tìm kiếm câu hỏi:", error);
-      alert("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
+      toast.error("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
     }
   };
 
@@ -222,7 +223,7 @@ const LifeManagement = () => {
       const token = localStorage.getItem("token");
       
       if (!user) {
-        alert("Vui lòng đăng nhập để thực hiện thao tác này");
+        toast.error("Vui lòng đăng nhập để thực hiện thao tác này");
         return;
       }
   
@@ -234,7 +235,7 @@ const LifeManagement = () => {
       };
   
       if (!lifeData.question || !lifeData.answer || !lifeData.category_id) {
-        alert("Vui lòng điền đầy đủ các trường bắt buộc (Câu hỏi, Câu trả lời, Danh mục)");
+        toast.warning("Vui lòng điền đầy đủ các trường bắt buộc (Câu hỏi, Câu trả lời, Danh mục)");
         return;
       }
   
@@ -246,7 +247,7 @@ const LifeManagement = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Thêm câu hỏi thành công!");
+        toast.success("Thêm câu hỏi thành công!");
       } else {
         await axios.put(`${API_URL}/${editingLife.id}`, {
           ...lifeData,
@@ -255,7 +256,7 @@ const LifeManagement = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Cập nhật câu hỏi thành công!");
+        toast.success("Cập nhật câu hỏi thành công!");
       }
   
       fetchLives();
@@ -271,7 +272,7 @@ const LifeManagement = () => {
                         JSON.stringify(error.response.data));
         }
       }
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

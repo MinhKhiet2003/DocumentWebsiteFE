@@ -21,6 +21,7 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API_URL = "http://localhost:5168/api/Document";
 const CATEGORIES_API_URL = "http://localhost:5168/api/Categories";
@@ -137,7 +138,7 @@ const LessonPlansAdmin = () => {
       }
     } catch (error) {
       console.error("Lỗi khi tìm kiếm tài liệu:", error);
-      alert("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
+      toast.error("Có lỗi xảy ra khi tìm kiếm. Vui lòng thử lại!");
     }
   };
 
@@ -245,7 +246,7 @@ const LessonPlansAdmin = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Thêm tài liệu thành công!");
+        toast.success("Thêm tài liệu thành công!");
       } else {
         await axios.put(`${API_URL}/${editingDocument.id}`, {
           ...documentData,
@@ -255,7 +256,7 @@ const LessonPlansAdmin = () => {
         }, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("Cập nhật tài liệu thành công!");
+        toast.success("Cập nhật tài liệu thành công!");
       }
   
       fetchDocuments();
@@ -265,11 +266,11 @@ const LessonPlansAdmin = () => {
       
       if (error.response) {
         const errorMessage = error.response.data?.message || error.response.statusText;
-        alert(`Lỗi: ${errorMessage}`);
+        toast.error(`Lỗi: ${errorMessage}`);
       } else if (error.request) {
-        alert("Không nhận được phản hồi từ server. Vui lòng thử lại!");
+        toast.error("Không nhận được phản hồi từ server. Vui lòng thử lại!");
       } else {
-        alert("Có lỗi xảy ra khi gửi yêu cầu!");
+        toast.error("Có lỗi xảy ra khi gửi yêu cầu!");
       }
     }
   };
