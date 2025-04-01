@@ -21,6 +21,9 @@ import Games from "./pages/NavigationMenu/games/games";
 import GameDetail from "./pages/NavigationMenu/games/GameDetail/GameDetail";
 import Videos from "./pages/NavigationMenu/videos/videos";
 import ExperimentVideoDetail from "./pages/NavigationMenu/videos/ExperimentVideoDetail/ExperimentVideoDetail";
+import ChemistryOfLife from "./pages/NavigationMenu/ChemistryOfLife/ChemistryOfLife";
+import ChemistryComics from "./pages/NavigationMenu/ChemistryComics/ChemistryComics";
+import ChemistryComicsDetail from "./pages/NavigationMenu/ChemistryComics/ChemistryComicsDetail/ChemistryComicsDetail";
 
 import MainAdmin from "./Admin/MainAdmin";
 import MainContent from "./Admin/pages/MainContent/MainContent";
@@ -47,13 +50,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="news" element={<News />} />
             <Route path="resources" element={<Resource />} />
             
-            <Route path="lesson-plans" element={<LessonPlans />} />
-            <Route path="lesson-plans/:id" element={<LessonPlanDetail />} />
-            <Route path="games" element={<Games />} />
-            <Route path="games/:id" element={<GameDetail />} />
-            <Route path="experiment-videos" element={<Videos />} />
-            <Route path="experiment-videos/:id" element={<ExperimentVideoDetail />} />
-            
+            <Route path="/resources/lesson-plans" element={<LessonPlans />} />
+            <Route path="/resources/lesson-plans/:id" element={<LessonPlanDetail />} />
+            <Route path="/resources/games" element={<Games />} />
+            <Route path="/resources/games/:id" element={<GameDetail />} />
+            <Route path="/resources/experiment-videos" element={<Videos />} />
+            <Route path="/resources/experiment-videos/:id" element={<ExperimentVideoDetail />} />
+            <Route path="/resources/chemistry-of-life" element={<ChemistryOfLife />} />
+            <Route path="/resources/chemistry-comics" element={<ChemistryComics />} />
+            <Route path="/resources/chemistry-comics/:id" element={<ChemistryComicsDetail />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 

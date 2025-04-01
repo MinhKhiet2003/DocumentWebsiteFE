@@ -1,41 +1,41 @@
-.video-detail {
+.document-detail {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
-.video-title{
+.document-title{
   display: flex;
   justify-content: space-between;
 }
 
-.video-title button{
+.document-title button{
   height: 30px;
 }
-
-.video-meta {
+.document-meta {
   margin: 20px 0;
   padding: 15px;
   background: #f5f5f5;
   border-radius: 5px;
 }
 
-.video-description {
+.document-description {
   margin: 25px 0;
   padding: 15px;
   border-left: 4px solid #3f51b5;
   background: #f5f5f5;
 }
 
-.video-embed-container {
+.document-embed-container {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 60%; /* Tỉ lệ khung hình */
   height: 0;
   overflow: hidden;
   margin: 20px 0;
+  border: 1px solid #ddd;
   border-radius: 5px;
 }
 
-.video-embed {
+.document-embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -44,15 +44,15 @@
   border: none;
 }
 
-.video-actions {
+.document-actions {
   display: flex;
   gap: 15px;
   margin-top: 10px;
 }
 
-.external-link {
+.external-link, .download-link {
   padding: 8px 15px;
-  background: #ff0000; /* YouTube red */
+  background: #3f51b5;
   color: white;
   text-decoration: none;
   border-radius: 4px;
@@ -60,11 +60,11 @@
   transition: background 0.3s;
 }
 
-.external-link:hover {
-  background: #cc0000;
+.external-link:hover, .download-link:hover {
+  background: #303f9f;
 }
 
-.video-error {
+.document-error {
   padding: 20px;
   background: #ffebee;
   color: #d32f2f;
@@ -74,8 +74,8 @@
   border: 1px solid #ef9a9a;
 }
 
-.Video-container {
-  flex: 1;
-  padding: 20px;
-  margin-left: 250px; /* Cùng với width của Sidebar */
+.document-actions .disabled-link {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }

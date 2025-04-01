@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../Auth/AuthContext';
 import './Navbar.css';
 
@@ -7,8 +7,8 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext); // Sử dụng AuthContext
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
-
-  // Xử lý click bên ngoài dropdown
+  const location = useLocation();
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -28,10 +28,10 @@ const Navbar = () => {
         <h1>SciPlay</h1>
       </div>
       <nav>
-        <Link to="/home">Giới thiệu</Link>
-        <Link to="/resources">Tài nguyên</Link>
-        <Link to="/news">Tin tức & Sự kiện</Link>
-        <Link to="/members">Thành viên & Đội ngũ</Link>
+        <Link to="/home" className={location.pathname.startsWith('/home') ? 'active' : ''}>Giới thiệu</Link>
+        <Link to="/resources" className={location.pathname.startsWith('/resources') ? 'active' : ''}>Tài nguyên</Link>
+        <Link to="/news" className={location.pathname.startsWith('/news') ? 'active' : ''}>Tin tức & Sự kiện</Link>
+        <Link to="/members" className={location.pathname.startsWith('/members') ? 'active' : ''}>Thành viên & Đội ngũ</Link>
 
         {user ? (
           <div id="profile" className="dropdown" ref={dropdownRef}>

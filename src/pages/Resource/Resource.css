@@ -1,15 +1,4 @@
-:root {
-  --primary-color: #2ecc71; /* Màu chính */
-  --secondary-color: #3498db; /* Màu phụ */
-  --background-color: #f4f7f6; /* Màu nền */
-  --text-color: #333; /* Màu chữ */
-  --border-color: #ddd; /* Màu viền */
-  --hover-background: #cbf7dd; /* Màu nền khi hover */
-  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
-}
-
 .Resource-container {
-  margin-top: 10px;
   margin-left: 340px;
   padding: 20px;
   background-color: var(--background-color);
@@ -76,6 +65,7 @@
   overflow: hidden;
   background-color: #f5f5f5;
   display: flex;
+  object-fit: cover; 
   justify-content: center;
   align-items: center;
 }
@@ -101,6 +91,12 @@
   font-size: 0.9rem;
   color: #666;
   margin: 0;
+}
+
+.card-footer{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Responsive Design */

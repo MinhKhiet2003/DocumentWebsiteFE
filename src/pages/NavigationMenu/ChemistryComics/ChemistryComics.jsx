@@ -3,20 +3,16 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
 import Tabs from '../../../components/Tabs/Tabs';
-import Pagination from '../../../components/Pagination/Pagination';
-import '../../Resource/Resource.css';
+import './ChemistryComics.css';
 
-const Videos = () => {
-  const [videos, setVideos] = useState([]);
+const ChemistryComics = () => {
+  const [comics, setComics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentCategory, setCurrentCategory] = useState(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,15 +27,15 @@ const Videos = () => {
         setLoading(true);
         setError(null);
 
-        // Lấy categoryId từ URL
+        // Get categoryId from URL
         const queryParams = new URLSearchParams(location.search);
         const categoryId = queryParams.get('categoryId');
 
-        let apiUrl = 'http://localhost:5168/api/Video';
+        let apiUrl = 'http://localhost:5168/api/Comic';
         if (categoryId) {
-          apiUrl = `http://localhost:5168/api/Video/category/${categoryId}`;
+          apiUrl = `http://localhost:5168/api/Comic/category/${categoryId}`;
           
-          // Lấy thông tin category nếu có categoryId
+          // Get category info if categoryId exists
           const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -54,7 +50,7 @@ const Videos = () => {
           setCurrentCategory(null);
         }
 
-        // Lấy danh sách video
+        // Get comics list
         const response = await fetch(apiUrl, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -67,11 +63,11 @@ const Videos = () => {
             navigate('/login');
             return;
           }
-          throw new Error(response.status === 404 ? 'Không tìm thấy video nào' : 'Lỗi khi tải dữ liệu video');
+          throw new Error(response.status === 404 ? 'No comics found' : 'Error loading data');
         }
 
         const data = await response.json();
-        setVideos(data);
+        setComics(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -82,21 +78,12 @@ const Videos = () => {
     fetchData();
   }, [user, navigate, location.search]);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleCardClick = (e, videoId) => {
+  const handleCardClick = (e, comicId) => {
     if (!user) {
       e.preventDefault();
       navigate('/login');
     }
   };
-
-  // Tính toán video cho trang hiện tại
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentVideos = videos.slice(indexOfFirstItem, indexOfLastItem);
 
   if (loading) {
     return (
@@ -104,10 +91,10 @@ const Videos = () => {
         <Sidebar />
         <div className="Resource-container">
           <Tabs />
-          <h1>Videos{currentCategory && `: ${currentCategory.name}`}</h1>
+          <h1>Chemistry Comics{currentCategory && `: ${currentCategory.name}`}</h1>
           <div className="d-flex justify-content-center my-5">
             <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Đang tải...</span>
+              <span className="visually-hidden">Loading...</span>
             </div>
           </div>
         </div>
@@ -121,7 +108,7 @@ const Videos = () => {
         <Sidebar />
         <div className="Resource-container">
           <Tabs />
-          <h1>Videos{currentCategory && `: ${currentCategory.name}`}</h1>
+          <h1>Chemistry Comics{currentCategory && `: ${currentCategory.name}`}</h1>
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
@@ -129,7 +116,7 @@ const Videos = () => {
             className="btn btn-primary mt-3"
             onClick={() => window.location.reload()}
           >
-            Thử lại
+            Try Again
           </button>
         </div>
       </div>
@@ -141,48 +128,46 @@ const Videos = () => {
       <Sidebar />
       <div className="Resource-container">
         <Tabs />
-        <h1>Videos{currentCategory && `: ${currentCategory.name}`}</h1>
+        <h1>Chemistry Comics{currentCategory && `: ${currentCategory.name}`}</h1>
         
-        {videos.length === 0 ? (
+        {comics.length === 0 ? (
           <div className="alert alert-info mt-3" role="alert">
-            Không có video nào được tìm thấy.
+            No comics found.
           </div>
         ) : (
-          <>
-            <div className="cards-grid">
-              {currentVideos.map((video) => (
-                <Link
-                  to={`/resources/experiment-videos/${video.video_id}`}
-                  key={video.video_id}
-                  className="card-link"
-                  onClick={(e) => handleCardClick(e, video.video_id)}
-                >
-                  <div className="card">
-                    <div className="card-image">
-                      <img
-                        src={video.thumbnailUrl || "https://hoctot.hocmai.vn/wp-content/uploads/2020/07/on-tap-hoa-hoc.png"}
-                        alt={video.title}
-                      />
-                    </div>
-                    <div className="card-content">
-                      <h3>{video.title}</h3>
-                      <p className="text-muted">{video.description || "Không có mô tả"}</p>
-                      <p><small>Tác giả: {video.uploadedByUsername || "Không xác định"}</small></p>
-                      <p><small>Ngày tạo: {new Date(video.created_at).toLocaleDateString()}</small></p>
-                      <div className="card-footer">
-                        <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                        <span className="ms-2">5 phản hồi</span>
-                      </div>
+          <div className="cards-grid">
+            {comics.map((comic) => (
+              <Link
+                to={`/resources/chemistry-comics/${comic.id}`}
+                key={comic.id}
+                className="card-link"
+                onClick={(e) => handleCardClick(e, comic.id)}
+              >
+                <div className="card">
+                  <div className="card-image">
+                    <img
+                      src={comic.imageUrl || "https://hoctot.hocmai.vn/wp-content/uploads/2020/07/on-tap-hoa-hoc.png"}
+                      alt={comic.title}
+                    />
+                  </div>
+                  <div className="card-content">
+                    <h3>{comic.title}</h3>
+                    <p className="text-muted">{comic.description || "No description"}</p>
+                    <p><small>Author: {comic.username || "Unknown"}</small></p>
+                    <p><small>Created: {new Date(comic.createdAt).toLocaleDateString()}</small></p>
+                    <div className="card-footer">
+                      <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                      <span className="ms-2">5 reviews</span>
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </>
+                </div>
+              </Link>
+            ))}
+          </div>
         )}
       </div>
     </div>
   );
 };
 
-export default Videos;
+export default ChemistryComics;

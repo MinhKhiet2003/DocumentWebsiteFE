@@ -21,6 +21,29 @@
       height: 100vh;
       width: calc(100% - 340px); */
     }
+
+    .back-button {
+      padding: 8px 15px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .back-button:hover {
+      background: var(--secondary-color);
+    }
+    
+    .back-button i {
+      margin-right: 5px;
+    }
   
   @media (max-width: 768px) {
     header {
