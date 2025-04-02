@@ -428,6 +428,7 @@ const LessonPlansAdmin = () => {
                     color="error"
                     onClick={() => handleDelete(doc.id)}
                     className="action-button"
+                    sx={{ marginLeft: 1 }}
                   >
                     Xóa
                   </Button>

@@ -54,7 +54,7 @@ const CategoriesManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      toast.error("Lỗi khi lấy danh mục! Vui lòng thử lại.");
+      toast.error("Lỗi khi lấy chủ đề! Vui lòng thử lại.");
     }
   };
 
@@ -103,7 +103,7 @@ const CategoriesManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      toast.error("Lỗi khi tìm kiếm danh mục!");
+      toast.error("Lỗi khi tìm kiếm chủ đề!");
     }
   };
 
@@ -122,16 +122,16 @@ const CategoriesManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa danh mục này?")) return;
+    if (!window.confirm("Bạn có chắc muốn xóa chủ đề này?")) return;
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("Xóa danh mục thành công!");
+      toast.success("Xóa chủ đề thành công!");
       fetchCategories();
     } catch (error) {
-      toast.error("Lỗi khi xóa danh mục!");
+      toast.error("Lỗi khi xóa chủ đề!");
     }
   };
 
@@ -140,7 +140,7 @@ const CategoriesManagement = () => {
       setErrorMessage("");
   
       if (!editingCategory.name || !editingCategory.classId) {
-        setErrorMessage("Tên danh mục và Lớp không được để trống!");
+        setErrorMessage("Tên chủ đề và Lớp không được để trống!");
         return;
       }
   
@@ -163,22 +163,22 @@ const CategoriesManagement = () => {
           uploadedBy: user.id, 
           createdAt: new Date().toISOString()
         }, config);
-        toast.success("Thêm danh mục thành công!");
+        toast.success("Thêm chủ đề thành công!");
       } else {
         await axios.put(`${API_URL}/${editingCategory.id}`, {
           ...categoryData,
           uploadedBy: editingCategory.uploadedBy 
         }, config);
-        toast.success("Cập nhật danh mục thành công!");
+        toast.success("Cập nhật chủ đề thành công!");
       }
   
       fetchCategories();
       setOpenDialog(false);
     } catch (error) {
       if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.message || "Lỗi khi lưu danh mục!");
+        setErrorMessage(error.response.data.message || "Lỗi khi lưu chủ đề!");
       } else {
-        toast.error("Lỗi khi lưu danh mục! Kiểm tra lại thông tin nhập vào.");
+        toast.error("Lỗi khi lưu chủ đề! Kiểm tra lại thông tin nhập vào.");
       }
     }
   };
@@ -196,12 +196,12 @@ const CategoriesManagement = () => {
 
   return (
     <div className="">
-      <h1>Quản lý Danh mục</h1>
+      <h1>Quản lý chủ đề</h1>
 
       <div className="search-add-container">
         <div className="search-box" >
           <TextField
-            label="Tìm kiếm danh mục"
+            label="Tìm kiếm chủ đề"
             variant="outlined"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
@@ -235,7 +235,7 @@ const CategoriesManagement = () => {
           </Select>
         </FormControl>
         <Button variant="contained" color="primary" onClick={handleAdd}>
-          Thêm danh mục
+          Thêm chủ đề
         </Button>
       </div>
 
@@ -243,7 +243,7 @@ const CategoriesManagement = () => {
         <TableHead>
           <TableRow>
             <TableCell>ID</TableCell>
-            <TableCell>Tên danh mục</TableCell>
+            <TableCell>Tên chủ đề</TableCell>
             <TableCell>Mô tả</TableCell>
             <TableCell>Lớp</TableCell>
             <TableCell>Người tạo</TableCell>
@@ -299,10 +299,10 @@ const CategoriesManagement = () => {
       </Table>
 
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>{isAdding ? "Thêm danh mục" : "Sửa danh mục"}</DialogTitle>
+        <DialogTitle>{isAdding ? "Thêm chủ đề" : "Sửa chủ đề"}</DialogTitle>
         <DialogContent>
           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          <TextField fullWidth label="Tên danh mục" name="name" value={editingCategory?.name || ""} onChange={handleChange} margin="normal" />
+          <TextField fullWidth label="Tên chủ đề" name="name" value={editingCategory?.name || ""} onChange={handleChange} margin="normal" />
           <TextField fullWidth label="Mô tả" name="description" value={editingCategory?.description || ""} onChange={handleChange} margin="normal" />
           <FormControl fullWidth margin="normal">
             <InputLabel>Lớp học</InputLabel>

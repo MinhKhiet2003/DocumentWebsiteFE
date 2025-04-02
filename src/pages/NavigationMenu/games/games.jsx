@@ -10,6 +10,7 @@ const Games = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentCategory, setCurrentCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,21 +28,26 @@ const Games = () => {
         setLoading(true);
         setError(null);
 
-        // Lấy categoryId từ URL
         const queryParams = new URLSearchParams(location.search);
         const categoryId = queryParams.get('categoryId');
+        const searchQuery = queryParams.get('search');
+        const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://localhost:5168/api/Game';
+        let apiUrl = 'http://localhost:5168/api/Game/search';
+
+        // Tạo query params cho API
+        const apiParams = new URLSearchParams();
+        if (searchQuery) apiParams.set('name', searchQuery);
+        if (categoryId) apiParams.set('categoryId', categoryId);
+        if (classId) apiParams.set('classId', classId);
+
+        apiUrl += `?${apiParams.toString()}`;
+
         if (categoryId) {
-          apiUrl = `http://localhost:5168/api/Game/category/${categoryId}`;
-          
-          // Lấy thông tin category nếu có categoryId
           const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
+            headers: { 'Authorization': `Bearer ${token}` },
           });
-          
+
           if (categoryResponse.ok) {
             const categoryData = await categoryResponse.json();
             setCurrentCategory(categoryData);
@@ -52,9 +58,7 @@ const Games = () => {
 
         // Lấy danh sách game
         const response = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
         if (!response.ok) {

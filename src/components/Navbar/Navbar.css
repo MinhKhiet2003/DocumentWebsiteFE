@@ -12,7 +12,19 @@ header {
   width: 100%;
   z-index: 1000;
 }
+/* Logo styles */
+header div img {
+  height: 80px; 
+  width: auto; 
+  object-fit: contain; 
+  margin-left: 10px; 
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
 
+header div img:hover {
+  transform: scale(1.1); 
+}
 /* Navigation styles */
 header nav {
   display: flex;

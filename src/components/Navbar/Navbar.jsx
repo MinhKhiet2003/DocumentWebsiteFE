@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../Auth/AuthContext';
+import logo from '../../assets/Hachieve.png';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -25,7 +26,7 @@ const Navbar = () => {
   return (
     <header>
       <div>
-        <h1>SciPlay</h1>
+      <Link to="/"><img src={logo} alt="Logo" /></Link>
       </div>
       <nav>
         <Link to="/home" className={location.pathname.startsWith('/home') ? 'active' : ''}>Giới thiệu</Link>

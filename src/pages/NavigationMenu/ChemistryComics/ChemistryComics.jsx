@@ -10,9 +10,13 @@ const ChemistryComics = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentCategory, setCurrentCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,21 +31,26 @@ const ChemistryComics = () => {
         setLoading(true);
         setError(null);
 
-        // Get categoryId from URL
         const queryParams = new URLSearchParams(location.search);
         const categoryId = queryParams.get('categoryId');
+        const searchQuery = queryParams.get('search');
+        const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://localhost:5168/api/Comic';
+        let apiUrl = 'http://localhost:5168/api/Comic/search';
+
+        // Create API query params
+        const apiParams = new URLSearchParams();
+        if (searchQuery) apiParams.set('title', searchQuery);
+        if (categoryId) apiParams.set('categoryId', categoryId);
+        if (classId) apiParams.set('classId', classId);
+
+        apiUrl += `?${apiParams.toString()}`;
+
         if (categoryId) {
-          apiUrl = `http://localhost:5168/api/Comic/category/${categoryId}`;
-          
-          // Get category info if categoryId exists
           const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
+            headers: { 'Authorization': `Bearer ${token}` },
           });
-          
+
           if (categoryResponse.ok) {
             const categoryData = await categoryResponse.json();
             setCurrentCategory(categoryData);
@@ -52,9 +61,7 @@ const ChemistryComics = () => {
 
         // Get comics list
         const response = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
         if (!response.ok) {
@@ -63,7 +70,7 @@ const ChemistryComics = () => {
             navigate('/login');
             return;
           }
-          throw new Error(response.status === 404 ? 'No comics found' : 'Error loading data');
+          throw new Error(response.status === 404 ? 'Không thấy truyện tranh hóa học nào' : 'lỗi không xác định');
         }
 
         const data = await response.json();
@@ -78,12 +85,18 @@ const ChemistryComics = () => {
     fetchData();
   }, [user, navigate, location.search]);
 
+
   const handleCardClick = (e, comicId) => {
     if (!user) {
       e.preventDefault();
       navigate('/login');
     }
   };
+
+  // Calculate comics for current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentComics = comics.slice(indexOfFirstItem, indexOfLastItem);
 
   if (loading) {
     return (
@@ -132,38 +145,40 @@ const ChemistryComics = () => {
         
         {comics.length === 0 ? (
           <div className="alert alert-info mt-3" role="alert">
-            No comics found.
+            Không có truyện tranh tài liệu nào.
           </div>
         ) : (
-          <div className="cards-grid">
-            {comics.map((comic) => (
-              <Link
-                to={`/resources/chemistry-comics/${comic.id}`}
-                key={comic.id}
-                className="card-link"
-                onClick={(e) => handleCardClick(e, comic.id)}
-              >
-                <div className="card">
-                  <div className="card-image">
-                    <img
-                      src={comic.imageUrl || "https://hoctot.hocmai.vn/wp-content/uploads/2020/07/on-tap-hoa-hoc.png"}
-                      alt={comic.title}
-                    />
-                  </div>
-                  <div className="card-content">
-                    <h3>{comic.title}</h3>
-                    <p className="text-muted">{comic.description || "No description"}</p>
-                    <p><small>Author: {comic.username || "Unknown"}</small></p>
-                    <p><small>Created: {new Date(comic.createdAt).toLocaleDateString()}</small></p>
-                    <div className="card-footer">
-                      <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                      <span className="ms-2">5 reviews</span>
+          <>
+            <div className="cards-grid">
+              {currentComics.map((comic) => (
+                <Link
+                  to={`/resources/chemistry-comics/${comic.id}`}
+                  key={comic.id}
+                  className="card-link"
+                  onClick={(e) => handleCardClick(e, comic.id)}
+                >
+                  <div className="card">
+                    <div className="card-image">
+                      <img
+                        src={comic.imageUrl || "https://hoctot.hocmai.vn/wp-content/uploads/2020/07/on-tap-hoa-hoc.png"}
+                        alt={comic.title}
+                      />
+                    </div>
+                    <div className="card-content">
+                      <h3>{comic.title}</h3>
+                      <p className="text-muted">{comic.description || "No description"}</p>
+                      <p><small>Author: {comic.username || "Unknown"}</small></p>
+                      <p><small>Created: {new Date(comic.createdAt).toLocaleDateString()}</small></p>
+                      <div className="card-footer">
+                        <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                        <span className="ms-2">5 reviews</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

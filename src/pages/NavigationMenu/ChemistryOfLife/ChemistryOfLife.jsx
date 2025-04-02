@@ -212,7 +212,7 @@ const ChemistryOfLife = () => {
                 
                 {answeredQuestions.includes(question.id) && (
                   <div className="answer-section">
-                    <p className="correct-answer">Đáp án: {question.answer}</p>
+                    <p className="correct-answer">Đáp án gợi ý: {question.answer}</p>
                     <p className="answer-author">
                       Tác giả: {question.username || 'Không xác định'}
                     </p>

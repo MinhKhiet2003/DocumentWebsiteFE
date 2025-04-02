@@ -413,6 +413,7 @@ const GamesManagement = () => {
                       color="error"
                       onClick={() => handleDelete(game.id)}
                       className="action-button"
+                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import axios from 'axios';
 import { AuthContext } from '../../Auth/AuthContext';
@@ -7,6 +7,9 @@ import { AuthContext } from '../../Auth/AuthContext';
 const Sidebar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchTerm, setSearchTerm] = useState(""); 
+
   const [menuItems, setMenuItems] = useState([
     {
       title: "Kế hoạch bài dạy",
@@ -55,146 +58,264 @@ const Sidebar = () => {
     baseURL: 'http://localhost:5168'
   });
 
-  authAxios.interceptors.request.use(
-    config => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    error => {
-      return Promise.reject(error);
+  // Thêm interceptor để tự động gắn token
+  authAxios.interceptors.request.use(config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  );
+    return config;
+  }, error => Promise.reject(error));
 
-  const toggleMenu = async (index) => {
+  const searchParams = new URLSearchParams(location.search);
+  const classId = searchParams.get('classId');
+
+  const fetchCategories = async (resourceType) => {
+    try {
+      const params = { resourceType };
+      if (classId) params.classId = classId;
+      
+      const response = await authAxios.get('/api/Categories/used-by-type', { params });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      if (error.response?.status === 401) {
+        logout();
+        navigate('/login');
+      }
+      throw error;
+    }
+  };
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const currentPath = location.pathname;
+      const searchParams = new URLSearchParams(location.search);
+      
+      if (searchTerm.trim() !== "") {
+        searchParams.set('search', searchTerm);
+      } else {
+        searchParams.delete('search');
+      }
+  
+      // Navigate to the new URL
+      navigate(`${currentPath}?${searchParams.toString()}`);
+    }
+  };
+  // Hàm xây dựng path với query params
+  const buildPath = (basePath, categoryId = null) => {
+    const params = new URLSearchParams();
+    if (classId) params.set('classId', classId);
+    if (categoryId) params.set('categoryId', categoryId);
+    return `${basePath}?${params.toString()}`;
+  };
+
+  // Hàm xử lý toggle menu chính
+  const toggleMenu = async (index, e) => {
+    e?.stopPropagation();
     const item = menuItems[index];
     
-    if (item.resourceType && item.subItems.length === 0 && !item.loading) {
-      try {
-        const updatedItems = [...menuItems];
-        updatedItems[index] = {
-          ...updatedItems[index],
-          loading: true,
-          error: null
-        };
-        setMenuItems(updatedItems);
-  
-        const response = await authAxios.get(
-          `/api/Categories/used-by-type?resourceType=${item.resourceType}`
-        );
-  
-        const subItems = response.data.map(category => ({
-          title: category.name,
-          path: `${item.path}?categoryId=${category.id}`,
-          categoryId: category.id 
-        }));
-  
-        const newItems = [...menuItems];
-        newItems[index] = {
-          ...newItems[index],
-          subItems,
-          loading: false
-        };
-        setMenuItems(newItems);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        
-        if (error.response && error.response.status === 401) {
-          logout();
-          navigate('/login');
-          return;
-        }
-  
-        const newItems = [...menuItems];
-        newItems[index] = {
-          ...newItems[index],
-          error: "Không thể tải danh mục",
-          loading: false
-        };
-        setMenuItems(newItems);
-      }
+    if (!item.resourceType || item.loading) {
+      setExpanded(expanded === index ? null : index);
+      return;
     }
-  
+
+    try {
+      // Bắt đầu loading
+      setMenuItems(prev => prev.map((mi, i) => 
+        i === index ? { ...mi, loading: true, error: null } : mi
+      ));
+
+      const categories = await fetchCategories(item.resourceType);
+      
+      // Cập nhật danh sách subItems
+      setMenuItems(prev => prev.map((mi, i) => 
+        i === index ? { 
+          ...mi, 
+          subItems: categories.map(cat => ({
+            title: cat.name,
+            path: buildPath(mi.path, cat.id),
+            categoryId: cat.id
+          })),
+          loading: false
+        } : mi
+      ));
+    } catch (error) {
+      setMenuItems(prev => prev.map((mi, i) => 
+        i === index ? { ...mi, error: "Không thể tải chủ đề", loading: false } : mi
+      ));
+    }
+    
     setExpanded(expanded === index ? null : index);
   };
 
-  const toggleSubMenu = async (menuIndex, subItemIndex) => {
+  // Hàm xử lý toggle sub menu
+  const toggleSubMenu = async (menuIndex, subItemIndex, e) => {
+    e?.stopPropagation();
     const subItem = menuItems[menuIndex].subItems[subItemIndex];
     
-    if (subItem.resourceType && subItem.subItems.length === 0 && !subItem.loading) {
-      try {
-        const updatedItems = [...menuItems];
-        updatedItems[menuIndex].subItems[subItemIndex] = {
-          ...updatedItems[menuIndex].subItems[subItemIndex],
+    if (!subItem.resourceType || subItem.loading) {
+      setExpandedSubMenu(expandedSubMenu === `${menuIndex}-${subItemIndex}` ? null : `${menuIndex}-${subItemIndex}`);
+      return;
+    }
+
+    try {
+      // Bắt đầu loading
+      setMenuItems(prev => {
+        const newItems = [...prev];
+        newItems[menuIndex].subItems[subItemIndex] = {
+          ...subItem,
           loading: true,
           error: null
         };
-        setMenuItems(updatedItems);
-  
-        const response = await authAxios.get(
-          `/api/Categories/used-by-type?resourceType=${subItem.resourceType}`
-        );
-  
-        const subSubItems = response.data.map(category => ({
-          title: category.name,
-          path: `${subItem.path}?categoryId=${category.id}`,
-          categoryId: category.id 
-        }));
-  
-        const newItems = [...menuItems];
+        return newItems;
+      });
+
+      const categories = await fetchCategories(subItem.resourceType);
+      
+      // Cập nhật danh sách subItems
+      setMenuItems(prev => {
+        const newItems = [...prev];
         newItems[menuIndex].subItems[subItemIndex] = {
-          ...newItems[menuIndex].subItems[subItemIndex],
-          subItems: subSubItems,
+          ...subItem,
+          subItems: categories.map(cat => ({
+            title: cat.name,
+            path: buildPath(subItem.path, cat.id),
+            categoryId: cat.id
+          })),
           loading: false
         };
-        setMenuItems(newItems);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        
-        if (error.response && error.response.status === 401) {
-          logout();
-          navigate('/login');
-          return;
-        }
-  
-        const newItems = [...menuItems];
+        return newItems;
+      });
+    } catch (error) {
+      setMenuItems(prev => {
+        const newItems = [...prev];
         newItems[menuIndex].subItems[subItemIndex] = {
-          ...newItems[menuIndex].subItems[subItemIndex],
-          error: "Không thể tải danh mục",
+          ...subItem,
+          error: "Không thể tải chủ đề",
           loading: false
         };
-        setMenuItems(newItems);
-      }
+        return newItems;
+      });
     }
-  
+    
     setExpandedSubMenu(expandedSubMenu === `${menuIndex}-${subItemIndex}` ? null : `${menuIndex}-${subItemIndex}`);
+  };
+
+  // Cập nhật chủ đề khi classId thay đổi
+  useEffect(() => {
+    const updateCategories = async () => {
+      const updates = menuItems.map(async (item, index) => {
+        // Cập nhật menu chính có resourceType
+        if (item.resourceType && item.subItems.length > 0) {
+          try {
+            const categories = await fetchCategories(item.resourceType);
+            return {
+              ...item,
+              subItems: categories.map(cat => ({
+                title: cat.name,
+                path: buildPath(item.path, cat.id),
+                categoryId: cat.id
+              })),
+              loading: false,
+              error: null
+            };
+          } catch (error) {
+            return {
+              ...item,
+              error: "Không thể tải chủ đề",
+              loading: false
+            };
+          }
+        }
+        
+        // Cập nhật sub menu có resourceType
+        if (item.subItems) {
+          const updatedSubItems = await Promise.all(item.subItems.map(async (subItem, subIndex) => {
+            if (subItem.resourceType && subItem.subItems.length > 0) {
+              try {
+                const categories = await fetchCategories(subItem.resourceType);
+                return {
+                  ...subItem,
+                  subItems: categories.map(cat => ({
+                    title: cat.name,
+                    path: buildPath(subItem.path, cat.id),
+                    categoryId: cat.id
+                  })),
+                  loading: false,
+                  error: null
+                };
+              } catch (error) {
+                return {
+                  ...subItem,
+                  error: "Không thể tải chủ đề",
+                  loading: false
+                };
+              }
+            }
+            return subItem;
+          }));
+          
+          return {
+            ...item,
+            subItems: updatedSubItems
+          };
+        }
+        
+        return item;
+      });
+
+      const updatedMenuItems = await Promise.all(updates);
+      setMenuItems(updatedMenuItems);
+    };
+
+    updateCategories();
+  }, [classId]);
+
+  // Kiểm tra active menu
+  const isActive = (path) => {
+    return path && location.pathname === path.split('?')[0];
   };
 
   return (
     <div className="sidebar">
       <aside>
-        <input type="text" className="form-control mb-3" placeholder="Search" />
+        <input
+          type="text"
+          className="form-control mb-3"
+          placeholder="Tìm kiếm..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={handleSearchKeyDown} 
+        />
         <ul className="list-group">
           {menuItems.map((item, index) => (
-            <li className="list-group-item" key={index}>
-              {item.resourceType ? (
-                <div className="menu-item-container" onClick={() => toggleMenu(index)}>
+            <li className={`list-group-item ${isActive(item.path) ? 'active-menu' : ''}`} key={index}>
+              {item.path ? (
+                <div className="menu-item-container">
                   <Link 
-                    to={item.path} 
-                    className="menu-item d-flex justify-content-between align-items-center"
+                    to={buildPath(item.path)}
+                    className={`menu-item d-flex justify-content-between align-items-center ${isActive(item.path) ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMenu(index, e);
+                    }}
                   >
-                    {item.title}
-                    {item.loading && <span className="spinner-border spinner-border-sm" role="status" />}
+                    <span>{item.title}</span>
+                    {item.resourceType && (
+                      <i className={`${expanded === index ? 'up' : 'down'}`} />
+                    )}
+                    {item.loading && <span className="spinner-border spinner-border-sm" />}
                   </Link>
                 </div>
               ) : (
-                <div 
-                  className="menu-item d-flex justify-content-between align-items-center"
-                  onClick={() => setExpanded(expanded === index ? null : index)}
-                >
-                  {item.title}
+                <div className="menu-item-container">
+                  <div 
+                    className={`menu-item d-flex justify-content-between align-items-center`}
+                    onClick={() => setExpanded(expanded === index ? null : index)}
+                  >
+                    <span>{item.title}</span>
+                    <i className={`${expanded === index ? 'up' : 'down'}`} />
+                  </div>
                 </div>
               )}
               
@@ -202,31 +323,39 @@ const Sidebar = () => {
                 {item.error && <li className="text-danger small p-2">{item.error}</li>}
                 
                 {item.subItems.map((subItem, subIndex) => (
-                  <li key={subIndex}>
+                  <li key={subIndex} className={isActive(subItem.path) ? 'active-submenu' : ''}>
                     {subItem.resourceType ? (
                       <div 
-                        className="sub-menu-item d-flex justify-content-between align-items-center"
-                        onClick={() => toggleSubMenu(index, subIndex)}
+                        className={`sub-menu-item d-flex justify-content-between align-items-center ${isActive(subItem.path) ? 'active' : ''}`}
+                        onClick={(e) => toggleSubMenu(index, subIndex, e)}
                       >
-                        {subItem.title}
-                        {subItem.loading && <span className="spinner-border spinner-border-sm" role="status" />}
+                        <span>{subItem.title}</span>
+                        {subItem.loading ? (
+                          <span className="spinner-border spinner-border-sm" />
+                        ) : (
+                          <i className={`fas fa-chevron-${
+                            expandedSubMenu === `${index}-${subIndex}` ? 'up' : 'down'
+                          }`} />
+                        )}
                       </div>
                     ) : (
                       <Link 
                         to={subItem.path} 
-                        className="sub-menu-item"
+                        className={`sub-menu-item ${isActive(subItem.path) ? 'active' : ''}`}
                       >
                         {subItem.title}
                       </Link>
                     )}
                     
-                    {subItem.subItems && subItem.subItems.length > 0 && (
-                      <ul className={`sub-sub-menu ${expandedSubMenu === `${index}-${subIndex}` ? 'open' : ''}`}>
+                    {subItem.subItems?.length > 0 && (
+                      <ul className={`sub-sub-menu ${
+                        expandedSubMenu === `${index}-${subIndex}` ? 'open' : ''
+                      }`}>
                         {subItem.error && <li className="text-danger small p-2">{subItem.error}</li>}
                         {subItem.subItems.map((subSubItem, subSubIndex) => (
                           <li 
                             key={subSubIndex} 
-                            className="sub-sub-menu-item"
+                            className={`sub-sub-menu-item ${location.pathname + location.search === subSubItem.path ? 'active' : ''}`}
                             onClick={() => navigate(subSubItem.path)}
                           >
                             {subSubItem.title}
@@ -242,7 +371,13 @@ const Sidebar = () => {
         </ul>
       </aside>
       <div className="sidebar-footer">
-        <p className="mt-2">&copy; SciPlay - Trường ĐHSP Hà Nội</p>
+        {/* {user && (
+          <div className="user-info mb-2">
+            <i className="fas fa-user-circle me-2" />
+            <span>{user.username}</span>
+          </div>
+        )} */}
+        <p className="mt-2 mb-0">&copy; Hachieve - Trường ĐHSP Hà Nội</p>
       </div>
     </div>
   );

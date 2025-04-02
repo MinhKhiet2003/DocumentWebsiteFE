@@ -425,6 +425,7 @@ const ComicManagement = () => {
                       color="error"
                       onClick={() => handleDelete(comic.id)}
                       className="action-button"
+                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>

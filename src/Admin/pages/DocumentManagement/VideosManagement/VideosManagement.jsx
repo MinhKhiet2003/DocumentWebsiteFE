@@ -434,6 +434,7 @@ const VideosManagement = () => {
                       color="error"
                       onClick={() => handleDelete(video.video_id)}
                       className="action-button"
+                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>

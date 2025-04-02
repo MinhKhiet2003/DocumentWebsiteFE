@@ -11,6 +11,7 @@ const Videos = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentCategory, setCurrentCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,21 +32,26 @@ const Videos = () => {
         setLoading(true);
         setError(null);
 
-        // Lấy categoryId từ URL
         const queryParams = new URLSearchParams(location.search);
         const categoryId = queryParams.get('categoryId');
+        const searchQuery = queryParams.get('search');
+        const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://localhost:5168/api/Video';
+        let apiUrl = 'http://localhost:5168/api/Video/search';
+
+        // Tạo query params cho API
+        const apiParams = new URLSearchParams();
+        if (searchQuery) apiParams.set('name', searchQuery);
+        if (categoryId) apiParams.set('categoryId', categoryId);
+        if (classId) apiParams.set('classId', classId);
+
+        apiUrl += `?${apiParams.toString()}`;
+
         if (categoryId) {
-          apiUrl = `http://localhost:5168/api/Video/category/${categoryId}`;
-          
-          // Lấy thông tin category nếu có categoryId
           const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
+            headers: { 'Authorization': `Bearer ${token}` },
           });
-          
+
           if (categoryResponse.ok) {
             const categoryData = await categoryResponse.json();
             setCurrentCategory(categoryData);
@@ -56,9 +62,7 @@ const Videos = () => {
 
         // Lấy danh sách video
         const response = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          headers: { 'Authorization': `Bearer ${token}` },
         });
 
         if (!response.ok) {
