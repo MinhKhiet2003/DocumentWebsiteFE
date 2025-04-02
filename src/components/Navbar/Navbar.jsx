@@ -5,7 +5,7 @@ import logo from '../../assets/Hachieve.png';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext); // Sử dụng AuthContext
+  const { user, logout } = useContext(AuthContext); 
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();

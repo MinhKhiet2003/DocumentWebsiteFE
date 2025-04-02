@@ -33,7 +33,7 @@ const CustomFormLoginRegister = ({
           )}
           <div className="form-group">
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="usernameOrEmail" className="form-control" required />
+            <input id="email" name="usernameOrEmail" className="form-control" required />
           </div>
           <div className="form-group password-group">
             <label htmlFor="password">Mật khẩu:</label>
@@ -71,13 +71,15 @@ const CustomFormLoginRegister = ({
             <button type="submit" className="btn btn-primary">
               {contentButton1}
             </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleSwitchClick} 
-            >
-              {contentButton2}
-            </button>
+            {handleSwitchClick && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleSwitchClick} 
+              >
+                {contentButton2}
+              </button>
+            )}
           </div>
         </form>
       </div>

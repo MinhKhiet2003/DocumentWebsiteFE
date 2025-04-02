@@ -114,7 +114,11 @@ const UserManagement = () => {
       fetchUsers(); 
       setOpenDialog(false);
     } catch (error) {if (error.response && error.response.status === 400) {
-      toast.error(error.response.data); 
+      if (error.response.data && error.response.data.error === "Username đã tồn tại") {
+        toast.error("Tên người dùng đã tồn tại, vui lòng chọn tên khác!");
+      } else {
+        toast.error(error.response.data || "Đã xảy ra lỗi khi lưu thông tin người dùng.");
+      }
     } else {
       toast.error("Đã xảy ra lỗi khi lưu thông tin người dùng.");
     }

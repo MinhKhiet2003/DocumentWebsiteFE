@@ -68,12 +68,19 @@ export const AuthProvider = ({ children }) => {
     navigate('/');
   };
 
+  const updateUser = (updatedUser) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      ...updatedUser
+    }));
+  };
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, updateUser }}>
       {!loading && children}
     </AuthContext.Provider>
   );

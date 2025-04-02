@@ -1,18 +1,15 @@
-import React, { useState, useContext } from 'react'; 
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomFormLoginRegister from '../../components/LoginRegister';
-import { AuthContext } from '../../Auth/AuthContext'; 
+import { AuthContext } from '../../Auth/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Login = () => {
-  const [isRegister, setIsRegister] = useState(false);
-  const { login } = useContext(AuthContext); // Sử dụng hàm login từ AuthContext
-
-  const handleSwitchClick = () => {
-    setIsRegister((prev) => !prev);
-  };
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
 
     const loginData = {
@@ -34,63 +31,29 @@ const Login = () => {
       }
 
       const data = await response.json();
-      console.log('Đăng nhập thành công:', data);
-
-      // Gọi hàm login từ AuthContext để lưu token và gọi API /profile
       login(data.token);
-
-      // Chuyển hướng về trang chủ
-      window.location.href = '/';
+      navigate('/');
     } catch (error) {
-      console.error('Lỗi đăng nhập:', error);
-      alert('Tài khoản hoặc mật khẩu không chính xác!');
+      toast.error('Tài khoản hoặc mật khẩu không chính xác!');
     }
   };
 
-  const handleRegisterSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const registerData = {
-      username: formData.get('nickname'),
-      password: formData.get('password'),
-      email: formData.get('usernameOrEmail'),
-      role: 'user',
-    };
-
-    try {
-      const response = await fetch('http://localhost:5168/api/User/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registerData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Đăng ký thất bại');
-      }
-
-      const data = await response.json();
-      console.log('Đăng ký thành công:', data);
-      alert('Đăng ký thành công! Vui lòng đăng nhập.');
-      setIsRegister(false);
-    } catch (error) {
-      console.error('Lỗi đăng ký:', error);
-      alert('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.');
-    }
+  const handleSwitchToRegister = () => {
+    navigate('/register');
   };
 
   return (
-    <CustomFormLoginRegister
-      title={isRegister ? 'Đăng ký' : 'Đăng nhập'}
-      isRegister={isRegister}
-      contentButton1={isRegister ? 'Đăng ký' : 'Đăng nhập'}
-      contentButton2={isRegister ? 'Đăng nhập' : 'Đăng ký'}
-      handleOnSubmit={isRegister ? handleRegisterSubmit : handleLoginSubmit}
-      handleSwitchClick={handleSwitchClick}
-    />
+    <div>
+      <CustomFormLoginRegister
+        title="Đăng nhập"
+        isRegister={false}
+        contentButton1="Đăng nhập"
+        contentButton2="Đăng ký"
+        handleOnSubmit={handleLoginSubmit}
+        handleSwitchClick={handleSwitchToRegister}
+      />
+      <ToastContainer />
+    </div>
   );
 };
 

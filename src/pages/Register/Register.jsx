@@ -1,56 +1,100 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomFormLoginRegister from '../../components/LoginRegister';
+import { toast, ToastContainer } from 'react-toastify';
 
 const Register = () => {
-  const handleOnSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành động mặc định của form
+  const navigate = useNavigate();
 
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const registerData = {
-      username: formData.get('nickname'), 
-      password: formData.get('password'), 
-      email: formData.get('usernameOrEmail'),
-      role: "user", 
-    };
+    const username = formData.get('nickname');
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmPassword');
+    const email = formData.get('usernameOrEmail');
 
-    // console.log("Dữ liệu gửi lên:", JSON.stringify(registerData));
+    // Validation
+    if (username.length < 3) {
+      toast.error('Tên người dùng phải có ít nhất 3 ký tự.');
+      return;
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(username)) {
+      toast.error('Tên người dùng chỉ được chứa chữ cái, số và dấu gạch dưới.');
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error('Mật khẩu phải có ít nhất 6 ký tự.');
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Email không hợp lệ.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error('Xác nhận mật khẩu không đúng.');
+      return;
+    }
+
+    const registerData = {
+      username: username,
+      password: password,
+      email: email,
+      role: "user",
+    };
 
     try {
       const response = await fetch('http://localhost:5168/api/User/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(registerData), 
+        body: JSON.stringify(registerData),
       });
 
-      // console.log("Phản hồi từ máy chủ:", response);
-
       if (!response.ok) {
-        const errorData = await response.json(); 
-        console.error("Chi tiết lỗi từ máy chủ:", errorData);
-        throw new Error(errorData.message || "Đăng ký thất bại");
+        const errorData = await response.json();
+        // Nếu có lỗi liên quan đến username đã tồn tại, hiển thị thông báo lỗi
+        if (errorData.errorMessage === 'Username đã tồn tại') {
+          toast.error('Tên người dùng đã tồn tại. Vui lòng chọn tên khác.');
+        } else {
+          toast.error(errorData.errorMessage || "Đăng ký thất bại");
+        }
+        return;
       }
 
-      const data = await response.json();
-      console.log('Đăng ký thành công:', data);
-      alert("Đăng ký thành công! Vui lòng đăng nhập.");
-      window.location.href = '/login'; 
+      toast.success("Đăng ký thành công!");
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); 
     } catch (error) {
-      console.error('Lỗi đăng ký:', error);
-      alert('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.');
+      toast.error(error.message || 'Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.');
     }
   };
 
+  const handleSwitchToLogin = () => {
+    navigate('/login');
+  };
+
   return (
-    <CustomFormLoginRegister
-      title={"Đăng ký"}
-      isRegister={true}
-      contentButton1={"Đăng ký"}
-      contentButton2={"Đăng nhập"}
-      handleOnSubmit={handleOnSubmit}
-    />
+    <div>
+      <CustomFormLoginRegister
+        title="Đăng ký"
+        isRegister={true}
+        contentButton1="Đăng ký"
+        contentButton2="Đăng nhập"
+        handleOnSubmit={handleRegisterSubmit}
+        handleSwitchClick={handleSwitchToLogin}
+      />
+      <ToastContainer />
+    </div>
   );
 };
 

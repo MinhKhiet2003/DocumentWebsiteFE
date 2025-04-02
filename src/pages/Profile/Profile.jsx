@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import ProfileDialog from './ProfileDialog/ProfileDialog'; 
+import { AuthContext } from '../../Auth/AuthContext'; 
 import ChangePasswordDialog from './ChangePasswordDialog/ChangePasswordDialog'; 
 import './Profile.css';
 import Navbar from '../../components/Navbar/Navbar';
 import Modal from 'react-modal';
+import { toast,ToastContainer } from 'react-toastify';
 
-// Thiết lập phần tử gốc của ứng dụng
 Modal.setAppElement('#root'); 
 
 const Profile = () => {
   const navigate = useNavigate(); 
+  const { user, updateUser } = useContext(AuthContext); 
   const [userInfo, setUserInfo] = useState({
     username: '',
     avatar: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -20,7 +22,6 @@ const Profile = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false); 
 
-  // Hàm để gọi API lấy thông tin profile
   const fetchProfile = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -39,7 +40,7 @@ const Profile = () => {
 
       const data = await response.json();
       setUserInfo({
-        username: data.nickname,
+        username: data.username,
         avatar: data.avatar || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
         role: data.role,
         email: data.email,
@@ -49,11 +50,10 @@ const Profile = () => {
     }
   };
 
-  // Hàm để cập nhật thông tin profile
   const handleUpdateProfile = async (updatedData) => {
     const token = localStorage.getItem('token');
     if (!token) return;
-
+  
     try {
       const response = await fetch('http://localhost:5168/api/User/profile', {
         method: 'PUT',
@@ -67,11 +67,17 @@ const Profile = () => {
           ProfilePicturePath: updatedData.profilePicturePath,
         }),
       });
-
+  
       if (!response.ok) {
-        throw new Error('Không thể cập nhật thông tin profile');
+        const errorData = await response.json();
+        if (errorData.errorMessage === 'Username đã tồn tại') {
+          toast.error('Tên người dùng đã tồn tại, vui lòng chọn tên khác!');
+        } else {
+          toast.error(errorData.errorMessage || "Không thể cập nhật thông tin profile");
+        }
+        return;
       }
-
+  
       if (response.status === 204) {
         setUserInfo((prev) => ({
           ...prev,
@@ -80,15 +86,22 @@ const Profile = () => {
           email: updatedData.email,
         }));
         setIsDialogOpen(false);
-        alert('Cập nhật thông tin thành công!');
+        toast.success('Cập nhật thông tin thành công!');
+  
+        // Update context user state with updated values
+        updateUser({
+          username: updatedData.username,
+          email: updatedData.email,
+          avatar: updatedData.profilePicturePath,
+          role: user.role,  // Using role from the current user context
+        });
       }
     } catch (error) {
       console.error('Lỗi khi cập nhật thông tin profile:', error);
-      alert('Có lỗi xảy ra khi cập nhật thông tin.');
+      toast.warning('Có lỗi xảy ra khi cập nhật thông tin.');
     }
   };
-
-  // Hàm để đổi mật khẩu
+  
   const handleChangePassword = async (passwordData) => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -108,17 +121,18 @@ const Profile = () => {
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        alert(errorResponse.errorMessage || 'Đổi mật khẩu thất bại');
+        toast.error(errorResponse.errorMessage || 'Đổi mật khẩu thất bại');
         return;
       }
 
       if (response.status === 204) {
-        alert('Đổi mật khẩu thành công!');
+        toast.success('Đổi mật khẩu thành công!');
         setIsChangePasswordDialogOpen(false);
+        fetchProfile();
       }
     } catch (error) {
       console.error('Lỗi khi đổi mật khẩu:', error);
-      alert('Có lỗi xảy ra khi đổi mật khẩu.');
+      toast.error('Có lỗi xảy ra khi đổi mật khẩu.');
     }
   };
 
@@ -174,6 +188,7 @@ const Profile = () => {
         onRequestClose={() => setIsChangePasswordDialogOpen(false)}
         onChangePassword={handleChangePassword}
       />
+      <ToastContainer />
     </div>
   );
 };
