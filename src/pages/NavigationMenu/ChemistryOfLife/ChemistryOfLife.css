@@ -4,7 +4,14 @@
   padding: 20px;
   font-family: 'Arial', sans-serif;
 }
+.chemistry-title{
+  display: flex;
+  justify-content: space-between;
+}
 
+.chemistry-title button{
+  height: 30px;
+}
 .filter-section {
   display: flex;
   gap: 20px;

@@ -135,7 +135,9 @@ const ChemistryOfLife = () => {
       toast.error('Vui lòng trả lời tất cả câu hỏi trước khi xem đáp án');
     }
   };
-
+  const handleGoBack = () => {
+    navigate(location.state?.from || '/resources/');
+  };
   if (!user) return null;
 
   if (loading) return (
@@ -152,8 +154,10 @@ const ChemistryOfLife = () => {
 
   return (
     <div className="chemistry-container">
-      <h1>Hóa học trong đời sống</h1>
-      
+      <div className='chemistry-title'>
+          <h1>Hóa học trong đời sống</h1>
+          <button onClick={handleGoBack} className="back-button">← Quay lại</button>
+        </div>
       <div className="filter-section">
         <div className="filter-group">
           <label htmlFor="class-select">Lớp học</label>

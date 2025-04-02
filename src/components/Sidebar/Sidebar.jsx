@@ -86,6 +86,7 @@ const Sidebar = () => {
       throw error;
     }
   };
+
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       const currentPath = location.pathname;
@@ -97,11 +98,10 @@ const Sidebar = () => {
         searchParams.delete('search');
       }
   
-      // Navigate to the new URL
       navigate(`${currentPath}?${searchParams.toString()}`);
     }
   };
-  // Hàm xây dựng path với query params
+
   const buildPath = (basePath, categoryId = null) => {
     const params = new URLSearchParams();
     if (classId) params.set('classId', classId);
@@ -109,8 +109,8 @@ const Sidebar = () => {
     return `${basePath}?${params.toString()}`;
   };
 
-  // Hàm xử lý toggle menu chính
   const toggleMenu = async (index, e) => {
+    e?.preventDefault();
     e?.stopPropagation();
     const item = menuItems[index];
     
@@ -120,14 +120,12 @@ const Sidebar = () => {
     }
 
     try {
-      // Bắt đầu loading
       setMenuItems(prev => prev.map((mi, i) => 
         i === index ? { ...mi, loading: true, error: null } : mi
       ));
 
       const categories = await fetchCategories(item.resourceType);
       
-      // Cập nhật danh sách subItems
       setMenuItems(prev => prev.map((mi, i) => 
         i === index ? { 
           ...mi, 
@@ -148,8 +146,8 @@ const Sidebar = () => {
     setExpanded(expanded === index ? null : index);
   };
 
-  // Hàm xử lý toggle sub menu
   const toggleSubMenu = async (menuIndex, subItemIndex, e) => {
+    e?.preventDefault();
     e?.stopPropagation();
     const subItem = menuItems[menuIndex].subItems[subItemIndex];
     
@@ -159,7 +157,6 @@ const Sidebar = () => {
     }
 
     try {
-      // Bắt đầu loading
       setMenuItems(prev => {
         const newItems = [...prev];
         newItems[menuIndex].subItems[subItemIndex] = {
@@ -172,7 +169,6 @@ const Sidebar = () => {
 
       const categories = await fetchCategories(subItem.resourceType);
       
-      // Cập nhật danh sách subItems
       setMenuItems(prev => {
         const newItems = [...prev];
         newItems[menuIndex].subItems[subItemIndex] = {
@@ -201,12 +197,17 @@ const Sidebar = () => {
     setExpandedSubMenu(expandedSubMenu === `${menuIndex}-${subItemIndex}` ? null : `${menuIndex}-${subItemIndex}`);
   };
 
+  // Reset expanded menus when classId changes
+  useEffect(() => {
+    setExpanded(null);
+    setExpandedSubMenu(null);
+  }, [classId]);
+
   // Cập nhật chủ đề khi classId thay đổi
   useEffect(() => {
     const updateCategories = async () => {
       const updates = menuItems.map(async (item, index) => {
-        // Cập nhật menu chính có resourceType
-        if (item.resourceType && item.subItems.length > 0) {
+        if (item.resourceType) {
           try {
             const categories = await fetchCategories(item.resourceType);
             return {
@@ -228,10 +229,9 @@ const Sidebar = () => {
           }
         }
         
-        // Cập nhật sub menu có resourceType
         if (item.subItems) {
-          const updatedSubItems = await Promise.all(item.subItems.map(async (subItem, subIndex) => {
-            if (subItem.resourceType && subItem.subItems.length > 0) {
+          const updatedSubItems = await Promise.all(item.subItems.map(async (subItem) => {
+            if (subItem.resourceType) {
               try {
                 const categories = await fetchCategories(subItem.resourceType);
                 return {
@@ -271,7 +271,6 @@ const Sidebar = () => {
     updateCategories();
   }, [classId]);
 
-  // Kiểm tra active menu
   const isActive = (path) => {
     return path && location.pathname === path.split('?')[0];
   };
@@ -289,32 +288,30 @@ const Sidebar = () => {
         />
         <ul className="list-group">
           {menuItems.map((item, index) => (
-            <li className={`list-group-item ${isActive(item.path) ? 'active-menu' : ''}`} key={index}>
+            <li 
+              className={`list-group-item ${isActive(item.path) ? 'active-menu' : ''}`} 
+              key={index}
+            >
               {item.path ? (
-                <div className="menu-item-container">
+                <div 
+                  className="menu-item-container"
+                  onClick={(e) => toggleMenu(index, e)}
+                >
                   <Link 
                     to={buildPath(item.path)}
                     className={`menu-item d-flex justify-content-between align-items-center ${isActive(item.path) ? 'active' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleMenu(index, e);
-                    }}
                   >
                     <span>{item.title}</span>
-                    {item.resourceType && (
-                      <i className={`${expanded === index ? 'up' : 'down'}`} />
-                    )}
                     {item.loading && <span className="spinner-border spinner-border-sm" />}
                   </Link>
                 </div>
               ) : (
-                <div className="menu-item-container">
-                  <div 
-                    className={`menu-item d-flex justify-content-between align-items-center`}
-                    onClick={() => setExpanded(expanded === index ? null : index)}
-                  >
+                <div 
+                  className="menu-item-container"
+                  onClick={() => setExpanded(expanded === index ? null : index)}
+                >
+                  <div className={`menu-item d-flex justify-content-between align-items-center`}>
                     <span>{item.title}</span>
-                    <i className={`${expanded === index ? 'up' : 'down'}`} />
                   </div>
                 </div>
               )}
@@ -323,20 +320,17 @@ const Sidebar = () => {
                 {item.error && <li className="text-danger small p-2">{item.error}</li>}
                 
                 {item.subItems.map((subItem, subIndex) => (
-                  <li key={subIndex} className={isActive(subItem.path) ? 'active-submenu' : ''}>
+                  <li 
+                    key={subIndex} 
+                    className={isActive(subItem.path) ? 'active-submenu' : ''}
+                  >
                     {subItem.resourceType ? (
                       <div 
                         className={`sub-menu-item d-flex justify-content-between align-items-center ${isActive(subItem.path) ? 'active' : ''}`}
                         onClick={(e) => toggleSubMenu(index, subIndex, e)}
                       >
                         <span>{subItem.title}</span>
-                        {subItem.loading ? (
-                          <span className="spinner-border spinner-border-sm" />
-                        ) : (
-                          <i className={`fas fa-chevron-${
-                            expandedSubMenu === `${index}-${subIndex}` ? 'up' : 'down'
-                          }`} />
-                        )}
+                        {subItem.loading && <span className="spinner-border spinner-border-sm" />}
                       </div>
                     ) : (
                       <Link 
@@ -371,12 +365,6 @@ const Sidebar = () => {
         </ul>
       </aside>
       <div className="sidebar-footer">
-        {/* {user && (
-          <div className="user-info mb-2">
-            <i className="fas fa-user-circle me-2" />
-            <span>{user.username}</span>
-          </div>
-        )} */}
         <p className="mt-2 mb-0">&copy; Hachieve - Trường ĐHSP Hà Nội</p>
       </div>
     </div>
