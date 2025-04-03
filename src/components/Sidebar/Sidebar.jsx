@@ -71,6 +71,10 @@ const Sidebar = () => {
   const classId = searchParams.get('classId');
 
   const fetchCategories = async (resourceType) => {
+    if (!user) {
+      return [];
+    }
+  
     try {
       const params = { resourceType };
       if (classId) params.classId = classId;

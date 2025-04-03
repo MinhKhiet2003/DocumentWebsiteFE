@@ -39,7 +39,7 @@ import LifeManagement from "./Admin/pages/ExerciseManagement/LifeManagement/Life
 import ComicManagement from "./Admin/pages/ExerciseManagement/chemistry-comics/ComicManagement";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+
     <BrowserRouter>
       <AuthProvider>
         <Routes>
@@ -95,5 +95,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Routes>
       </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
 );

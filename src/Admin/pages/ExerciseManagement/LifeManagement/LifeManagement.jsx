@@ -308,7 +308,7 @@ const LifeManagement = () => {
 
   return (
     <div className="">
-      <h1>Quản lý Câu hỏi cuộc sống</h1>
+      <h1>Quản lý câu hỏi hóa học đời sống</h1>
       
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <FormControl sx={{ minWidth: 200 }} size="small">

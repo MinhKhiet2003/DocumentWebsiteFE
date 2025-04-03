@@ -27,7 +27,7 @@ const SidebarAdmin = () => {
       requiredRole: "admin"
     },
     {
-      title: "Quản lý danh mục",
+      title: "Quản lý chủ đề",
       path: "/admin/categories",
       icon: "🏷️"
     },
@@ -86,7 +86,7 @@ const SidebarAdmin = () => {
   return (
     <div className="admin-sidebar">
       <div className="admin-sidebar-header">
-        <h2>SciPlay</h2>
+        <h2>Hachieve</h2>
         <p className="admin-user-role-badge">
           {user?.role === 'admin' ? 'Quản trị viên' : 
           user?.role === 'teacher' ? 'Giáo viên' : 
