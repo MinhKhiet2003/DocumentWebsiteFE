@@ -420,6 +420,7 @@ const LessonPlansAdmin = () => {
                     color="secondary" 
                     onClick={() => handleEdit(doc)}
                     className="action-button"
+                    style={{ marginRight: "10px" }}
                   >
                     Sửa
                   </Button>
@@ -428,7 +429,6 @@ const LessonPlansAdmin = () => {
                     color="error"
                     onClick={() => handleDelete(doc.id)}
                     className="action-button"
-                    sx={{ marginLeft: 1 }}
                   >
                     Xóa
                   </Button>

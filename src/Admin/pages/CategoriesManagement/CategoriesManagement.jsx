@@ -269,6 +269,7 @@ const CategoriesManagement = () => {
                       variant="contained" 
                       color="secondary" 
                       onClick={() => handleEdit(cat)}
+                      style={{ marginRight: "10px" }}
                     >
                       Sửa
                     </Button>
@@ -276,7 +277,6 @@ const CategoriesManagement = () => {
                       variant="contained"
                       color="error"
                       onClick={() => handleDelete(cat.id)}
-                      style={{ marginLeft: "10px" }}
                     >
                       Xóa
                     </Button>

@@ -405,6 +405,7 @@ const GamesManagement = () => {
                       color="secondary" 
                       onClick={() => handleEdit(game)}
                       className="action-button"
+                      style={{ marginRight: "10px" }}
                     >
                       Sửa
                     </Button>
@@ -413,7 +414,6 @@ const GamesManagement = () => {
                       color="error"
                       onClick={() => handleDelete(game.id)}
                       className="action-button"
-                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>

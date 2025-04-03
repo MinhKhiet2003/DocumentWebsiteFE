@@ -426,6 +426,7 @@ const VideosManagement = () => {
                       color="secondary" 
                       onClick={() => handleEdit(video)}
                       className="action-button"
+                      style={{ marginRight: "10px" }}
                     >
                       Sửa
                     </Button>
@@ -434,7 +435,6 @@ const VideosManagement = () => {
                       color="error"
                       onClick={() => handleDelete(video.video_id)}
                       className="action-button"
-                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>

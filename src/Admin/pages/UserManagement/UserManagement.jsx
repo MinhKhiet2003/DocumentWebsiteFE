@@ -222,6 +222,7 @@ const UserManagement = () => {
                   variant="contained"
                   color="secondary"
                   onClick={() => handleEdit(user)}
+                  style={{ marginRight: "10px" }}
                 >
                   Sửa
                 </Button>
@@ -229,7 +230,6 @@ const UserManagement = () => {
                   variant="contained"
                   color="error"
                   onClick={() => handleDelete(user.user_id)}
-                  style={{ marginLeft: "10px" }}
                 >
                   Xóa
                 </Button>

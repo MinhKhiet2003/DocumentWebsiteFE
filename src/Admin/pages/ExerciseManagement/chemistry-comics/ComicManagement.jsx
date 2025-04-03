@@ -416,7 +416,7 @@ const ComicManagement = () => {
                       color="secondary" 
                       onClick={() => handleEdit(comic)}
                       className="action-button"
-                      sx={{ mr: 1 }}
+                      style={{ marginRight: "10px" }}
                     >
                       Sửa
                     </Button>
@@ -425,7 +425,6 @@ const ComicManagement = () => {
                       color="error"
                       onClick={() => handleDelete(comic.id)}
                       className="action-button"
-                      sx={{ marginLeft: 1 }}
                     >
                       Xóa
                     </Button>
