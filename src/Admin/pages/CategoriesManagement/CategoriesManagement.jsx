@@ -19,9 +19,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const API_URL = "http://localhost:5168/api/Categories";
-const SEARCH_API_URL = "http://localhost:5168/api/Categories/search?keyword=";
-const CLASS_API_URL = "http://localhost:5168/api/Class";
+const API_URL = "http://20.28.55.54:5168/api/Categories";
+const SEARCH_API_URL = "http://20.28.55.54:5168/api/Categories/search?keyword=";
+const CLASS_API_URL = "http://20.28.55.54:5168/api/Class";
 
 const CategoriesManagement = () => {
   const { user } = useContext(AuthContext);

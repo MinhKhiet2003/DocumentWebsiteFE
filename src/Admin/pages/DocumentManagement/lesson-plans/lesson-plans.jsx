@@ -23,9 +23,9 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_URL = "http://localhost:5168/api/Document";
-const CATEGORIES_API_URL = "http://localhost:5168/api/Categories";
-const USED_CLASSES_API_URL = "http://localhost:5168/api/Categories/used-classes";
+const API_URL = "http://20.28.55.54:5168/api/Document";
+const CATEGORIES_API_URL = "http://20.28.55.54:5168/api/Categories";
+const USED_CLASSES_API_URL = "http://20.28.55.54:5168/api/Categories/used-classes";
 
 const LessonPlansAdmin = () => {
   const { user } = useContext(AuthContext);
@@ -88,7 +88,7 @@ const LessonPlansAdmin = () => {
       setIsLoadingCategories(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5168/api/Categories/by-class/${classId}`,
+        `http://20.28.55.54:5168/api/Categories/by-class/${classId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

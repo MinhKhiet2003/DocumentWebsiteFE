@@ -42,7 +42,7 @@ const UserManagement = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get("http://localhost:5168/api/User", {
+      const response = await axios.get("http://20.28.55.54:5168/api/User", {
         headers: {
           'Authorization': `Bearer ${token}`, 
         },
@@ -80,7 +80,7 @@ const UserManagement = () => {
     if (!window.confirm("Bạn có chắc muốn xóa người dùng này?")) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5168/api/User/${user_id}`, {
+      await axios.delete(`http://20.28.55.54:5168/api/User/${user_id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -97,14 +97,14 @@ const UserManagement = () => {
     try {
       const token = localStorage.getItem('token');
       if (isAdding) {
-        await axios.post("http://localhost:5168/api/User", editingUser, {
+        await axios.post("http://20.28.55.54:5168/api/User", editingUser, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },
         });
         toast.success("Thêm người dùng thành công!");
       } else {
-        await axios.put(`http://localhost:5168/api/User/${editingUser.user_id}`, editingUser, {
+        await axios.put(`http://20.28.55.54:5168/api/User/${editingUser.user_id}`, editingUser, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },
@@ -132,7 +132,7 @@ const UserManagement = () => {
         return;
       }
       const response = await axios.get(
-        `http://localhost:5168/api/User/search?keyword=${searchKeyword}`,
+        `http://20.28.55.54:5168/api/User/search?keyword=${searchKeyword}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -23,9 +23,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const API_URL = "http://localhost:5168/api/Game";
-const CATEGORIES_API_URL = "http://localhost:5168/api/Categories";
-const USED_CLASSES_API_URL = "http://localhost:5168/api/Categories/used-classes";
+const API_URL = "http://20.28.55.54:5168/api/Game";
+const CATEGORIES_API_URL = "http://20.28.55.54:5168/api/Categories";
+const USED_CLASSES_API_URL = "http://20.28.55.54:5168/api/Categories/used-classes";
 
 const GamesManagement = () => {
   const { user } = useContext(AuthContext);
@@ -86,7 +86,7 @@ const GamesManagement = () => {
       setIsLoadingCategories(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5168/api/Categories/by-class/${classId}`,
+        `http://20.28.55.54:5168/api/Categories/by-class/${classId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

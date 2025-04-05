@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 import './GameDetail.css'; 
@@ -22,7 +21,7 @@ const GameDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5168/api/Game/${id}`, {
+        const response = await fetch(`http://20.28.55.54:5168/api/Game/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
