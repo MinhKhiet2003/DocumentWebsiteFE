@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
 import Tabs from '../../../components/Tabs/Tabs';
-import './Games.css';
+import './games.css';
 
 const Games = () => {
   const [games, setGames] = useState([]);
