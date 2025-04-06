@@ -36,7 +36,7 @@ const ChemistryComics = () => {
         const searchQuery = queryParams.get('search');
         const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://20.28.55.54:5168/api/Comic/search';
+        let apiUrl = 'http://localhost:5168/api/Comic/search';
 
         // Create API query params
         const apiParams = new URLSearchParams();
@@ -47,7 +47,7 @@ const ChemistryComics = () => {
         apiUrl += `?${apiParams.toString()}`;
 
         if (categoryId) {
-          const categoryResponse = await fetch(`http://20.28.55.54:5168/api/Categories/${categoryId}`, {
+          const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
 

@@ -27,7 +27,7 @@ const Profile = () => {
     if (!token) return;
 
     try {
-      const response = await fetch('http://20.28.55.54:5168/api/User/profile', {
+      const response = await fetch('http://localhost:5168/api/User/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -55,7 +55,7 @@ const Profile = () => {
     if (!token) return;
   
     try {
-      const response = await fetch('http://20.28.55.54:5168/api/User/profile', {
+      const response = await fetch('http://localhost:5168/api/User/profile', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -107,7 +107,7 @@ const Profile = () => {
     if (!token) return;
 
     try {
-      const response = await fetch('http://20.28.55.54:5168/api/User/change-password', {
+      const response = await fetch('http://localhost:5168/api/User/change-password', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

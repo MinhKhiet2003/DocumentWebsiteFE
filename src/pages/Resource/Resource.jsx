@@ -30,13 +30,13 @@ const Resource = () => {
   useEffect(() => {
     const fetchRandomData = async () => {
       try {
-        const docResponse = await fetch('https://f464-20-28-55-54.ngrok-free.app/api/Document/random');
+        const docResponse = await fetch('http://20.28.55.54:5168/api/Document/random');
         const documents = await docResponse.json();
         
-        const gameResponse = await fetch('https://f464-20-28-55-54.ngrok-free.app/api/Game/random');
+        const gameResponse = await fetch('http://20.28.55.54:5168/api/Game/random');
         const games = await gameResponse.json();
         
-        const videoResponse = await fetch('https://f464-20-28-55-54.ngrok-free.app/api/Video/random');
+        const videoResponse = await fetch('http://20.28.55.54:5168/api/Video/random');
         const videos = await videoResponse.json();
 
         setCategories(prev => [

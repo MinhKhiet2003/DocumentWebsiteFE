@@ -30,7 +30,7 @@ const ChemistryOfLife = () => {
         const token = localStorage.getItem('token');
         
         // Fetch classes
-        const classesResponse = await fetch('http://20.28.55.54:5168/api/Categories/used-classes', {
+        const classesResponse = await fetch('http://localhost:5168/api/Categories/used-classes', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ const ChemistryOfLife = () => {
         setClasses(classesData);
 
         // Fetch life questions
-        const response = await fetch('http://20.28.55.54:5168/api/Life', {
+        const response = await fetch('http://localhost:5168/api/Life', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -86,7 +86,7 @@ const ChemistryOfLife = () => {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(
-          `http://20.28.55.54:5168/api/Categories/by-class/${selectedClass}`,
+          `http://localhost:5168/api/Categories/by-class/${selectedClass}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

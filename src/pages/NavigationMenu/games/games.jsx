@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
 import Tabs from '../../../components/Tabs/Tabs';
-import './games.css';
 
 const Games = () => {
   const [games, setGames] = useState([]);
@@ -33,7 +32,7 @@ const Games = () => {
         const searchQuery = queryParams.get('search');
         const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://20.28.55.54:5168/api/Game/search';
+        let apiUrl = 'http://localhost:5168/api/Game/search';
 
         // Tạo query params cho API
         const apiParams = new URLSearchParams();
@@ -44,7 +43,7 @@ const Games = () => {
         apiUrl += `?${apiParams.toString()}`;
 
         if (categoryId) {
-          const categoryResponse = await fetch(`http://20.28.55.54:5168/api/Categories/${categoryId}`, {
+          const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
 

@@ -21,7 +21,7 @@ const GameDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://20.28.55.54:5168/api/Game/${id}`, {
+        const response = await fetch(`http://localhost:5168/api/Game/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
