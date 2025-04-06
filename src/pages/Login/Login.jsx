@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch('https://20.28.55.54:7278/api/User/login', {
+      const response = await fetch('https://f464-20-28-55-54.ngrok-free.app/api/User/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
