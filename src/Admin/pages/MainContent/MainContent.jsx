@@ -18,7 +18,7 @@ const MainContent = () => {
         setLoading(true);
         
         // Lấy tổng số người dùng
-        const userResponse = await fetch('https://hachieve.runasp.net//api/User/count', {
+        const userResponse = await fetch('https://hachieve.runasp.net/api/User/count', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -31,7 +31,7 @@ const MainContent = () => {
         const totalUsers = await userResponse.json();
 
         // Lấy thống kê danh mục theo lớp
-        const categoryResponse = await fetch('https://hachieve.runasp.net//api/Categories/count-by-class', {
+        const categoryResponse = await fetch('https://hachieve.runasp.net/api/Categories/count-by-class', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

@@ -23,9 +23,9 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const API_URL = "https://hachieve.runasp.net//api/Comic";
-const CATEGORIES_API_URL = "https://hachieve.runasp.net//api/Categories";
-const USED_CLASSES_API_URL = "https://hachieve.runasp.net//api/Categories/used-classes";
+const API_URL = "https://hachieve.runasp.net/api/Comic";
+const CATEGORIES_API_URL = "https://hachieve.runasp.net/api/Categories";
+const USED_CLASSES_API_URL = "https://hachieve.runasp.net/api/Categories/used-classes";
 
 const ComicManagement = () => {
   const { user } = useContext(AuthContext);
@@ -87,7 +87,7 @@ const ComicManagement = () => {
       setIsLoadingCategories(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://hachieve.runasp.net//api/Categories/by-class/${classId}`,
+        `https://hachieve.runasp.net/api/Categories/by-class/${classId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

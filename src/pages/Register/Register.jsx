@@ -51,7 +51,7 @@ const Register = () => {
     };
 
     try {
-      const response = await fetch('https://hachieve.runasp.net//api/User/register', {
+      const response = await fetch('https://hachieve.runasp.net/api/User/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

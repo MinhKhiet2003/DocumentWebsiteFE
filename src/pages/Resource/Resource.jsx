@@ -30,13 +30,13 @@ const Resource = () => {
   useEffect(() => {
     const fetchRandomData = async () => {
       try {
-        const docResponse = await fetch('https://hachieve.runasp.net//api/Document/random');
+        const docResponse = await fetch('https://hachieve.runasp.net/api/Document/random');
         const documents = await docResponse.json();
         
-        const gameResponse = await fetch('https://hachieve.runasp.net//api/Game/random');
+        const gameResponse = await fetch('https://hachieve.runasp.net/api/Game/random');
         const games = await gameResponse.json();
         
-        const videoResponse = await fetch('https://hachieve.runasp.net//api/Video/random');
+        const videoResponse = await fetch('https://hachieve.runasp.net/api/Video/random');
         const videos = await videoResponse.json();
 
         setCategories(prev => [

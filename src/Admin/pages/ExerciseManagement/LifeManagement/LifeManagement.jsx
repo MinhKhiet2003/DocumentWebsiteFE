@@ -23,9 +23,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const API_URL = "https://hachieve.runasp.net//api/Life";
-const CATEGORIES_API_URL = "https://hachieve.runasp.net//api/Categories";
-const USED_CLASSES_API_URL = "https://hachieve.runasp.net//api/Categories/used-classes";
+const API_URL = "https://hachieve.runasp.net/api/Life";
+const CATEGORIES_API_URL = "https://hachieve.runasp.net/api/Categories";
+const USED_CLASSES_API_URL = "https://hachieve.runasp.net/api/Categories/used-classes";
 
 const LifeManagement = () => {
   const { user } = useContext(AuthContext);
@@ -87,7 +87,7 @@ const LifeManagement = () => {
       setIsLoadingCategories(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://hachieve.runasp.net//api/Categories/by-class/${classId}`,
+        `https://hachieve.runasp.net/api/Categories/by-class/${classId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

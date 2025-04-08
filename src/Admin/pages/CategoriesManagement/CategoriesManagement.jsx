@@ -19,9 +19,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const API_URL = "https://hachieve.runasp.net//api/Categories";
-const SEARCH_API_URL = "https://hachieve.runasp.net//api/Categories/search?keyword=";
-const CLASS_API_URL = "https://hachieve.runasp.net//api/Class";
+const API_URL = "https://hachieve.runasp.net/api/Categories";
+const SEARCH_API_URL = "https://hachieve.runasp.net/api/Categories/search?keyword=";
+const CLASS_API_URL = "https://hachieve.runasp.net/api/Class";
 
 const CategoriesManagement = () => {
   const { user } = useContext(AuthContext);

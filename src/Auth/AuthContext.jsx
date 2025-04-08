@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch('https://hachieve.runasp.net//api/User/profile', {
+      const response = await fetch('https://hachieve.runasp.net/api/User/profile', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
