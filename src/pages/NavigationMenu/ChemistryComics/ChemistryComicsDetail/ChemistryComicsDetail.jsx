@@ -26,7 +26,7 @@ const ChemistryComicsDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://20.28.55.54:5168/api/Comic/${id}`, {
+        const response = await fetch(`https://hachieve.runasp.net//api/Comic/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

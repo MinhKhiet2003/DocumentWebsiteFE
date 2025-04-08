@@ -55,7 +55,7 @@ const Sidebar = () => {
   const [expandedSubMenu, setExpandedSubMenu] = useState(null);
 
   const authAxios = axios.create({
-    baseURL: 'http://20.28.55.54:5168'
+    baseURL: 'https://hachieve.runasp.net/'
   });
 
   // Thêm interceptor để tự động gắn token
