@@ -21,7 +21,7 @@ const GameDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5168/api/Game/${id}`, {
+        const response = await fetch(`https://hachieve.vercel.app/api/Game/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

@@ -22,7 +22,7 @@ const LessonPlanDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5168/api/Document/${id}`, {
+        const response = await fetch(`https://hachieve.vercel.app/api/Document/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

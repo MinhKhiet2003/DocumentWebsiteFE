@@ -32,7 +32,7 @@ const Games = () => {
         const searchQuery = queryParams.get('search');
         const classId = queryParams.get('classId');
 
-        let apiUrl = 'http://localhost:5168/api/Game/search';
+        let apiUrl = 'https://hachieve.vercel.app/api/Game/search';
 
         // Tạo query params cho API
         const apiParams = new URLSearchParams();
@@ -43,7 +43,7 @@ const Games = () => {
         apiUrl += `?${apiParams.toString()}`;
 
         if (categoryId) {
-          const categoryResponse = await fetch(`http://localhost:5168/api/Categories/${categoryId}`, {
+          const categoryResponse = await fetch(`https://hachieve.vercel.app/api/Categories/${categoryId}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
 
