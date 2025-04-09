@@ -21,7 +21,7 @@ const ExperimentVideoDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`https://hachieve.vercel.app/api/Video/${id}`, {
+        const response = await fetch(`https://hachieve.runasp.net/api/Video/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

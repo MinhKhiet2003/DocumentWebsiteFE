@@ -30,7 +30,7 @@ const ChemistryOfLife = () => {
         const token = localStorage.getItem('token');
         
         // Fetch classes
-        const classesResponse = await fetch('https://hachieve.vercel.app/api/Categories/used-classes', {
+        const classesResponse = await fetch('https://hachieve.runasp.net/api/Categories/used-classes', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -41,7 +41,7 @@ const ChemistryOfLife = () => {
         setClasses(classesData);
 
         // Fetch life questions
-        const response = await fetch('https://hachieve.vercel.app/api/Life', {
+        const response = await fetch('https://hachieve.runasp.net/api/Life', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -86,7 +86,7 @@ const ChemistryOfLife = () => {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(
-          `https://hachieve.vercel.app/api/Categories/by-class/${selectedClass}`,
+          `https://hachieve.runasp.net/api/Categories/by-class/${selectedClass}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

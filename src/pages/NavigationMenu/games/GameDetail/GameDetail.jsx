@@ -21,7 +21,7 @@ const GameDetail = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch(`https://hachieve.vercel.app/api/Game/${id}`, {
+        const response = await fetch(`https://hachieve.runasp.net/api/Game/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

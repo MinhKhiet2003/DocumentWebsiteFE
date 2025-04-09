@@ -36,7 +36,7 @@ const ChemistryComics = () => {
         const searchQuery = queryParams.get('search');
         const classId = queryParams.get('classId');
 
-        let apiUrl = 'https://hachieve.vercel.app/api/Comic/search';
+        let apiUrl = 'https://hachieve.runasp.net/api/Comic/search';
 
         // Create API query params
         const apiParams = new URLSearchParams();
@@ -47,7 +47,7 @@ const ChemistryComics = () => {
         apiUrl += `?${apiParams.toString()}`;
 
         if (categoryId) {
-          const categoryResponse = await fetch(`https://hachieve.vercel.app/api/Categories/${categoryId}`, {
+          const categoryResponse = await fetch(`https://hachieve.runasp.net/api/Categories/${categoryId}`, {
             headers: { 'Authorization': `Bearer ${token}` },
           });
 
