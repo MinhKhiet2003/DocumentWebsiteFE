@@ -95,6 +95,7 @@ const GameDetail = () => {
       
       <div className="game-meta">
         <p><strong>Tác giả:</strong> {game.uploadedByUsername || "Không xác định"}</p>
+        <p><strong>Phân loại:</strong> {game.classify || "Không xác định"}</p>
         <p><strong>Ngày tạo:</strong> {new Date(game.createdAt).toLocaleDateString()}</p>
         <p><strong>Cập nhật lần cuối:</strong> {new Date(game.updatedAt).toLocaleDateString()}</p>
       </div>
