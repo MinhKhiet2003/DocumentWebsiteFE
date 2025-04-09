@@ -78,7 +78,7 @@ const LifeManagement = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục:", error);
+      console.error("Lỗi khi lấy chủ đề:", error);
     }
   };
 
@@ -94,7 +94,7 @@ const LifeManagement = () => {
       );
       setFilteredCategories(response.data);
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục theo lớp:", error);
+      console.error("Lỗi khi lấy chủ đề theo lớp:", error);
       setFilteredCategories([]);
     } finally {
       setIsLoadingCategories(false);
@@ -235,7 +235,7 @@ const LifeManagement = () => {
       };
   
       if (!lifeData.question || !lifeData.answer || !lifeData.category_id) {
-        toast.warning("Vui lòng điền đầy đủ các trường bắt buộc (Câu hỏi, Câu trả lời, Danh mục)");
+        toast.warning("Vui lòng điền đầy đủ các trường bắt buộc (Câu hỏi, Câu trả lời, Chủ đề)");
         return;
       }
   
@@ -338,17 +338,17 @@ const LifeManagement = () => {
         </FormControl>
         
         <FormControl sx={{ minWidth: 200 }} size="small">
-          <InputLabel>Danh mục</InputLabel>
+          <InputLabel>Chủ đề</InputLabel>
           <Select
             name="categoryId"
             value={searchParams.categoryId}
             onChange={handleSearchParamChange}
-            label="Danh mục"
+            label="Chủ đề"
             disabled={!searchParams.classId || isLoadingCategories}
           >
-            <MenuItem value="">Tất cả danh mục</MenuItem>
+            <MenuItem value="">Tất cả chủ đề</MenuItem>
             {isLoadingCategories ? (
-              <MenuItem disabled>Đang tải danh mục...</MenuItem>
+              <MenuItem disabled>Đang tải chủ đề...</MenuItem>
             ) : searchParams.classId ? (
               filteredCategories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
@@ -391,7 +391,7 @@ const LifeManagement = () => {
             <TableCell>ID</TableCell>
             <TableCell>Câu hỏi</TableCell>
             <TableCell>Câu trả lời</TableCell>
-            <TableCell>Danh mục</TableCell>
+            <TableCell>Chủ đề</TableCell>
             <TableCell>Người tạo</TableCell>
             <TableCell>Ngày tạo</TableCell>
             <TableCell>Ngày cập nhật</TableCell>
@@ -486,17 +486,17 @@ const LifeManagement = () => {
           </FormControl>
           
           <FormControl fullWidth margin="normal">
-            <InputLabel>Danh mục</InputLabel>
+            <InputLabel>Chủ đề</InputLabel>
             <Select
               name="categoryId"
               value={editingLife?.categoryId || ""}
               onChange={handleChange}
-              label="Danh mục"
+              label="Chủ đề"
               required
               disabled={!selectedClassId || isLoadingCategories}
             >
               {isLoadingCategories ? (
-                <MenuItem disabled>Đang tải danh mục...</MenuItem>
+                <MenuItem disabled>Đang tải chủ đề...</MenuItem>
               ) : filteredCategories.length > 0 ? (
                 filteredCategories.map((category) => (
                   <MenuItem key={category.id} value={category.id}>
@@ -505,7 +505,7 @@ const LifeManagement = () => {
                 ))
               ) : (
                 <MenuItem disabled value="">
-                  {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
+                  {selectedClassId ? "Không có chủ đề nào" : "Vui lòng chọn lớp trước"}
                 </MenuItem>
               )}
             </Select>

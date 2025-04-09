@@ -30,7 +30,7 @@ const MainContent = () => {
         }
         const totalUsers = await userResponse.json();
 
-        // Lấy thống kê danh mục theo lớp
+        // Lấy thống kê chủ đề theo lớp
         const categoryResponse = await fetch('https://hachieve.runasp.net/api/Categories/count-by-class', {
           method: 'GET',
           headers: {
@@ -39,7 +39,7 @@ const MainContent = () => {
         });
 
         if (!categoryResponse.ok) {
-          throw new Error('Không thể lấy dữ liệu số lượng danh mục theo lớp');
+          throw new Error('Không thể lấy dữ liệu số lượng chủ đề theo lớp');
         }
         const categoryData = await categoryResponse.json();
 
@@ -85,18 +85,18 @@ const MainContent = () => {
         </div>
         
         <div className="stat-card total-categories">
-          <h4>Tổng số danh mục</h4>
+          <h4>Tổng số chủ đề</h4>
           <p>{categoryCounts.reduce((sum, item) => sum + item.count, 0)}</p>
         </div>
       </div>
       
       <div className="category-stats">
-        <h4>Thống kê danh mục theo lớp</h4>
+        <h4>Thống kê chủ đề theo lớp</h4>
         {categoryCounts.length > 0 ? (
           <div className="stats-table">
             <div className="table-header">
               <div className="header-item">Lớp</div>
-              <div className="header-item">Số danh mục</div>
+              <div className="header-item">Số chủ đề</div>
               <div className="header-item">Tỷ lệ</div>
             </div>
             

@@ -118,7 +118,7 @@ const ChemistryComicsDetail = () => {
           <p><strong>Tác giả:</strong> {comic.username || 'Không xác định'}</p>
           <p><strong>Ngày tạo:</strong> {new Date(comic.createdAt).toLocaleDateString()}</p>
           <p><strong>Cập nhật lần cuối:</strong> {new Date(comic.updatedAt).toLocaleDateString()}</p>
-          {comic.categoryName && <p><strong>Danh mục:</strong> {comic.categoryName}</p>}
+          {comic.categoryName && <p><strong>Chủ đề:</strong> {comic.categoryName}</p>}
         </div>
 
         {comic.description && (

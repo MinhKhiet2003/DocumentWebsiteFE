@@ -239,10 +239,10 @@ const ChemistryOfLife = () => {
           </div>
         </div>
       ) : selectedCategory ? (
-        <p className="no-questions">Không có câu hỏi nào trong danh mục này</p>
+        <p className="no-questions">Không có câu hỏi nào trong chủ đề này</p>
       ) : (
         !selectedClass && (
-          <p className="no-questions">Vui lòng chọn lớp và danh mục để xem câu hỏi</p>
+          <p className="no-questions">Vui lòng chọn lớp và chủ đề để xem câu hỏi</p>
         )
       )}
       <ToastContainer />

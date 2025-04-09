@@ -79,7 +79,7 @@ const LessonPlansAdmin = () => {
       });
       setCategories(response.data);
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục:", error);
+      console.error("Lỗi khi lấy chủ đề:", error);
     }
   };
 
@@ -95,7 +95,7 @@ const LessonPlansAdmin = () => {
       );
       setFilteredCategories(response.data);
     } catch (error) {
-      console.error("Lỗi khi lấy danh mục theo lớp:", error);
+      console.error("Lỗi khi lấy chủ đề theo lớp:", error);
       setFilteredCategories([]);
     } finally {
       setIsLoadingCategories(false);
@@ -184,11 +184,11 @@ const LessonPlansAdmin = () => {
   const handleEdit = async (document) => {
     setIsAdding(false);
     
-    // Lấy thông tin lớp học của danh mục này (giả sử mỗi category có classId)
+    // Lấy thông tin lớp học của chủ đề này (giả sử mỗi category có classId)
     const category = categories.find(cat => cat.id === document.categoryId);
     const classId = category?.classId || "";
     
-    // Nếu có classId thì load danh mục tương ứng
+    // Nếu có classId thì load chủ đề tương ứng
     if (classId) {
       setSelectedClassId(classId);
       await fetchCategoriesByClass(classId);
@@ -283,12 +283,12 @@ const LessonPlansAdmin = () => {
   const handleSearchParamChange = async (e) => {
     const { name, value } = e.target;
     
-    // Nếu thay đổi lớp học, cần fetch lại danh mục tương ứng
+    // Nếu thay đổi lớp học, cần fetch lại chủ đề tương ứng
     if (name === "classId") {
       setSearchParams(prev => ({ 
         ...prev, 
         [name]: value,
-        categoryId: "" // Reset danh mục khi thay đổi lớp
+        categoryId: "" // Reset chủ đề khi thay đổi lớp
       }));
       
       if (value) {
@@ -338,15 +338,15 @@ const LessonPlansAdmin = () => {
         </FormControl>
         
         <FormControl sx={{ minWidth: 200 }} size="small">
-          <InputLabel>Danh mục</InputLabel>
+          <InputLabel>Chủ đề</InputLabel>
           <Select
             name="categoryId"
             value={searchParams.categoryId}
             onChange={handleSearchParamChange}
-            label="Danh mục"
+            label="Chủ đề"
             disabled={!searchParams.classId}
           >
-            <MenuItem value="">Tất cả danh mục</MenuItem>
+            <MenuItem value="">Tất cả chủ đề</MenuItem>
             {searchParams.classId ? (
               filteredCategories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
@@ -390,7 +390,7 @@ const LessonPlansAdmin = () => {
             <TableCell>Tiêu đề</TableCell>
             <TableCell>Mô tả</TableCell>
             <TableCell>Đường dẫn file</TableCell>
-            <TableCell>Danh mục</TableCell>
+            <TableCell>Chủ đề</TableCell>
             <TableCell>Người tải lên</TableCell>
             <TableCell>Ngày tạo</TableCell>
             <TableCell>Ngày cập nhật</TableCell>
@@ -471,17 +471,17 @@ const LessonPlansAdmin = () => {
           </Select>
         </FormControl>
         <FormControl fullWidth margin="normal">
-          <InputLabel>Danh mục</InputLabel>
+          <InputLabel>Chủ đề</InputLabel>
           <Select
             name="categoryId"
             value={editingDocument?.categoryId || ""}
             onChange={handleChange}
-            label="Danh mục"
+            label="Chủ đề"
             required
             disabled={!selectedClassId || isLoadingCategories}
           >
             {isLoadingCategories ? (
-              <MenuItem disabled>Đang tải danh mục...</MenuItem>
+              <MenuItem disabled>Đang tải chủ đề...</MenuItem>
             ) : filteredCategories.length > 0 ? (
               filteredCategories.map((category) => (
                 <MenuItem key={category.id} value={category.id}>
@@ -490,7 +490,7 @@ const LessonPlansAdmin = () => {
               ))
             ) : (
               <MenuItem disabled value="">
-                {selectedClassId ? "Không có danh mục nào" : "Vui lòng chọn lớp trước"}
+                {selectedClassId ? "Không có chủ đề nào" : "Vui lòng chọn lớp trước"}
               </MenuItem>
             )}
           </Select>
