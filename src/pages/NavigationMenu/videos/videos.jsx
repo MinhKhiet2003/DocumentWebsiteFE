@@ -175,7 +175,7 @@ const Videos = () => {
                       <p><small>Ngày tạo: {new Date(video.created_at).toLocaleDateString()}</small></p>
                       <div className="card-footer">
                         <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                        <span className="ms-2">5 phản hồi</span>
+                        <span className="ms-2">{video.commentCount} phản hồi</span>
                       </div>
                     </div>
                   </div>

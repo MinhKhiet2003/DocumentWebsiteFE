@@ -161,7 +161,7 @@ const LessonPlans = () => {
                     <p><small>Ngày tạo: {new Date(document.createdAt).toLocaleDateString()}</small></p>
                     <div className="card-footer">
                       <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                      <span className="ms-2">5 phản hồi</span>
+                      <span className="ms-2">{document.commentCount} phản hồi</span>
                     </div>
                   </div>
                 </div>

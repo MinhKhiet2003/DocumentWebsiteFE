@@ -175,7 +175,7 @@ import './games.css';
                       <p><small>Ngày tạo: {new Date(game.createdAt).toLocaleDateString()}</small></p>
                       <div className="card-footer">
                         <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                        <span className="ms-2">5 phản hồi</span>
+                        <span className="ms-2">{game.commentCount} phản hồi</span>
                       </div>
                     </div>
                   </div>

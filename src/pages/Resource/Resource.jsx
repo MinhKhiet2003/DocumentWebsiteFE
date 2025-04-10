@@ -46,6 +46,7 @@ const Resource = () => {
               id: doc.id || doc.Id,
               title: doc.title,
               author: `Tác giả: ${doc.uploadedByUsername}`,
+              commentCount: doc.commentCount || 0,
             }))
           },
           {
@@ -54,6 +55,7 @@ const Resource = () => {
               id: game.Id || game.id,
               title: game.title,
               author: `Tác giả: ${game.uploadedByUsername}`,
+              commentCount: game.commentCount || 0,
             }))
           },
           {
@@ -62,6 +64,7 @@ const Resource = () => {
               id: video.video_id || video.Id,
               title: video.title,
               author: `Tác giả: ${video.uploadedByUsername}`,
+              commentCount: video.commentCount || 0,
             }))
           },
         ]);
@@ -117,7 +120,7 @@ const Resource = () => {
                       <p>{item.author}</p>
                       <div className="card-footer">
                         <p className="text-yellow-500">⭐⭐⭐⭐⭐</p>
-                        <p>5 phản hồi</p>
+                        <p>{item.commentCount} phản hồi</p>
                       </div>
                     </div>
                   </div>

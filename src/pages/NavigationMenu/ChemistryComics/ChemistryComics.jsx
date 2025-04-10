@@ -171,7 +171,7 @@ const ChemistryComics = () => {
                       <p><small>Created: {new Date(comic.createdAt).toLocaleDateString()}</small></p>
                       <div className="card-footer">
                         <span className="text-warning">⭐⭐⭐⭐⭐</span>
-                        <span className="ms-2">5 reviews</span>
+                        <span className="ms-2">{comic.commentCount} phản hồi</span>
                       </div>
                     </div>
                   </div>

@@ -36,15 +36,12 @@ export const AuthProvider = ({ children }) => {
           'Authorization': `Bearer ${token}`,
         },
       });
-      console.log('Đang gọi API...');
-      console.log('Response status:', response.status);
 
       if (!response.ok) {
         throw new Error('Không thể lấy thông tin người dùng');
       }
 
       const userInfo = await response.json();
-      console.log('Response JSON:', userInfo); // Ghi log dữ liệu JSON đã phân tích
       setUser({
         ...userInfo,
         userId: userInfo.id,
