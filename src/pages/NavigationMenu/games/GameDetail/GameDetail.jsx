@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
+import UserRating from '../../../../components/StarRating/UserRating';
 import 'react-toastify/dist/ReactToastify.css';
 import './GameDetail.css';
 
@@ -206,6 +207,14 @@ const GameDetail = () => {
         <p><strong>Phân loại:</strong> {game.classify || "Không xác định"}</p>
         <p><strong>Ngày tạo:</strong> {new Date(game.createdAt).toLocaleDateString()}</p>
         <p><strong>Cập nhật lần cuối:</strong> {new Date(game.updatedAt).toLocaleDateString()}</p>
+      </div>
+      <div className="game-rating">
+        <UserRating
+          userId={user?.id}
+          gameId={parseInt(id)}
+          initialUserRating={game.userRating || 0}
+          initialAverageRating={game.averageRating || 0}
+        />
       </div>
 
       {game.description && (

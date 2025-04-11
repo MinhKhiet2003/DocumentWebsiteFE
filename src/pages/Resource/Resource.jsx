@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import './Resource.css';
+import StarRating from '../../components/StarRating/StarRating';
 // import Pagination from '../../components/Pagination/Pagination';
 import { AuthContext } from '../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
@@ -47,6 +48,7 @@ const Resource = () => {
               title: doc.title,
               author: `Tác giả: ${doc.uploadedByUsername}`,
               commentCount: doc.commentCount || 0,
+              averageRating: doc.averageRating || 0,
             }))
           },
           {
@@ -56,6 +58,7 @@ const Resource = () => {
               title: game.title,
               author: `Tác giả: ${game.uploadedByUsername}`,
               commentCount: game.commentCount || 0,
+              averageRating: game.averageRating || 0,
             }))
           },
           {
@@ -65,6 +68,7 @@ const Resource = () => {
               title: video.title,
               author: `Tác giả: ${video.uploadedByUsername}`,
               commentCount: video.commentCount || 0,
+              averageRating: video.averageRating || 0,
             }))
           },
         ]);
@@ -119,7 +123,11 @@ const Resource = () => {
                       <h3>{item.title}</h3>
                       <p>{item.author}</p>
                       <div className="card-footer">
-                        <p className="text-yellow-500">⭐⭐⭐⭐⭐</p>
+                        <StarRating 
+                          averageRating={item.averageRating || 0} 
+                          starSize="0.9rem"
+                          className="card-rating"
+                        />
                         <p>{item.commentCount} phản hồi</p>
                       </div>
                     </div>

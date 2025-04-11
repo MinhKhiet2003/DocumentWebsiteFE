@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
+import UserRating from '../../../../components/StarRating/UserRating';
 import 'react-toastify/dist/ReactToastify.css';
 import './ChemistryComicsDetail.css';
 
@@ -234,7 +235,14 @@ const ChemistryComicsDetail = () => {
         <p><strong>Cập nhật lần cuối:</strong> {new Date(comic.updatedAt).toLocaleDateString()}</p>
         {comic.categoryName && <p><strong>Chủ đề:</strong> {comic.categoryName}</p>}
       </div>
-
+      <div className="comic-rating">
+        <UserRating
+          userId={user?.id}
+          comicId={parseInt(id)}
+          initialUserRating={comic.userRating || 0}
+          initialAverageRating={comic.averageRating || 0}
+        />
+      </div>
       {comic.description && (
         <div className="comic-description">
           <h2>Mô tả</h2>

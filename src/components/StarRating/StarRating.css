@@ -1,0 +1,35 @@
+.average-rating-display {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star {
+  color: #ccc;
+  position: relative;
+  display: inline-block;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.star.half-filled {
+  position: relative;
+  color: #ccc;
+}
+
+.star.half-filled::before {
+  content: '★';
+  color: #ffc107;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.rating-value {
+  margin-left: 5px;
+  font-size: 0.9em;
+  color: #666;
+}

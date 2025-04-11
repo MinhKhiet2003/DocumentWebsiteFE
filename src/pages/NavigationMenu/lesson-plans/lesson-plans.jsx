@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
 import Tabs from '../../../components/Tabs/Tabs';
+import StarRating from '../../../components/StarRating/StarRating';
 import './lesson-plans.css';
 
 const LessonPlans = () => {
@@ -88,6 +89,23 @@ const LessonPlans = () => {
       navigate('/login');
     }
   };
+  const fetchAverageRatings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://hachieve.runasp.net/api/Star/all-averages', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error('Không thể lấy dữ liệu đánh giá');
+      }
+
+      const averages = await response.json();
+      // Xử lý dữ liệu đánh giá trung bình nếu cần
+    } catch (error) {
+      console.error('Lỗi khi lấy đánh giá trung bình:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -160,7 +178,7 @@ const LessonPlans = () => {
                     <p><small>Tác giả: {document.uploadedByUsername || "Không xác định"}</small></p>
                     <p><small>Ngày tạo: {new Date(document.createdAt).toLocaleDateString()}</small></p>
                     <div className="card-footer">
-                      <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                      <StarRating averageRating={document.averageRating || 0} />
                       <span className="ms-2">{document.commentCount} phản hồi</span>
                     </div>
                   </div>

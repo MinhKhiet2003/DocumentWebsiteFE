@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../../components/Sidebar/Sidebar';
+import UserRating from '../../../../components/StarRating/UserRating';
 import { AuthContext } from '../../../../Auth/AuthContext';
 import './LessonPlanDetail.css';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const LessonPlanDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useContext(AuthContext);
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -219,6 +221,16 @@ const LessonPlanDetail = () => {
         <p><strong>Cập nhật lần cuối:</strong> {new Date(document.updatedAt).toLocaleDateString()}</p>
       </div>
 
+      {/* Thêm UserRating vào đây */}
+      <div className="document-rating">
+        <UserRating
+          userId={user?.id}
+          documentId={parseInt(id)}
+          initialUserRating={document.userRating || 0}
+          initialAverageRating={document.averageRating || 0}
+        />
+      </div>
+
       {document.description && (
         <div className="document-description">
           <h2>Mô tả</h2>
@@ -268,7 +280,6 @@ const LessonPlanDetail = () => {
         </div>
       )}
 
-      {/* Comments Section - Hiển thị bất kể isValidUrl */}
       <div className="comments-section">
         <h2>Bình luận</h2>
         <div className="comments-list">

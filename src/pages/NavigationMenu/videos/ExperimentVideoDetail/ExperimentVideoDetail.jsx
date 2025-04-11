@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
+import UserRating from '../../../../components/StarRating/UserRating';
 import 'react-toastify/dist/ReactToastify.css';
 import './ExperimentVideoDetail.css';
 
@@ -233,7 +234,14 @@ const ExperimentVideoDetail = () => {
         <p><strong>Ngày tạo:</strong> {new Date(video.created_at).toLocaleDateString()}</p>
         <p><strong>Cập nhật lần cuối:</strong> {new Date(video.updated_at).toLocaleDateString()}</p>
       </div>
-
+      <div className="video-rating">
+        <UserRating
+          userId={user?.id}
+          videoId={parseInt(id)}
+          initialUserRating={video.userRating || 0}
+          initialAverageRating={video.averageRating || 0}
+        />
+      </div>
       {video.description && (
         <div className="video-description">
           <h2>Mô tả</h2>

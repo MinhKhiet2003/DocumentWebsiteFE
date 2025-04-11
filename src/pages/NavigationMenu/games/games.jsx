@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import StarRating from '../../../components/StarRating/StarRating';
 import { AuthContext } from '../../../Auth/AuthContext';
 import Tabs from '../../../components/Tabs/Tabs';
 import './games.css';
@@ -174,7 +175,7 @@ import './games.css';
                       <p><small>Tác giả: {game.uploadedByUsername || "Không xác định"}</small></p>
                       <p><small>Ngày tạo: {new Date(game.createdAt).toLocaleDateString()}</small></p>
                       <div className="card-footer">
-                        <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                        <StarRating averageRating={game.averageRating || 0} />
                         <span className="ms-2">{game.commentCount} phản hồi</span>
                       </div>
                     </div>

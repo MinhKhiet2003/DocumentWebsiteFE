@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
+import StarRating from '../../../components/StarRating/StarRating';
 import Tabs from '../../../components/Tabs/Tabs';
 import './ChemistryComics.css';
 
@@ -170,7 +171,7 @@ const ChemistryComics = () => {
                       <p><small>Author: {comic.username || "Unknown"}</small></p>
                       <p><small>Created: {new Date(comic.createdAt).toLocaleDateString()}</small></p>
                       <div className="card-footer">
-                        <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                        <StarRating averageRating={comic.averageRating} />
                         <span className="ms-2">{comic.commentCount} phản hồi</span>
                       </div>
                     </div>

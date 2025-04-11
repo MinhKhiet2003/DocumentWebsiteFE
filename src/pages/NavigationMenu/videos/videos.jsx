@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { AuthContext } from '../../../Auth/AuthContext';
+import StarRating from '../../../components/StarRating/StarRating';
 import Tabs from '../../../components/Tabs/Tabs';
 import Pagination from '../../../components/Pagination/Pagination';
 import '../../Resource/Resource.css';
@@ -174,7 +175,7 @@ const Videos = () => {
                       <p><small>Tác giả: {video.uploadedByUsername || "Không xác định"}</small></p>
                       <p><small>Ngày tạo: {new Date(video.created_at).toLocaleDateString()}</small></p>
                       <div className="card-footer">
-                        <span className="text-warning">⭐⭐⭐⭐⭐</span>
+                        <StarRating averageRating={video.averageRating || 0} />
                         <span className="ms-2">{video.commentCount} phản hồi</span>
                       </div>
                     </div>
