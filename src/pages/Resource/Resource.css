@@ -126,12 +126,21 @@
     font-size: 0.8rem;
   }
 }
-/* Style cho liên kết card */
+
 .card-link {
-  text-decoration: none; /* Bỏ gạch chân */
-  color: inherit; /* Kế thừa màu chữ */
+  text-decoration: none; 
+  color: inherit; 
 }
 
 .card-link:hover {
-  text-decoration: none; /* Đảm bảo không có gạch chân khi hover */
+  text-decoration: none; 
+}
+
+.card-content h3,
+.card-content p {
+  white-space: nowrap;     
+  overflow: hidden;         
+  text-overflow: ellipsis;   
+  display: block;            
+  width: 100%;               
 }
