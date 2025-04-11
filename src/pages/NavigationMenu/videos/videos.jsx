@@ -8,6 +8,7 @@ const Videos = () => {
       title="Videos"
       itemsPerPage={6}
       imageField="thumbnailUrl"
+      dateField="created_at"
     />
   );
 };

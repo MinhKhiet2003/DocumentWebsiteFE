@@ -46,7 +46,9 @@ const Resource = () => {
             items: documents.map(doc => ({
               id: doc.id || doc.Id,
               title: doc.title,
+              description: doc.description || "Không có mô tả",
               author: `Tác giả: ${doc.uploadedByUsername}`,
+              date: doc.createdAt || "Không xác định",
               commentCount: doc.commentCount || 0,
               averageRating: doc.averageRating || 0,
             }))
@@ -56,7 +58,9 @@ const Resource = () => {
             items: games.map(game => ({
               id: game.Id || game.id,
               title: game.title,
+              description: game.description || "Không có mô tả",
               author: `Tác giả: ${game.uploadedByUsername}`,
+              date: game.createdAt || "Không xác định",
               commentCount: game.commentCount || 0,
               averageRating: game.averageRating || 0,
             }))
@@ -66,7 +70,9 @@ const Resource = () => {
             items: videos.map(video => ({
               id: video.video_id || video.Id,
               title: video.title,
+              description: video.description || "Không có mô tả",
               author: `Tác giả: ${video.uploadedByUsername}`,
+              date: video.created_at || "Không xác định",
               commentCount: video.commentCount || 0,
               averageRating: video.averageRating || 0,
             }))
@@ -121,7 +127,10 @@ const Resource = () => {
                     </div>
                     <div className="card-content">
                       <h3>{item.title}</h3>
-                      <p>{item.author}</p>
+                      <p className="text-muted">{item.description || "Không có mô tả"}</p>
+                      <p className="card-author">{item.author}</p>
+                      <p className="card-date">Ngày tạo: {new Date(item.date).toLocaleDateString()}</p>
+                      
                       <div className="card-footer">
                         <StarRating 
                           averageRating={item.averageRating || 0} 
