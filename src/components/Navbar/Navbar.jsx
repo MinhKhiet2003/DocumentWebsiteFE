@@ -30,7 +30,7 @@ const Navbar = () => {
       </div>
       <nav>
         <Link to="/home" className={location.pathname.startsWith('/home') ? 'active' : ''}>Giới thiệu</Link>
-        <Link to="/resources" className={location.pathname.startsWith('/resources') ? 'active' : ''}>Tài nguyên</Link>
+        <Link to="/resources" className={location.pathname.startsWith('/resources') ? 'active' : ''}>Tài liệu tham khảo</Link>
         <Link to="/news" className={location.pathname.startsWith('/news') ? 'active' : ''}>Tin tức & Sự kiện</Link>
         <Link to="/members" className={location.pathname.startsWith('/members') ? 'active' : ''}>Thành viên & Đội ngũ</Link>
 

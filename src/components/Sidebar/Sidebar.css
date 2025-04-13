@@ -25,7 +25,7 @@
 
 /* Search input */
 .sidebar input {
-  width: 93%;
+  width: 85%;
   margin-bottom: 20px;
   font-size: 16px;
   padding: 10px;
@@ -74,10 +74,6 @@
   background-color: var(--active-background);
 }
 
-/* Menu title */
-.menu-item-container {
-  width: 80%;
-}
 
 .menu-item {
   display: flex;
@@ -234,4 +230,39 @@
   .sub-menu {
     padding-left: 10px;
   }
+}
+
+/* Add these to your existing Sidebar.css */
+.menu-icon {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+}
+
+.chevron-icon {
+  width: 12px;
+  height: 12px;
+  margin-left: 5px;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: #6c757d;
+}
+
+.search-container input {
+  padding-left: 35px;
+}
+
+.sub-menu-item .menu-icon,
+.sub-sub-menu-item .menu-icon {
+  margin-right: 8px;
+  width: 14px;
+  height: 14px;
 }

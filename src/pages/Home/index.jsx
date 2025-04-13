@@ -6,11 +6,13 @@ import home3 from '../../assets/home/home3.jpg';
 import home4 from '../../assets/home/home4.jpg';
 import home5 from '../../assets/home/home5.jpg';
 import home6 from '../../assets/home/home6.jpg';
+import poster from '../../assets/poster.png';
 
 const Home = () => {
   return (
     <div className="home">
       <h1>Giới thiệu nền tảng Hachieve <br /> ( Happy to Achieve )</h1>
+      <img className="poster" src = {poster} alt="" />
       <p>
         Trong bối cảnh công nghệ số phát triển mạnh mẽ, nền giáo dục cũng không ngừng đổi mới để đáp ứng nhu cầu học tập và giảng dạy ngày càng đa dạng. Đặc biệt, đối với môn Hóa học – một bộ môn khoa học tự nhiên có tính ứng dụng thực tiễn cao nhưng lại thường được xem là khó tiếp cận do tính chất lý thuyết phức tạp và hệ thống công thức đa dạng – việc áp dụng những phương pháp dạy và học tiên tiến là điều vô cùng cần thiết. Chính từ thực tế đó, Hachieve (Happy to Achieve) đã ra đời với sứ mệnh mang lại sự đổi mới toàn diện trong cách tiếp cận và giảng dạy môn học này.
      </p>

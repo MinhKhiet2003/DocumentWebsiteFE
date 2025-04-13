@@ -3,6 +3,18 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import axios from 'axios';
 import { AuthContext } from '../../Auth/AuthContext';
+// Import icons
+import { 
+  FaSearch, 
+  FaBook, 
+  FaGamepad, 
+  FaVideo, 
+  FaTasks, 
+  FaFlask, 
+  FaBookOpen,
+  FaChevronDown,
+  FaChevronRight
+} from 'react-icons/fa';
 
 const Sidebar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -17,7 +29,8 @@ const Sidebar = () => {
       resourceType: "document",
       subItems: [],
       loading: false,
-      error: null
+      error: null,
+      icon: <FaBook className="menu-icon" />
     },
     {
       title: "Game",
@@ -25,7 +38,8 @@ const Sidebar = () => {
       resourceType: "game",
       subItems: [],
       loading: false,
-      error: null
+      error: null,
+      icon: <FaGamepad className="menu-icon" />
     },
     {
       title: "Video thí nghiệm",
@@ -33,19 +47,26 @@ const Sidebar = () => {
       resourceType: "video",
       subItems: [],
       loading: false,
-      error: null
+      error: null,
+      icon: <FaVideo className="menu-icon" />
     },
     {
       title: "Bài tập",
+      icon: <FaTasks className="menu-icon" />,
       subItems: [
-        { title: "Hóa học đời sống", path: "/resources/chemistry-of-life" },
+        { 
+          title: "Hóa học đời sống", 
+          path: "/resources/chemistry-of-life",
+          icon: <FaFlask className="menu-icon" />
+        },
         { 
           title: "Truyện tranh hóa học", 
           path: "/resources/chemistry-comics",
           resourceType: "comic",
           subItems: [],
           loading: false,
-          error: null
+          error: null,
+          icon: <FaBookOpen className="menu-icon" />
         },
       ],
     },
@@ -136,7 +157,8 @@ const Sidebar = () => {
           subItems: categories.map(cat => ({
             title: cat.name,
             path: buildPath(mi.path, cat.id),
-            categoryId: cat.id
+            categoryId: cat.id,
+            icon: mi.icon // Pass down the icon
           })),
           loading: false
         } : mi
@@ -180,7 +202,8 @@ const Sidebar = () => {
           subItems: categories.map(cat => ({
             title: cat.name,
             path: buildPath(subItem.path, cat.id),
-            categoryId: cat.id
+            categoryId: cat.id,
+            icon: subItem.icon // Pass down the icon
           })),
           loading: false
         };
@@ -219,7 +242,8 @@ const Sidebar = () => {
               subItems: categories.map(cat => ({
                 title: cat.name,
                 path: buildPath(item.path, cat.id),
-                categoryId: cat.id
+                categoryId: cat.id,
+                icon: item.icon
               })),
               loading: false,
               error: null
@@ -243,7 +267,8 @@ const Sidebar = () => {
                   subItems: categories.map(cat => ({
                     title: cat.name,
                     path: buildPath(subItem.path, cat.id),
-                    categoryId: cat.id
+                    categoryId: cat.id,
+                    icon: subItem.icon
                   })),
                   loading: false,
                   error: null
@@ -282,14 +307,17 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <aside>
-        <input
-          type="text"
-          className="form-control mb-3"
-          placeholder="Tìm kiếm..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={handleSearchKeyDown} 
-        />
+        <div className="search-container">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Tìm kiếm..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleSearchKeyDown} 
+          />
+        </div>
         <ul className="list-group">
           {menuItems.map((item, index) => (
             <li 
@@ -305,7 +333,13 @@ const Sidebar = () => {
                     to={buildPath(item.path)}
                     className={`menu-item d-flex justify-content-between align-items-center ${isActive(item.path) ? 'active' : ''}`}
                   >
-                    <span>{item.title}</span>
+                    <div className="d-flex align-items-center">
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </div>
+                    {item.subItems.length > 0 && (
+                      expanded === index ? <FaChevronDown className="chevron-icon" /> : <FaChevronRight className="chevron-icon" />
+                    )}
                     {item.loading && <span className="spinner-border spinner-border-sm" />}
                   </Link>
                 </div>
@@ -315,7 +349,13 @@ const Sidebar = () => {
                   onClick={() => setExpanded(expanded === index ? null : index)}
                 >
                   <div className={`menu-item d-flex justify-content-between align-items-center`}>
-                    <span>{item.title}</span>
+                    <div className="d-flex align-items-center">
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </div>
+                    {item.subItems.length > 0 && (
+                      expanded === index ? <FaChevronDown className="chevron-icon" /> : <FaChevronRight className="chevron-icon" />
+                    )}
                   </div>
                 </div>
               )}
@@ -333,7 +373,15 @@ const Sidebar = () => {
                         className={`sub-menu-item d-flex justify-content-between align-items-center ${isActive(subItem.path) ? 'active' : ''}`}
                         onClick={(e) => toggleSubMenu(index, subIndex, e)}
                       >
-                        <span>{subItem.title}</span>
+                        <div className="d-flex align-items-center">
+                          {subItem.icon}
+                          <span>{subItem.title}</span>
+                        </div>
+                        {subItem.subItems?.length > 0 && (
+                          expandedSubMenu === `${index}-${subIndex}` ? 
+                            <FaChevronDown className="chevron-icon" /> : 
+                            <FaChevronRight className="chevron-icon" />
+                        )}
                         {subItem.loading && <span className="spinner-border spinner-border-sm" />}
                       </div>
                     ) : (
@@ -341,7 +389,10 @@ const Sidebar = () => {
                         to={subItem.path} 
                         className={`sub-menu-item ${isActive(subItem.path) ? 'active' : ''}`}
                       >
-                        {subItem.title}
+                        <div className="d-flex align-items-center">
+                          {/* {subItem.icon} */}
+                          <span>{subItem.title}</span>
+                        </div>
                       </Link>
                     )}
                     
@@ -356,7 +407,10 @@ const Sidebar = () => {
                             className={`sub-sub-menu-item ${location.pathname + location.search === subSubItem.path ? 'active' : ''}`}
                             onClick={() => navigate(subSubItem.path)}
                           >
-                            {subSubItem.title}
+                            <div className="d-flex align-items-center">
+                              {/* {subSubItem.icon} */}
+                              <span>{subSubItem.title}</span>
+                            </div>
                           </li>
                         ))}
                       </ul>
