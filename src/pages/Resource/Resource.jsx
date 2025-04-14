@@ -129,7 +129,7 @@ const Resource = () => {
                       <h3>{item.title}</h3>
                       <p className="text-muted">{item.description || "Không có mô tả"}</p>
                       <p className="card-author">{item.author}</p>
-                      <p className="card-date">Ngày tạo: {new Date(item.date).toLocaleDateString()}</p>
+                      {/* <p className="card-date">Ngày tạo: {new Date(item.date).toLocaleDateString()}</p> */}
                       
                       <div className="card-footer">
                         <StarRating 

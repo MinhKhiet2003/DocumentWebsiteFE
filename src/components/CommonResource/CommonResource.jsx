@@ -216,7 +216,7 @@ const CommonResource = ({
                       <p className="text-muted">{item[descriptionField] || "Không có mô tả"}</p>
                       {item.classify && <p><small>Phân loại: {item.classify}</small></p>}
                       <p><small>Tác giả: {item[authorField] || "Không xác định"}</small></p>
-                      <p><small>Ngày tạo: {new Date(item[dateField]).toLocaleDateString()}</small></p>
+                      {/* <p><small>Ngày tạo: {new Date(item[dateField]).toLocaleDateString()}</small></p> */}
                       <div className="card-footer">
                         <StarRating averageRating={item.averageRating || 0} />
                         <span className="ms-2">{item.commentCount || 0} phản hồi</span>
