@@ -219,6 +219,7 @@
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchGames();
+        toast.success("Xóa game thành công!");
       } catch (error) {
         console.error("Lỗi khi xóa game:", error);
         toast.error(error.response?.data?.message || "Có lỗi xảy ra khi xóa game");

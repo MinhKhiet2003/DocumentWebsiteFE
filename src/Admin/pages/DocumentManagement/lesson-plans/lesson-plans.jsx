@@ -215,15 +215,17 @@ const LessonPlansAdmin = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa tài liệu này?")) return;
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`${API_URL}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchDocuments();
+        const token = localStorage.getItem("token");
+        await axios.delete(`${API_URL}/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        fetchDocuments();
+        toast.success("Xóa tài liệu thành công!");
     } catch (error) {
-      console.error("Lỗi khi xóa tài liệu:", error);
+        console.error("Lỗi khi xóa tài liệu:", error);
+        toast.error("Có lỗi xảy ra khi xóa tài liệu!");
     }
-  };
+};
 
   const handleSave = async () => {
     try {

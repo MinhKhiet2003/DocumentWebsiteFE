@@ -128,8 +128,8 @@ const CategoriesManagement = () => {
       await axios.delete(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("Xóa chủ đề thành công!");
       fetchCategories();
+      toast.success("Xóa chủ đề thành công!");
     } catch (error) {
       toast.error("Lỗi khi xóa chủ đề!");
     }

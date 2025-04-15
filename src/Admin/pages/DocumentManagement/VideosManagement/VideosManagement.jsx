@@ -215,6 +215,7 @@ const VideosManagement = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchVideos();
+      toast.success("Xóa video thành công!");
     } catch (error) {
       console.error("Lỗi khi xóa video:", error);
     }
