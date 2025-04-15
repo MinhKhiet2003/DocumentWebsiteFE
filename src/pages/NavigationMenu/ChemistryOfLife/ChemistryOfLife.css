@@ -1,74 +1,173 @@
+/* ChemistryOfLife.css */
+
 .chemistry-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
-}
-.chemistry-title{
-  display: flex;
-  justify-content: space-between;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.chemistry-title button{
-  height: 30px;
+.chemistry-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  position: relative;
 }
+
+.chemistry-header h1 {
+  flex: 1;
+  text-align: center;
+  color: #2c3e50;
+  font-size: 28px;
+  margin: 0;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.back-button:hover {
+  background-color: #f8f9fa;
+  color: var(--primary-color);
+}
+
+.back-button i {
+  margin-right: 8px;
+}
+
 .filter-section {
   display: flex;
   gap: 20px;
-  margin: 30px 0;
+  margin-bottom: 30px;
   flex-wrap: wrap;
 }
 
 .filter-group {
   flex: 1;
   min-width: 250px;
-  position: relative;
 }
 
 .filter-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #333;
+  color: #34495e;
 }
 
-.filter-group select {
+.custom-select {
   width: 100%;
   padding: 12px 15px;
   font-size: 16px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
   transition: border-color 0.3s;
 }
 
-.filter-group select:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
-}
-
-.filter-group select:focus {
+.custom-select:focus {
   outline: none;
-  border-color: #3f51b5;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
 .no-categories-message {
   margin-top: 8px;
   font-size: 14px;
-  color: #666;
+  color: #7f8c8d;
   font-style: italic;
 }
 
-/* Các phần CSS khác giữ nguyên như trước */
-.questions-container {
-  margin-top: 20px;
-  animation: fadeIn 0.5s ease;
+.question-sets-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.sets-title {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.set-card {
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid #e0e0e0;
+  font-weight: 500;
+  color: #34495e;
+  font-size: 15px;
+  outline: none;
+}
+
+.set-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.set-card.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.questions-section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.section-header h2 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 22px;
+}
+
+.section-header h2 span {
+  color: var(--primary-color);
+}
+
+.question-count {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin: 0;
 }
 
 .questions-list {
@@ -76,102 +175,226 @@
 }
 
 .question-card {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #f8fafc;
+  border-radius: 10px;
   transition: transform 0.3s;
+  border-left: 4px solid var(--primary-color);
 }
 
 .question-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.question-content {
+  margin-bottom: 15px;
+}
+
+.question-content textarea{
+  width: 97%;
 }
 
 .question-text {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #2c3e50;
   margin-bottom: 15px;
-  color: #333;
+}
+
+.question-number {
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-right: 8px;
 }
 
 .answer-input {
-  width: calc(100% - 27px) ;
+  width: 100%;
   padding: 12px 15px;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-size: 15px;
   transition: border-color 0.3s;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
 }
 
 .answer-input:focus {
   outline: none;
-  border-color: #3f51b5;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-.answer-display {
-  margin-top: 15px;
+.answer-section {
+  background: white;
   padding: 15px;
-  background: #f5f9ff;
-  border-radius: 6px;
-  border-left: 4px solid #3f51b5;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid #eee;
+}
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.answer-label {
+  font-weight: 600;
+  color: #27ae60;
+  font-size: 15px;
 }
 
 .correct-answer {
-  font-weight: 600;
-  color: #2e7d32;
-  margin-bottom: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2c3e50;
+  margin-bottom: 10px;
 }
 
 .answer-author {
   font-size: 14px;
-  color: #666;
-  font-style: italic;
+  color: #7f8c8d;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.answer-author i {
+  margin-right: 6px;
+  font-size: 13px;
 }
 
 .actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   margin-top: 30px;
 }
 
-.question-count {
-  color: #666;
-  font-size: 14px;
-}
-
 .submit-button {
-  background-color: #3f51b5;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 6px;
+  padding: 12px 30px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .submit-button:hover {
-  background-color: #303f9f;
+  background-color: var(--primary-color);
 }
 
-.no-questions {
+.submit-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.no-questions-container {
   text-align: center;
-  padding: 30px;
-  color: #666;
-  font-style: italic;
-  background: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 20px;
+  padding: 40px 20px;
+  color: #7f8c8d;
 }
 
-.loading-container,
+.no-questions-container i {
+  font-size: 40px;
+  color: #bdc3c7;
+  margin-bottom: 15px;
+}
+
+.no-questions-container p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+}
+
+.empty-state i {
+  font-size: 50px;
+  color: #bdc3c7;
+  margin-bottom: 20px;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin: 0;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid var(--primary-color);
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .error-container {
   text-align: center;
   padding: 50px;
 }
 
 .error-message {
-  color: #f44336;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+.retry-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.retry-button:hover {
+  background-color: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+  }
+  
+  .chemistry-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .chemistry-header h1 {
+    font-size: 24px;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .sets-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
 }

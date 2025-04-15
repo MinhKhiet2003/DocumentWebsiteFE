@@ -20,6 +20,8 @@ import {
   FormControl,
   InputLabel,
   Box,
+  Chip,
+  Stack,
 } from "@mui/material";
 import axios from "axios";
 
@@ -32,16 +34,21 @@ const LifeManagement = () => {
   const [lives, setLives] = useState([]);
   const [categories, setCategories] = useState([]);
   const [usedClasses, setUsedClasses] = useState([]);
+  const [questionSets, setQuestionSets] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingLife, setEditingLife] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [selectedClassId, setSelectedClassId] = useState("");
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+  const [selectedQuestionSet, setSelectedQuestionSet] = useState("");
+  const [showQuestionSetFilter, setShowQuestionSetFilter] = useState(false);
+
   const [searchParams, setSearchParams] = useState({
     question: "",
     categoryId: "",
-    classId: ""
+    classId: "",
+    questionSet: ""
   });
 
   const formatDateTime = (dateTimeString) => {
@@ -55,6 +62,7 @@ const LifeManagement = () => {
     fetchLives();
     fetchCategories();
     fetchUsedClasses();
+    fetchQuestionSets();
   }, []);
 
   const fetchLives = async (params = {}) => {
@@ -67,6 +75,30 @@ const LifeManagement = () => {
       setLives(response.data);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách câu hỏi:", error);
+    }
+  };
+
+  const fetchQuestionSets = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/questionsets`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setQuestionSets(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách bộ câu hỏi:", error);
+    }
+  };
+
+  const fetchLivesByQuestionSet = async (questionSet) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/questionset/${questionSet}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLives(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy câu hỏi theo bộ:", error);
     }
   };
 
@@ -120,7 +152,8 @@ const LifeManagement = () => {
       const params = {
         ...(searchParams.question && { question: searchParams.question.trim() }), 
         ...(searchParams.categoryId && { categoryId: parseInt(searchParams.categoryId) }), 
-        ...(searchParams.classId && { classId: parseInt(searchParams.classId) }) 
+        ...(searchParams.classId && { classId: parseInt(searchParams.classId) }),
+        ...(searchParams.questionSet && { questionSet: parseInt(searchParams.questionSet) })
       };
   
       if (Object.keys(params).length === 0) {
@@ -154,12 +187,24 @@ const LifeManagement = () => {
     }
   };
 
+  const handleQuestionSetChange = (e) => {
+    const questionSet = e.target.value;
+    setSelectedQuestionSet(questionSet);
+    if (questionSet) {
+      fetchLivesByQuestionSet(questionSet);
+    } else {
+      fetchLives();
+    }
+  };
+
   const handleResetSearch = () => {
     setSearchParams({
       question: "",
       categoryId: "",
-      classId: ""
+      classId: "",
+      questionSet: ""
     });
+    setSelectedQuestionSet("");
     fetchLives();
   };
 
@@ -171,6 +216,7 @@ const LifeManagement = () => {
       question: "",
       answer: "",
       categoryId: "",
+      questionSet: 1, // Default value
       uploadedBy: user?.userId || 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -197,6 +243,7 @@ const LifeManagement = () => {
       question: life.question,
       answer: life.answer,
       categoryId: life.category_id,
+      questionSet: life.questionSet,
       uploadedBy: life.uploaded_by,
       createdAt: life.createdAt,
       updatedAt: life.updatedAt
@@ -213,8 +260,10 @@ const LifeManagement = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchLives();
+      toast.success("Xóa câu hỏi thành công!");
     } catch (error) {
       console.error("Lỗi khi xóa câu hỏi:", error);
+      toast.error("Có lỗi xảy ra khi xóa câu hỏi!");
     }
   };
 
@@ -231,6 +280,7 @@ const LifeManagement = () => {
         question: editingLife.question,
         answer: editingLife.answer,
         category_id: parseInt(editingLife.categoryId),
+        questionSet: parseInt(editingLife.questionSet),
         updatedAt: new Date().toISOString()
       };
   
@@ -260,6 +310,7 @@ const LifeManagement = () => {
       }
   
       fetchLives();
+      fetchQuestionSets();
       setOpenDialog(false);
     } catch (error) {
       console.error("Lỗi khi lưu câu hỏi:", error);
@@ -364,6 +415,21 @@ const LifeManagement = () => {
             )}
           </Select>
         </FormControl>
+
+        <FormControl sx={{ minWidth: 200 }} size="small">
+          <InputLabel>Bộ câu hỏi</InputLabel>
+          <Select
+            name="questionSet"
+            value={searchParams.questionSet}
+            onChange={handleSearchParamChange}
+            label="Bộ câu hỏi"
+          >
+            <MenuItem value="">Tất cả bộ câu hỏi</MenuItem>
+            {questionSets.map((set) => (
+              <MenuItem key={set} value={set}>Bộ {set}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         
         <Button 
           variant="contained" 
@@ -381,9 +447,43 @@ const LifeManagement = () => {
         </Button>
       </Box>
 
-      <Button variant="contained" color="primary" onClick={handleAdd} sx={{ mb: 2 }}>
-        Thêm Câu hỏi
-      </Button>
+      <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleAdd}>
+          Thêm Câu hỏi
+        </Button>
+        <Button 
+          variant="outlined" 
+          onClick={() => setShowQuestionSetFilter(!showQuestionSetFilter)}
+        >
+          {showQuestionSetFilter ? 'Ẩn bộ câu hỏi' : 'Xem theo bộ câu hỏi'}
+        </Button>
+      </Stack>
+
+      {showQuestionSetFilter && (
+        <Box sx={{ mb: 3, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {questionSets.map((set) => (
+            <Chip
+              key={set}
+              label={`Bộ ${set}`}
+              onClick={() => {
+                setSelectedQuestionSet(set);
+                fetchLivesByQuestionSet(set);
+              }}
+              color={selectedQuestionSet === set ? 'primary' : 'default'}
+              variant={selectedQuestionSet === set ? 'filled' : 'outlined'}
+            />
+          ))}
+          <Chip
+            label="Tất cả"
+            onClick={() => {
+              setSelectedQuestionSet("");
+              fetchLives();
+            }}
+            color={!selectedQuestionSet ? 'primary' : 'default'}
+            variant={!selectedQuestionSet ? 'filled' : 'outlined'}
+          />
+        </Box>
+      )}
 
       <Table>
         <TableHead>
@@ -392,6 +492,7 @@ const LifeManagement = () => {
             <TableCell>Câu hỏi</TableCell>
             <TableCell>Câu trả lời</TableCell>
             <TableCell>Chủ đề</TableCell>
+            <TableCell>Bộ câu hỏi</TableCell>
             <TableCell>Người tạo</TableCell>
             <TableCell>Ngày tạo</TableCell>
             <TableCell>Ngày cập nhật</TableCell>
@@ -405,6 +506,7 @@ const LifeManagement = () => {
               <TableCell>{life.question}</TableCell>
               <TableCell>{life.answer}</TableCell>
               <TableCell>{life.categoryName}</TableCell>
+              <TableCell>Bộ {life.questionSet}</TableCell>
               <TableCell>{life.username}</TableCell>
               <TableCell>{formatDateTime(life.createdAt)}</TableCell>
               <TableCell>{formatDateTime(life.updatedAt)}</TableCell>
@@ -424,7 +526,7 @@ const LifeManagement = () => {
                       color="error"
                       onClick={() => handleDelete(life.id)}
                       className="action-button"
-                      sx={{ ml: 1 }} // Thay style bằng sx prop
+                      sx={{ ml: 1 }}
                     >
                       Xóa
                     </Button>
@@ -445,7 +547,7 @@ const LifeManagement = () => {
         </TableBody>
       </Table>
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="md">
         <DialogTitle>{isAdding ? "Thêm Câu hỏi" : "Sửa Câu hỏi"}</DialogTitle>
         <DialogContent>
           <TextField 
@@ -469,21 +571,38 @@ const LifeManagement = () => {
             required
           />
           
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Lớp học</InputLabel>
-            <Select
-              value={selectedClassId}
-              onChange={handleClassChange}
-              label="Lớp học"
-              required
-            >
-              {usedClasses.map((classItem) => (
-                <MenuItem key={classItem.id} value={classItem.id}>
-                  {classItem.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <FormControl fullWidth margin="normal" sx={{ flex: 1 }}>
+              <InputLabel>Bộ câu hỏi</InputLabel>
+              <Select
+                name="questionSet"
+                value={editingLife?.questionSet || 1}
+                onChange={handleChange}
+                label="Bộ câu hỏi"
+                required
+              >
+                {[1, 2, 3, 4, 5].map((set) => (
+                  <MenuItem key={set} value={set}>Bộ {set}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth margin="normal" sx={{ flex: 1 }}>
+              <InputLabel>Lớp học</InputLabel>
+              <Select
+                value={selectedClassId}
+                onChange={handleClassChange}
+                label="Lớp học"
+                required
+              >
+                {usedClasses.map((classItem) => (
+                  <MenuItem key={classItem.id} value={classItem.id}>
+                    {classItem.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           
           <FormControl fullWidth margin="normal">
             <InputLabel>Chủ đề</InputLabel>
