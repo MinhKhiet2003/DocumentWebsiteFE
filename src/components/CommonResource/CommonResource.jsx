@@ -169,6 +169,9 @@ const CommonResource = ({
         <Tabs />
         <div className="resource-header">
           <h1>{title}{currentCategory && `: ${currentCategory.name}`}</h1>
+          <p className="total-items">
+            Tổng số : {items.length}
+          </p>
           {additionalFilters && (
             <div className="resource-filters">
               {additionalFilters.map(filter => (
