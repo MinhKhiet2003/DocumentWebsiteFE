@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ChemistryOfLife = () => {
+  // Các state hiện có
   const [lifeData, setLifeData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,14 @@ const ChemistryOfLife = () => {
   const [selectedQuestionSet, setSelectedQuestionSet] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Thêm các state mới cho comment
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedContent, setEditedContent] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +43,7 @@ const ChemistryOfLife = () => {
 
         const token = localStorage.getItem('token');
         
-        // Fetch classes
+        // Fetch classes, life questions và comments
         const [classesResponse, lifeResponse] = await Promise.all([
           fetch('https://hachieve.runasp.net/api/Categories/used-classes', {
             headers: { 'Authorization': `Bearer ${token}` },
@@ -81,6 +90,26 @@ const ChemistryOfLife = () => {
 
     fetchLifeData();
   }, [user, navigate]);
+
+  // Thêm hàm fetchComments
+  const fetchComments = async (questionSet, categoryId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `https://hachieve.runasp.net/api/comment/by-questionset?questionSet=${questionSet}&categoryId=${categoryId}`,
+        {
+          headers: { 'Authorization': `Bearer ${token}` },
+        }
+      );
+      
+      if (!response.ok) throw new Error('Failed to fetch comments');
+      const data = await response.json();
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      setComments([]);
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -134,8 +163,116 @@ const ChemistryOfLife = () => {
     );
     setFilteredData(result);
     setShowQuestions(true);
+    // Load comments khi chọn bộ câu hỏi
+    fetchComments(set, parseInt(selectedCategory));
   };
 
+  // Thêm các hàm xử lý comment
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!newComment.trim()) {
+      toast.error('Vui lòng nhập nội dung bình luận');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('https://hachieve.runasp.net/api/comment', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: newComment,
+          userId: user.id,
+          questionSet: selectedQuestionSet,
+          categoryId: parseInt(selectedCategory)
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Không thể gửi bình luận');
+      }
+
+      const addedComment = await response.json();
+      const updatedComment = {
+        ...addedComment,
+        user: {
+          user_id: user.id,
+          username: user.username || 'Người dùng', 
+        },
+        createdAt: new Date().toISOString(),
+      };
+      setComments([...comments, updatedComment]);
+      setNewComment('');
+      toast.success('Bình luận đã được gửi');
+    } catch (err) {
+      toast.error(err.message || 'Đã xảy ra lỗi khi gửi bình luận');
+    }
+  };
+
+  const handleEditComment = (comment) => {
+    setEditingCommentId(comment.comment_id);
+    setEditedContent(comment.content);
+    setDropdownOpen(null);
+  };
+
+  const handleUpdateComment = async (commentId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: editedContent,
+          userId: user.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Không thể cập nhật bình luận');
+      }
+
+      const updatedComment = await response.json();
+      setComments(comments.map(c => (c.comment_id === commentId ? updatedComment : c)));
+      setEditingCommentId(null);
+      setEditedContent('');
+      toast.success('Bình luận đã được cập nhật');
+    } catch (err) {
+      toast.error(err.message || 'Đã xảy ra lỗi khi cập nhật bình luận');
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}?userId=${user.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Không thể xóa bình luận');
+      }
+
+      setComments(comments.filter(c => c.comment_id !== commentId));
+      toast.success('Bình luận đã được xóa');
+    } catch (err) {
+      toast.error(err.message || 'Đã xảy ra lỗi khi xóa bình luận');
+    }
+  };
+
+  const toggleDropdown = (commentId) => {
+    setDropdownOpen(dropdownOpen === commentId ? null : commentId);
+  };
+
+  // Các hàm hiện có giữ nguyên
   const handleAnswerChange = (questionId, answer) => {
     setUserAnswers(prev => ({
       ...prev,
@@ -151,7 +288,6 @@ const ChemistryOfLife = () => {
 
     setIsSubmitting(true);
     try {
-      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 800));
       setAnsweredQuestions(prev => [...prev, ...filteredData.map(q => q.id)]);
       toast.success('Kiểm tra đáp án thành công!');
@@ -304,6 +440,68 @@ const ChemistryOfLife = () => {
                 ))}
               </div>
 
+              {/* Thêm phần comment vào đây */}
+              <div className="comments-section">
+                <h3>Bình luận về bộ câu hỏi</h3>
+                <div className="comments-list">
+                  {comments.length > 0 ? (
+                    comments.map(comment => (
+                      <div key={comment.comment_id} className="comment-item">
+                        <div className="comment-header">
+                          <span className="comment-author">{comment.user?.username || 'Người dùng'}</span>
+                          <div className="comment-meta">
+                            <span className="comment-date">
+                              {new Date(comment.createdAt).toLocaleString()}
+                            </span>
+                            {comment.user_id === user.id && (
+                              <div className="comment-actions">
+                                <button
+                                  className="more-options"
+                                  onClick={() => toggleDropdown(comment.comment_id)}
+                                >
+                                  ⋮
+                                </button>
+                                {dropdownOpen === comment.comment_id && (
+                                  <div className="dropdown-menu">
+                                    <button onClick={() => handleEditComment(comment)}>Sửa</button>
+                                    <button onClick={() => handleDeleteComment(comment.comment_id)}>Xóa</button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {editingCommentId === comment.comment_id ? (
+                          <div className="edit-comment">
+                            <textarea
+                              value={editedContent}
+                              onChange={(e) => setEditedContent(e.target.value)}
+                            />
+                            <div className="edit-actions">
+                              <button onClick={() => handleUpdateComment(comment.comment_id)}>Lưu</button>
+                              <button onClick={() => setEditingCommentId(null)}>Hủy</button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="comment-content">{comment.content}</p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>Chưa có bình luận nào.</p>
+                  )}
+                </div>
+
+                <form className="comment-form" onSubmit={handleCommentSubmit}>
+                  <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Viết bình luận của bạn về bộ câu hỏi này..."
+                  />
+                  <button type="submit">Gửi</button>
+                </form>
+              </div>
+
               <div className="actions">
                 <button 
                   onClick={handleSubmitAnswers}
@@ -336,7 +534,7 @@ const ChemistryOfLife = () => {
         </div>
       )}
 
-      <ToastContainer position="bottom-right" autoClose={3000} />
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };
