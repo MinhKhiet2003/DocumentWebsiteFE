@@ -15,7 +15,10 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  FormControl, InputLabel, Select, MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 
@@ -34,12 +37,12 @@ const CategoriesManagement = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedClassId, setSelectedClassId] = useState("");
 
-
   const formatDateTime = (dateTimeString) => {
     return moment(dateTimeString).format("DD/MM/YYYY HH:mm:ss");
   };
+
   useEffect(() => {
-    if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
+    if (!user || (user.role !== "admin" && user.role !== "teacher")) {
       window.location.href = "/";
     }
     fetchCategories();
@@ -77,19 +80,18 @@ const CategoriesManagement = () => {
         fetchCategories();
         return;
       }
-      const response = await axios.get(`${API_URL}/by-class/${classId}`, {
+      const response = await axios.get(`${API_URL}/by-class-search/${classId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.length === 0) {
-        setCategories([]); 
+        setCategories([]);
       } else {
-      setCategories(response.data);
+        setCategories(response.data);
       }
     } catch (error) {
-      setCategories([]); 
+      setCategories([]);
     }
   };
-  
 
   const handleSearch = async () => {
     try {
@@ -135,43 +137,64 @@ const CategoriesManagement = () => {
     }
   };
 
+  const handleRestore = async (id) => {
+    if (!window.confirm("Bạn có chắc muốn khôi phục chủ đề này?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`${API_URL}/restore/${id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchCategories();
+      toast.success("Khôi phục chủ đề thành công!");
+    } catch (error) {
+      toast.error("Lỗi khi khôi phục chủ đề!");
+    }
+  };
+
   const handleSave = async () => {
     try {
       setErrorMessage("");
-  
+
       if (!editingCategory.name || !editingCategory.classId) {
         setErrorMessage("Tên chủ đề và Lớp không được để trống!");
         return;
       }
-  
+
       const token = localStorage.getItem("token");
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-  
-      // Chuẩn bị dữ liệu cơ bản
+
       const categoryData = {
         name: editingCategory.name,
         description: editingCategory.description,
         classId: editingCategory.classId,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-  
+
       if (isAdding) {
-        await axios.post(API_URL, {
-          ...categoryData,
-          uploadedBy: user.id, 
-          createdAt: new Date().toISOString()
-        }, config);
+        await axios.post(
+          API_URL,
+          {
+            ...categoryData,
+            uploadedBy: user.id,
+            createdAt: new Date().toISOString(),
+          },
+          config
+        );
         toast.success("Thêm chủ đề thành công!");
       } else {
-        await axios.put(`${API_URL}/${editingCategory.id}`, {
-          ...categoryData,
-          uploadedBy: editingCategory.uploadedBy 
-        }, config);
+        await axios.put(
+          `${API_URL}/${editingCategory.id}`,
+          {
+            ...categoryData,
+            uploadedBy: editingCategory.uploadedBy,
+          },
+          config
+        );
         toast.success("Cập nhật chủ đề thành công!");
       }
-  
+
       fetchCategories();
       setOpenDialog(false);
     } catch (error) {
@@ -182,7 +205,6 @@ const CategoriesManagement = () => {
       }
     }
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -191,7 +213,7 @@ const CategoriesManagement = () => {
 
   const hasPermission = (category) => {
     if (!user) return false;
-    return user.role === 'admin' || user.id === category.uploadedBy;
+    return user.role === "admin" || user.id === category.uploadedBy;
   };
 
   return (
@@ -199,7 +221,7 @@ const CategoriesManagement = () => {
       <h1>Quản lý chủ đề</h1>
 
       <div className="search-add-container">
-        <div className="search-box" >
+        <div className="search-box">
           <TextField
             label="Tìm kiếm chủ đề"
             variant="outlined"
@@ -213,7 +235,9 @@ const CategoriesManagement = () => {
         </div>
         <FormControl sx={{ minWidth: 200 }} size="small">
           <InputLabel>Lọc theo lớp học</InputLabel>
-          <Select name="classId" label="Lọc theo lớp học"
+          <Select
+            name="classId"
+            label="Lọc theo lớp học"
             value={selectedClassId}
             onChange={(e) => {
               setSelectedClassId(e.target.value);
@@ -223,14 +247,16 @@ const CategoriesManagement = () => {
               PaperProps: {
                 style: {
                   maxHeight: 200,
-                  overflowY: "auto", 
+                  overflowY: "auto",
                 },
               },
             }}
           >
             <MenuItem value="">Tất cả</MenuItem>
             {classes.map((cls) => (
-              <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
+              <MenuItem key={cls.class_id} value={cls.class_id}>
+                {cls.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -248,7 +274,7 @@ const CategoriesManagement = () => {
             <TableCell>Lớp</TableCell>
             <TableCell>Người tạo</TableCell>
             <TableCell>Ngày tạo</TableCell>
-            <TableCell>ngày cập nhật</TableCell>
+            <TableCell>Ngày cập nhật</TableCell>
             <TableCell>Hành động</TableCell>
           </TableRow>
         </TableHead>
@@ -263,26 +289,35 @@ const CategoriesManagement = () => {
               <TableCell>{formatDateTime(cat.createdAt)}</TableCell>
               <TableCell>{formatDateTime(cat.updatedAt)}</TableCell>
               <TableCell>
-                {hasPermission(cat) && (
-                  <>
-                    <Button 
-                      variant="contained" 
-                      color="secondary" 
-                      onClick={() => handleEdit(cat)}
-                      style={{ marginRight: "10px" }}
-                    >
-                      Sửa
-                    </Button>
+                {hasPermission(cat) ? (
+                  cat.isDeleted ? (
                     <Button
                       variant="contained"
-                      color="error"
-                      onClick={() => handleDelete(cat.id)}
+                      color="muted"
+                      onClick={() => handleRestore(cat.id)}
                     >
-                      Xóa
+                      Khôi phục
                     </Button>
-                  </>
-                )}
-                {!hasPermission(cat) && (
+                  ) : (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleEdit(cat)}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Sửa
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDelete(cat.id)}
+                      >
+                        Xóa
+                      </Button>
+                    </>
+                  )
+                ) : (
                   <Button
                     variant="contained"
                     disabled
@@ -302,28 +337,53 @@ const CategoriesManagement = () => {
         <DialogTitle>{isAdding ? "Thêm chủ đề" : "Sửa chủ đề"}</DialogTitle>
         <DialogContent>
           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          <TextField fullWidth label="Tên chủ đề" name="name" value={editingCategory?.name || ""} onChange={handleChange} margin="normal" />
-          <TextField fullWidth label="Mô tả" name="description" value={editingCategory?.description || ""} onChange={handleChange} margin="normal" />
+          <TextField
+            fullWidth
+            label="Tên chủ đề"
+            name="name"
+            value={editingCategory?.name || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Mô tả"
+            name="description"
+            value={editingCategory?.description || ""}
+            onChange={handleChange}
+            margin="normal"
+          />
           <FormControl fullWidth margin="normal">
             <InputLabel>Lớp học</InputLabel>
-            <Select name="classId" label="Lớp học" value={editingCategory?.classId || ""} onChange={handleChange}
+            <Select
+              name="classId"
+              label="Lớp học"
+              value={editingCategory?.classId || ""}
+              onChange={handleChange}
               MenuProps={{
                 PaperProps: {
                   style: {
                     maxHeight: 200,
-                    overflowY: "auto", 
+                    overflowY: "auto",
                   },
                 },
-              }}>
+              }}
+            >
               {classes.map((cls) => (
-                <MenuItem key={cls.class_id} value={cls.class_id}>{cls.name}</MenuItem>
+                <MenuItem key={cls.class_id} value={cls.class_id}>
+                  {cls.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} color="secondary">Hủy</Button>
-          <Button onClick={handleSave} color="primary">Lưu</Button>
+          <Button onClick={() => setOpenDialog(false)} color="secondary">
+            Hủy
+          </Button>
+          <Button onClick={handleSave} color="primary">
+            Lưu
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

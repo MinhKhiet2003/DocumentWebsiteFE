@@ -101,6 +101,25 @@ const VideosManagement = () => {
     }
   };
 
+  const fetchCategoriesByClassSearch = async (classId) => {
+    try {
+      setIsLoadingCategories(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `https://hachieve.runasp.net/api/Categories/by-class-search/${classId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setFilteredCategories(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy chủ đề theo lớp:", error);
+      setFilteredCategories([]);
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  };
+
   const fetchUsedClasses = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -297,7 +316,7 @@ const VideosManagement = () => {
       }));
       
       if (value) {
-        await fetchCategoriesByClass(value);
+        await fetchCategoriesByClassSearch(value);
       } else {
         setFilteredCategories([]);
       }
