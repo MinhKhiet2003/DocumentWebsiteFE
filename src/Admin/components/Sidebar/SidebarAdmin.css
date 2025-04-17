@@ -11,6 +11,9 @@
   z-index: 1000;
   box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
+  left: 0;
+  top: 0;
+  transition: transform 0.3s ease;
 }
 
 /* Admin Sidebar Header */
@@ -171,44 +174,71 @@
   color: inherit;
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
+/* Responsive Adjustments - Bổ sung thêm breakpoints */
+@media (max-width: 1199px) {
+  /* Sidebar sẽ ẩn và hiện khi click menu */
   .admin-sidebar {
-    width: 240px;
     transform: translateX(-100%);
   }
-
+  
   .admin-sidebar.open {
     transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media (max-width: 992px) {
+  /* Điều chỉnh kích thước sidebar khi mở */
+  .admin-sidebar.open {
+    width: 280px;
+  }
+  
+  /* Menu item điều chỉnh padding */
+  .admin-menu-title {
+    padding: 0.6rem 0.8rem;
   }
 }
 
 @media (max-width: 768px) {
+  /* Sidebar chiếm toàn bộ chiều rộng trên mobile */
   .admin-sidebar {
     width: 100%;
     height: auto;
     max-height: 80vh;
-    position: fixed;
     bottom: 0;
+    top: auto;
     left: 0;
     transform: translateY(100%);
-    border-radius: 1rem 1rem 0 0;
-    padding: 1rem;
+    border-radius: 12px 12px 0 0;
   }
-
+  
   .admin-sidebar.open {
     transform: translateY(0);
+    width: 100%;
   }
-
-  .admin-sidebar-menu {
-    padding: 0.5rem 0;
+  
+  /* Điều chỉnh padding cho mobile */
+  .admin-sidebar-header {
+    padding-bottom: 1rem;
   }
-
+  
   .admin-menu-item {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.3rem;
   }
+}
 
-  .admin-submenu {
-    padding-left: 1.5rem;
+@media (max-width: 576px) {
+  /* Tối ưu cho điện thoại nhỏ */
+  .admin-sidebar {
+    max-height: 85vh;
+    padding: 1rem 0.8rem;
+  }
+  
+  .admin-menu-icon {
+    font-size: 1rem;
+  }
+  
+  .admin-menu-text {
+    font-size: 0.9rem;
   }
 }
