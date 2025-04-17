@@ -11,7 +11,7 @@ const Games = () => {
           name: 'classify',
           placeholder: 'Tất cả',
           options: [
-            { value: '', label: 'Tất cả' },
+            // { value: '', label: 'Tất cả' },
             { value: 'Online', label: 'Online' },
             { value: 'Offline', label: 'Offline' }
           ]
