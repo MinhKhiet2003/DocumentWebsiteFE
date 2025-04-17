@@ -11,42 +11,42 @@ const Members = () => {
   const teamMembers = [
     {
       name: 'Nguyễn Vũ Mai Chi',
-      role: 'Thành viên nhóm',
+      role: 'Sư Phạm Hóa Học',
       description: 'Nguyễn Vũ Mai Chi là sinh viên lớp K71A1, có đam mê nghiên cứu hóa học và ứng dụng trong thực tiễn.',
       email: 'ngvumaichi1809@gmail.com',
       photo: imgchi
     },
     {
       name: 'Văn Thị Phương Nam',
-      role: 'Thành viên nhóm',
+      role: 'Sư Phạm Hóa Học',
       description: 'Văn Thị Phương Nam thuộc lớp K72K, quan tâm đến lĩnh vực hóa học phân tích và nghiên cứu môi trường.',
       email: 'vanthiphuongnam@gmail.com',
       photo: imgnam
     },
     {
       name: 'Tạ Minh Khiết',
-      role: 'Thành viên nhóm',
+      role: 'Công Nghệ Thông Tin',
       description: 'Tạ Minh Khiết là sinh viên lớp K71E2 - K.CNTT, đam mê lập trình và phát triển phần mềm.',
       email: 'khiet2003@gmail.com',
       photo: imgkhiet
     },
     {
       name: 'Nguyễn Thị Thu Hà',
-      role: 'Thành viên nhóm',
+      role: 'Sư Phạm Hóa Học',
       description: 'Nguyễn Thị Thu Hà là sinh viên lớp K71K, yêu thích nghiên cứu và thực nghiệm trong lĩnh vực hóa học.',
       email: 'thuhanguyenth2003@gmail.com',
       photo: imgha
     },
     {
       name: 'Phùng Thị Mai',
-      role: 'Thành viên nhóm',
+      role: 'Sư Phạm Hóa Học',
       description: 'Phùng Thị Mai đang theo học lớp K71K, có hứng thú với các phản ứng hóa học và ứng dụng của chúng trong công nghiệp.',
       email: 'Mai14112003@gmail.com',
       photo: imgmai
     },
     {
       name: 'Nguyễn Nhất Sinh',
-      role: 'Thành viên nhóm',
+      role: 'Sư Phạm Hóa Học',
       description: 'Nguyễn Nhất Sinh là sinh viên lớp K73K, yêu thích hóa hữu cơ và tìm hiểu về các hợp chất ứng dụng trong đời sống.',
       email: 'nnsinh.0912@gmail.com',
       photo: imgsinh

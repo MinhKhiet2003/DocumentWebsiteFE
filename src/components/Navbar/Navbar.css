@@ -167,3 +167,149 @@ header nav a.active {
   margin: 8px 0; 
   border-top: 1px solid #ddd;
 } 
+/* Ẩn nút hamburger trên desktop */
+.menu-toggle-container {
+  display: none;
+}
+
+/* Navigation styles - desktop */
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-right: 25px;
+}
+
+/* Responsive styles - tablet */
+@media (max-width: 992px) {
+  header {
+    padding: 10px 15px;
+  }
+  
+  header nav {
+    gap: 10px;
+    margin-right: 15px;
+  }
+  
+  header nav a {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+  .logo-menu-toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 20px); 
+    padding-right: 20px;
+  }
+}
+
+/* Responsive styles - mobile */
+@media (max-width: 768px) {
+  /* Hiển thị nút hamburger */
+  .menu-toggle-container {
+    display: flex;
+    order: 2;
+    margin-left: auto;
+    margin-right: 15px;
+    z-index: 1001;
+  }
+  /* Ẩn menu chính */
+  header nav {
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: calc(100vh - 80px);
+    background-color: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 0;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+  }
+  
+  /* Hiển thị menu khi mở */
+  header nav.open {
+    right: 0;
+  }
+  
+  /* Style cho các link trong menu mobile */
+  header nav a {
+    width: calc(100% - 24px);
+    padding: 12px 15px;
+    margin-bottom: 5px;
+    border-bottom: none;
+  }
+  
+  /* Style cho nút hamburger */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .hamburger span {
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease;
+  }
+  
+  /* Animation khi menu mở */
+  .hamburger.open span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+  
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger.open span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+  
+  /* Điều chỉnh layout các thành phần khác trên mobile */
+  .auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0 0;
+    gap: 10px;
+  }
+  
+  #profile {
+    width: 100%;
+    margin: 20px 0 0;
+  }
+  
+  #profile .dropdown-toggle {
+    padding: 12px 15px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  header div img {
+    height: 60px;
+  }
+  
+  header nav {
+    width: 80%;
+  }
+  .logo-menu-toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 20px); 
+    padding-right: 20px;
+  }
+}

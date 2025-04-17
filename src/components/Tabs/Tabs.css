@@ -35,3 +35,9 @@
   color: #2ecc71;
   border-bottom-color: #2ecc71;
 }
+
+@media (max-width: 992px) {
+  .tabs-container {
+    display: none;
+  }
+}

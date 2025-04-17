@@ -182,3 +182,143 @@
   animation: fadeScale 1.2s ease-in-out;
 }
 
+
+/* Responsive cho tablet (768px - 992px) */
+@media (max-width: 992px) {
+  .home {
+    margin: 35px auto 30px auto;
+    padding: 20px;
+  }
+  
+  .home h1 {
+    font-size: 2.2em;
+    margin-bottom: 15px;
+  }
+  
+  .home h2 {
+    font-size: 1.6em;
+    margin-top: 30px;
+  }
+  
+  .home p {
+    font-size: 1.1em;
+  }
+  
+  .image-gallery {
+    gap: 15px;
+  }
+  
+  .image-gallery img {
+    width: calc(50% - 10px);
+    height: auto;
+  }
+}
+
+/* Responsive cho mobile (576px - 768px) */
+@media (max-width: 768px) {
+  .home {
+    width: 95%;
+    margin: 0px auto 20px auto;
+    padding: 15px;
+  }
+  
+  .home h1 {
+    font-size: 1.8em;
+    padding-bottom: 8px;
+  }
+  
+  .home h2 {
+    font-size: 1.4em;
+    margin-top: 25px;
+  }
+  
+  .home p, .home ul li {
+    font-size: 1em;
+    line-height: 1.6em;
+  }
+  
+  .image-gallery {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .image-gallery img {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Giảm animation trên mobile để tối ưu hiệu suất */
+  .home h1, .home h2 {
+    animation: none;
+  }
+  
+  .home p {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Responsive cho mobile nhỏ (dưới 576px) */
+@media (max-width: 576px) {
+  .home {
+    margin: -24px auto 15px auto;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .home h1 {
+    font-size: 1.5em;
+    text-transform: none;
+  }
+  
+  .home h2 {
+    font-size: 1.3em;
+    margin-top: 20px;
+  }
+  
+  .home p {
+    font-size: 0.95em;
+    margin-bottom: 15px;
+  }
+  
+  .home ul li {
+    font-size: 0.95em;
+    margin-bottom: 8px;
+  }
+  
+  .poster {
+    border-radius: 8px;
+  }
+  
+  /* Tắt hiệu ứng hover trên mobile */
+  .image-gallery img:hover {
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .home ul li:hover {
+    transform: none;
+  }
+}
+
+/* Điều chỉnh cho các thiết bị có chiều cao nhỏ */
+@media (max-height: 600px) and (orientation: landscape) {
+  .home {
+    margin: 60px auto 20px auto;
+  }
+  
+  .home h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  
+  .image-gallery {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .image-gallery img {
+    width: calc(50% - 10px);
+    height: 120px;
+  }
+}

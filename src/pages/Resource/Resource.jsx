@@ -137,7 +137,7 @@ const Resource = () => {
                           starSize="0.9rem"
                           className="card-rating"
                         />
-                        <p>{item.commentCount} phản hồi</p>
+                        <span>{item.commentCount} phản hồi</span>
                       </div>
                     </div>
                   </div>
