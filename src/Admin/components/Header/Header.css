@@ -76,6 +76,19 @@
   }
 
   @media (max-width: 992px) {
+    .header--admin.sidebar-visible{
+      position: fixed;
+      width: calc(100% - 80px); 
+      margin-left: 0px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      padding: 15px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: width 0.3s ease, margin-left 0.3s ease;
+    }
     .menu-icon--admin{
       display: none;
     }
@@ -84,8 +97,8 @@
   @media (max-width: 768px) {
     .header--admin.sidebar-visible{
       position: fixed;
-      width: calc(100% - 90px); 
-      margin-left: 20px;
+      width: calc(100% - 80px); 
+      margin-left: 0px;
       display: flex;
       justify-content: space-between;
       align-items: center;
