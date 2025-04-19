@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import App from "./App";
 import "./assets/styles.css";
 
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/index";
@@ -64,7 +65,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />

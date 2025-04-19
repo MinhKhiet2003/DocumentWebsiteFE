@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CustomFormLoginRegister from '../../components/LoginRegister';
 import { AuthContext } from '../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
@@ -51,6 +51,11 @@ const Login = () => {
         contentButton2="Đăng ký"
         handleOnSubmit={handleLoginSubmit}
         handleSwitchClick={handleSwitchToRegister}
+        forgotPasswordLink={
+          <Link to="/forgot-password" className="forgot-password-link">
+            Quên mật khẩu?
+          </Link>
+        }
       />
       <ToastContainer />
     </div>
