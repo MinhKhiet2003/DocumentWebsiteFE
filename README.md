@@ -1,8 +1,39 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📦 Hachieve - chemistry document sharing website
 
-Currently, two official plugins are available:
+This is a frontend project developed using **ReactJS** combined with **Vite** for super fast build performance. The project can be used as a boilerplate or deployed to a real application.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
+
+- ⚡️ Configured with Vite for fast startup
+
+- 💄 Flexible styling with CSS Modules
+
+- 🧩 Clear, scalable folder structure
+
+- 🔗 Easy integration with Backend API
+
+- 🔄 HMR (Hot Module Replacement) is extremely fast
+
+- 📁 Ready to deploy
+
+## 📸 Screenshot 
+![image](https://github.com/user-attachments/assets/c5637db8-aca8-4cc6-9c0a-4d832d37fb74)
+
+## 🛠️ Install & run locally
+
+```bash
+# Clone the project
+git clone https://github.com/[username]/[repo-name].git
+
+# Move to the folder
+cd [repo-name]
+
+# Install dependencies
+npm install
+
+# Run the project
+npm run dev
+
+💬 Feedback
+If you have any contributions If you have any ideas or errors to report, please create an issue or contact us via email: khiet2003@gmail.com
