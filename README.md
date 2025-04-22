@@ -23,48 +23,23 @@
 
 ## 🛠️ Install & Run Locally
 
-bash
-# Clone the repository
+Clone the repository
+```bash
 git clone https://github.com/MinhKhiet2003/DocumentWebsiteFE.git
-
-# Navigate into the project directory
+```
+Navigate into the project directory
+```bash
 cd DocumentWebsiteFE
-
-# Install dependencies
+```
+Install dependencies
+```bash
 npm install
-
-# Start the development server
+```
+Start the development server
+```bash
 npm run dev
+```
 Once the server is running, open your browser and visit: http://localhost:5173
 
-📦 Build for Production
-bash
-npm run build
-This will generate an optimized production build inside the dist/ folder.
-
-🌐 Deploy
-You can easily deploy the built app using services like Vercel, Netlify, or any static web server.
-
-Example with Vercel:
-bash
-# Install Vercel CLI
-npm install -g vercel
-
-# Deploy
-vercel
-📁 Folder Structure
-bash
-src/
-├── assets/         # Static files (images, fonts, etc.)
-├── components/     # Reusable UI components
-├── pages/          # Application pages
-├── services/       # API services and logic
-├── hooks/          # Custom React hooks
-├── utils/          # Utility functions
-├── App.jsx         # Root app component
-└── main.jsx        # Application entry point
-📄 License
-This project is licensed under the MIT License.
-
-💬 Feedback
+## 💬 Feedback
 If you have any ideas, suggestions, or issues to report, feel free to open an issue or contact us via email: khiet2003@gmail.com
