@@ -24,10 +24,10 @@ This is a frontend project developed using **ReactJS** combined with **Vite** fo
 
 ```bash
 # Clone the project
-git clone https://github.com/[username]/[repo-name].git
+git clone https://github.com/MinhKhiet2003/DocumentWebsiteFE
 
 # Move to the folder
-cd [repo-name]
+cd DocumentWebsiteFE
 
 # Install dependencies
 npm install
@@ -35,5 +35,5 @@ npm install
 # Run the project
 npm run dev
 
-💬 Feedback
+# 💬 Feedback
 If you have any contributions If you have any ideas or errors to report, please create an issue or contact us via email: khiet2003@gmail.com
