@@ -23,7 +23,7 @@
 
 ## 🛠️ Install & Run Locally
 
-```bash
+bash
 # Clone the repository
 git clone https://github.com/MinhKhiet2003/DocumentWebsiteFE.git
 
