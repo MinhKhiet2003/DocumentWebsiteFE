@@ -365,9 +365,9 @@ const ResourceDetail = ({ resourceType }) => {
       <div className="resource-meta">
         <p><strong>Tác giả:</strong> {resource.username || resource.uploadedByUsername || 'Không xác định'}</p>
         {resource.classify && <p><strong>Phân loại:</strong> {resource.classify}</p>}
-        {resource.categoryName && <p><strong>Chủ đề:</strong> {resource.categoryName}</p>}
-        <p><strong>Ngày tạo:</strong> {new Date(resource.createdAt || resource.created_at).toLocaleDateString()}</p>
-        <p><strong>Cập nhật lần cuối:</strong> {new Date(resource.updatedAt || resource.updated_at).toLocaleDateString()}</p>
+        {/* {resource.categoryName && <p><strong>Chủ đề:</strong> {resource.categoryName}</p>} */}
+        {/* <p><strong>Ngày tạo:</strong> {new Date(resource.createdAt || resource.created_at).toLocaleDateString()}</p>
+        <p><strong>Cập nhật lần cuối:</strong> {new Date(resource.updatedAt || resource.updated_at).toLocaleDateString()}</p> */}
       </div>
 
       <div className="resource-rating">
