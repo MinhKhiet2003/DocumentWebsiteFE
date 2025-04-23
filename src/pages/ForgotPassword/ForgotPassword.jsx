@@ -36,7 +36,7 @@ const ForgotPassword = () => {
         return;
       }
 
-      toast.success('OTP đã được gửi.');
+      toast.success('OTP đã được gửi. Vui lòng kiểm tra hộp thư đến và thư mục spam/thư rác của bạn.');
       setIsOtpSent(true);
       setResendCooldown(30); // 30-second cooldown
     } catch (error) {
