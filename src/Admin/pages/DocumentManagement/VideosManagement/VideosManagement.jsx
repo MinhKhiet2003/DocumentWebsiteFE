@@ -412,7 +412,7 @@ const VideosManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Tiêu đề</TableCell>
             <TableCell>Mô tả</TableCell>
             <TableCell>Đường dẫn Video</TableCell>
@@ -424,9 +424,9 @@ const VideosManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {videos.map((video) => (
+          {videos.map((video,index) => (
             <TableRow key={video.video_id}>
-              <TableCell>{video.video_id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{video.title}</TableCell>
               <TableCell>{video.description}</TableCell>
               <TableCell>

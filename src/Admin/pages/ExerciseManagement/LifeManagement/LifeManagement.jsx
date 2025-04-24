@@ -488,7 +488,7 @@ const LifeManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Câu hỏi</TableCell>
             <TableCell>Câu trả lời</TableCell>
             <TableCell>Chủ đề</TableCell>
@@ -500,9 +500,9 @@ const LifeManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {lives.map((life) => (
+          {lives.map((life,index) => (
             <TableRow key={life.id}>
-              <TableCell>{life.id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{life.question}</TableCell>
               <TableCell>{life.answer}</TableCell>
               <TableCell>{life.categoryName}</TableCell>

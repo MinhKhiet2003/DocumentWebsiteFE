@@ -267,7 +267,7 @@ const UserManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Tên đăng nhập</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Vai trò</TableCell>
@@ -279,9 +279,9 @@ const UserManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredUsers.map((user) => (
+          {filteredUsers.map((user,index) => (
             <TableRow key={user.user_id}>
-              <TableCell>{user.user_id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>

@@ -268,7 +268,7 @@ const CategoriesManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Tên chủ đề</TableCell>
             <TableCell>Mô tả</TableCell>
             <TableCell>Lớp</TableCell>
@@ -279,9 +279,9 @@ const CategoriesManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {categories.map((cat) => (
+        {categories.map((cat, index) => (
             <TableRow key={cat.id}>
-              <TableCell>{cat.id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{cat.name}</TableCell>
               <TableCell>{cat.description}</TableCell>
               <TableCell>{cat.classId}</TableCell>

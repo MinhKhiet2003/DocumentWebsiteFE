@@ -401,7 +401,7 @@ const ComicManagement = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>STT</TableCell>
             <TableCell>Tiêu đề</TableCell>
             <TableCell>Mô tả</TableCell>
             <TableCell>Đường dẫn</TableCell>
@@ -413,9 +413,9 @@ const ComicManagement = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {comics.map((comic) => (
+          {comics.map((comic,index) => (
             <TableRow key={comic.id}>
-              <TableCell>{comic.id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{comic.title}</TableCell>
               <TableCell>{comic.description}</TableCell>
               <TableCell>

@@ -409,7 +409,7 @@
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell>Tiêu đề</TableCell>
               <TableCell>Mô tả</TableCell>
               <TableCell>Đường dẫn Game</TableCell>
@@ -422,9 +422,9 @@
             </TableRow>
           </TableHead>
           <TableBody>
-            {games.map((game) => (
+            {games.map((game,index) => (
               <TableRow key={game.id}>
-                <TableCell>{game.id}</TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{game.title}</TableCell>
                 <TableCell>{game.description}</TableCell>
                 <TableCell>
