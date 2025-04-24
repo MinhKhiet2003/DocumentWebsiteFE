@@ -354,7 +354,28 @@ const ResourceDetail = ({ resourceType }) => {
 
   // Get the appropriate URL field based on resource type
   const resourceUrl = resource.comic_url || resource.gameUrl || resource.file_path || resource.video_url;
-
+  const renderDescription = (description) => {
+    if (!description) return null;
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = description.split(urlRegex);
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="description-link"
+          >
+            {part}
+          </a>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+  
   return (
     <div className="resource-detail">
       <div className="resource-title">
@@ -382,7 +403,7 @@ const ResourceDetail = ({ resourceType }) => {
       {resource.description && (
         <div className="resource-description">
           <h2>Mô tả</h2>
-          <p>{resource.description}</p>
+          <p>{renderDescription(resource.description)}</p>
         </div>
       )}
 
