@@ -64,7 +64,6 @@
   color: var(--primary-color);
   margin-bottom: 10px;
   font-weight: bold;
-
 }
 
 .member-description {
@@ -73,7 +72,7 @@
   line-height: 1.6;
 }
 
-/* Hiệu ứng hover cho background */
+/* Vietnamese flag hover effect with HNUE text */
 .team-member::before {
   content: '';
   position: absolute;
@@ -81,24 +80,44 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, var(--secondary-color), rgb(255, 0, 247));
+  background: #da251d; /* Red color of the Vietnamese flag */
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
 }
 
-.team-member:hover::before {
-  opacity: 0.1;
+.team-member::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 100px;
+  height: 160px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 768"><g transform="translate(0, 40)"><path fill="yellow" d="M256 100l79.3 169.1 182.9 26.6-132.3 129 31.2 181.8L256 526.7l-161.1 79.8 31.2-181.8-132.3-129 182.9-26.6z"/><text x="256" y="680" font-size="80" font-family="Arial, sans-serif" fill="yellow" opacity="0.4" text-anchor="middle">HNUE</text></g></svg>') no-repeat center;
+  background-size: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: -1;
 }
 
-/* Hiệu ứng hover cho text */
+
+.team-member:hover::before {
+  opacity: 0.65; /* Semi-transparent red background */
+}
+
+.team-member:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1); /* Scale up the star and text */
+}
+
+/* Hover effects for text and shadow */
 .team-member:hover .member-name,
 .team-member:hover .member-role,
 .team-member:hover .member-description {
   color: #2c3e50;
 }
 
-/* Hiệu ứng hover cho shadow */
 .team-member:hover {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }

@@ -40,14 +40,14 @@ const Members = () => {
     {
       name: 'Phùng Thị Mai',
       role: 'Sư Phạm Hóa Học',
-      description: 'Phùng Thị Mai đang theo học lớp K71K, có hứng thú với các phản ứng hóa học và ứng dụng của chúng trong công nghiệp.',
+      description: 'Phùng Thị Mai thuộc lớp K71K, hứng thú với các phản ứng hóa học và ứng dụng của chúng trong công nghiệp.',
       email: 'Mai14112003@gmail.com',
       photo: imgmai
     },
     {
       name: 'Nguyễn Nhất Sinh',
       role: 'Sư Phạm Hóa Học',
-      description: 'Nguyễn Nhất Sinh là sinh viên lớp K73K, yêu thích hóa hữu cơ và tìm hiểu về các hợp chất ứng dụng trong đời sống.',
+      description: 'Nguyễn Nhất Sinh thuộc lớp K73K, yêu thích hóa hữu cơ và tìm hiểu các hợp chất ứng dụng trong đời sống.',
       email: 'nnsinh.0912@gmail.com',
       photo: imgsinh
     },

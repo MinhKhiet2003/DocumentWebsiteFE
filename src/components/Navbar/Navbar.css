@@ -1,3 +1,32 @@
+.marquee-container {
+  margin-top: 100px;
+  width: 100%;
+  overflow: hidden;
+  /* background-color: #f0f0f0; */
+  color: #d32f2f;
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 10px;
+  white-space: nowrap;
+}
+
+.marquee-text {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-text:hover {
+  animation-play-state: paused; /* Tạm dừng khi hover */
+}
 /* General header styles */
 header {
   background-color: #fff;
