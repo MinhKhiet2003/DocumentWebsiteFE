@@ -211,6 +211,9 @@ header nav {
 
 /* Responsive styles - tablet */
 @media (max-width: 992px) {
+  .marquee-container {
+    margin-top: 130px;
+  }
   header {
     padding: 10px 15px;
   }
@@ -235,6 +238,10 @@ header nav {
 
 /* Responsive styles - mobile */
 @media (max-width: 768px) {
+  .marquee-container {
+    margin-top: 80px;
+    padding-bottom: 20px;
+  }
   /* Hiển thị nút hamburger */
   .menu-toggle-container {
     display: flex;
