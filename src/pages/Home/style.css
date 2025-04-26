@@ -81,9 +81,7 @@
 
 /* Carousel Styles */
 .poster-carousel {
-  max-width: 1000px;
-  margin: 0 auto 20px auto;
-  padding: 20px 30px;
+  width: 100%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -211,8 +209,6 @@
   }
 
   .poster-carousel {
-    margin: 0 auto 20px auto;
-    padding: 20px;
     height: 300px;
   }
 
@@ -246,13 +242,6 @@
     width: 95%;
     margin: 0px auto 20px auto;
     padding: 15px;
-  }
-
-  .poster-carousel {
-    width: 95%;
-    margin: 0px auto 20px auto;
-    padding: 15px;
-    height: 250px;
   }
 
   .home h1 {
@@ -302,9 +291,6 @@
   }
 
   .poster-carousel {
-    margin: -24px auto 15px auto;
-    padding: 12px;
-    border-radius: 8px;
     height: 200px;
   }
 
@@ -350,7 +336,6 @@
   }
 
   .poster-carousel {
-    margin: 60px auto 20px auto;
     height: 200px;
   }
 
