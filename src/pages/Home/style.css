@@ -1,10 +1,10 @@
 .home {
   max-width: 1000px;
-  margin: 0px auto 40px auto; 
+  margin: 0px auto 40px auto;
   padding: 20px 30px;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   font-family: 'Arial', sans-serif;
   color: var(--text-color);
   text-align: left;
@@ -62,14 +62,14 @@
   height: 200px;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
 .image-gallery img:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
 .home p:last-child {
@@ -79,24 +79,62 @@
   margin-top: 40px;
 }
 
-@media screen and (max-width: 768px) {
-  .home {
-    width: 90%;
-    margin: 100px auto 40px auto;
-  }
-  
-  .image-gallery {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .image-gallery img {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-  }
+/* Carousel Styles */
+.poster-carousel {
+  max-width: 1000px;
+  margin: 0 auto 20px auto;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  height: 500px;
 }
 
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  border-radius: 10px;
+}
+
+.poster.active {
+  opacity: 1;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: var(--primary-color);
+}
+
+.dot:hover {
+  background-color: var(--primary-color);
+}
+
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -121,17 +159,9 @@
   }
 }
 
-.home h1, .home h2 {
+.home h1,
+.home h2 {
   animation: slideInFromLeft 1s ease-out;
-}
-
-.image-gallery img {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.image-gallery img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .home p {
@@ -158,15 +188,6 @@
   cursor: pointer;
 }
 
-.poster {
-  width: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin-bottom: 20px;
-  animation: fadeIn 1.5s ease-in-out;
-}
-
 @keyframes fadeScale {
   from {
     opacity: 0;
@@ -178,145 +199,171 @@
   }
 }
 
-.poster {
+.poster.active {
   animation: fadeScale 1.2s ease-in-out;
 }
 
-
-/* Responsive cho tablet (768px - 992px) */
+/* Responsive for tablet (768px - 992px) */
 @media (max-width: 992px) {
   .home {
     margin: 0 auto 30px auto;
     padding: 20px;
   }
-  
+
+  .poster-carousel {
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    height: 300px;
+  }
+
   .home h1 {
     font-size: 2.2em;
     margin-bottom: 15px;
   }
-  
+
   .home h2 {
     font-size: 1.6em;
     margin-top: 30px;
   }
-  
+
   .home p {
     font-size: 1.1em;
   }
-  
+
   .image-gallery {
     gap: 15px;
   }
-  
+
   .image-gallery img {
     width: calc(50% - 10px);
     height: auto;
   }
 }
 
-/* Responsive cho mobile (576px - 768px) */
+/* Responsive for mobile (576px - 768px) */
 @media (max-width: 768px) {
   .home {
     width: 95%;
     margin: 0px auto 20px auto;
     padding: 15px;
   }
-  
+
+  .poster-carousel {
+    width: 95%;
+    margin: 0px auto 20px auto;
+    padding: 15px;
+    height: 250px;
+  }
+
   .home h1 {
     font-size: 1.8em;
     padding-bottom: 8px;
   }
-  
+
   .home h2 {
     font-size: 1.4em;
     margin-top: 25px;
   }
-  
-  .home p, .home ul li {
+
+  .home p,
+  .home ul li {
     font-size: 1em;
     line-height: 1.6em;
   }
-  
+
   .image-gallery {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .image-gallery img {
     width: 100%;
     max-width: 100%;
   }
-  
-  /* Giảm animation trên mobile để tối ưu hiệu suất */
-  .home h1, .home h2 {
+
+  /* Disable animations on mobile for performance */
+  .home h1,
+  .home h2 {
     animation: none;
   }
-  
+
   .home p {
     animation: none;
     opacity: 1;
   }
 }
 
-/* Responsive cho mobile nhỏ (dưới 576px) */
+/* Responsive for small mobile (below 576px) */
 @media (max-width: 576px) {
   .home {
     margin: -24px auto 15px auto;
     padding: 12px;
     border-radius: 8px;
   }
-  
+
+  .poster-carousel {
+    margin: -24px auto 15px auto;
+    padding: 12px;
+    border-radius: 8px;
+    height: 200px;
+  }
+
+  .poster {
+    border-radius: 8px;
+  }
+
   .home h1 {
     font-size: 1.5em;
     text-transform: none;
   }
-  
+
   .home h2 {
     font-size: 1.3em;
     margin-top: 20px;
   }
-  
+
   .home p {
     font-size: 0.95em;
     margin-bottom: 15px;
   }
-  
+
   .home ul li {
     font-size: 0.95em;
     margin-bottom: 8px;
   }
-  
-  .poster {
-    border-radius: 8px;
-  }
-  
-  /* Tắt hiệu ứng hover trên mobile */
+
+  /* Disable hover effects on mobile */
   .image-gallery img:hover {
     transform: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
-  
+
   .home ul li:hover {
     transform: none;
   }
 }
 
-/* Điều chỉnh cho các thiết bị có chiều cao nhỏ */
+/* Adjust for devices with low height in landscape */
 @media (max-height: 600px) and (orientation: landscape) {
   .home {
     margin: 60px auto 20px auto;
   }
-  
+
+  .poster-carousel {
+    margin: 60px auto 20px auto;
+    height: 200px;
+  }
+
   .home h1 {
     font-size: 1.8em;
     margin-bottom: 10px;
   }
-  
+
   .image-gallery {
     flex-direction: row;
     flex-wrap: wrap;
   }
-  
+
   .image-gallery img {
     width: calc(50% - 10px);
     height: 120px;
