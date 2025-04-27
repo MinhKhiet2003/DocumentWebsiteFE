@@ -51,7 +51,7 @@ const Sidebar = () => {
       icon: <FaVideo className="menu-icon" />
     },
     {
-      title: "Bài tập",
+      title: "Kiến thức mở rộng",
       icon: <FaTasks className="menu-icon" />,
       subItems: [
         { 

@@ -76,16 +76,7 @@ const Home = () => {
       </div>
       <h2>Hướng tới cộng đồng học tập Hóa học sôi động, sáng tạo và kết nối</h2>
       <p>
-        Trong bối cảnh giáo dục hiện nay, số lượng học sinh lựa chọn Hóa học như một môn học chính đang có xu hướng giảm dần. Nguyên nhân chủ yếu đến từ việc học sinh cảm thấy Hóa học là một môn học khó, khô khan và thiếu sự liên kết với thực tế, khiến động lực học tập bị giảm sút. Hơn nữa, phương pháp giảng dạy truyền thống với nhiều công thức phức tạp, nội dung lý thuyết nặng nề đôi khi chưa thực sự khơi gợi hứng thú học tập, khiến học sinh gặp khó khăn trong việc tiếp thu và ứng dụng kiến thức.
-      </p>
-      <p>
-        Thấu hiểu những thách thức này, Hachieve được tạo ra với mong muốn thay đổi cách tiếp cận đối với môn Hóa học, biến việc học tập trở thành một hành trình khám phá đầy thú vị. Không chỉ đơn thuần là một nền tảng học liệu số cung cấp kiến thức một cách có hệ thống, Hachieve còn mang đến một không gian học tập sáng tạo, nơi học sinh có thể học tập thông qua các phương pháp trực quan, tương tác và ứng dụng thực tế. Nhờ vào các bài giảng sinh động, mô phỏng thí nghiệm ảo, bài tập tương tác và hệ thống câu hỏi đa dạng, học sinh có thể nắm bắt kiến thức dễ dàng hơn, từ đó tăng cường khả năng ghi nhớ và vận dụng linh hoạt vào thực tiễn.
-      </p>
-      <p>
-        Bên cạnh đó, Hachieve không chỉ đóng vai trò là công cụ hỗ trợ giảng dạy mà còn hướng tới việc xây dựng một cộng đồng học tập sôi động dành cho những ai yêu thích và đam mê bộ môn Hóa học. Đây là nơi mà giáo viên, học sinh, sinh viên và những người quan tâm có thể kết nối, chia sẻ tài nguyên, kinh nghiệm cũng như cùng nhau thảo luận, giải đáp các vấn đề liên quan đến Hóa học. Thông qua diễn đàn học thuật, các buổi thảo luận trực tuyến, cũng như các hoạt động giao lưu, Hachieve tạo ra một môi trường mở, khuyến khích sự sáng tạo, chủ động và hợp tác trong học tập.
-      </p>
-      <p>
-        Không dừng lại ở đó, Hachieve còn là một bước tiến trong việc ứng dụng công nghệ vào giáo dục, mở ra một cách tiếp cận mới giúp nâng cao hiệu quả dạy và học trong thời đại số. Với sự kết hợp giữa trí tuệ nhân tạo (AI), dữ liệu lớn (Big Data) và các phương pháp giảng dạy hiện đại, Hachieve giúp cá nhân hóa lộ trình học tập cho từng học sinh, giúp mỗi người có thể học theo tốc độ và phong cách riêng của mình. Điều này không chỉ giúp cải thiện chất lượng giáo dục mà còn truyền cảm hứng để học sinh tự tin theo đuổi đam mê, khám phá sâu hơn về thế giới Hóa học.
+      Nhằm mục đích phát triển, mở rộng tài nguyên và không gian học tập của website, Hachieve định hướng trong tương lai sẽ cập nhật quyền đăng tải tài liệu để các thầy cô giáo có thể chia sẻ học hỏi lẫn nhau, chung tay tạo một kho tài liệu giá trị trên website; bên cạnh đó mở các diễn đàn trao đổi học tập trực tuyến tích hợp và ứng dụng trí tuệ nhân tạo AI vào việc cập nhật các tài liệu học tập và tin tức sự kiện,...
       </p>
       <div className="image-gallery">
         <img src={home4} alt="Hoạt động giáo dục trải nghiệm STEM" />
