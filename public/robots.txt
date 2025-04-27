@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hachieve.vercel.app/sitemap.xml
