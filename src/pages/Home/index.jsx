@@ -55,17 +55,18 @@ const Home = () => {
         </div>
       </div>
       <p>
-        Trong bối cảnh công nghệ số phát triển mạnh mẽ, nền giáo dục cũng không ngừng đổi mới để đáp ứng nhu cầu học tập và giảng dạy ngày càng đa dạng. Đặc biệt, đối với môn Hóa học – một bộ môn khoa học tự nhiên có tính ứng dụng thực tiễn cao nhưng lại thường được xem là khó tiếp cận do tính chất lý thuyết phức tạp và hệ thống công thức đa dạng – việc áp dụng những phương pháp dạy và học tiên tiến là điều vô cùng cần thiết. Chính từ thực tế đó, Hachieve (Happy to Achieve) đã ra đời với sứ mệnh mang lại sự đổi mới toàn diện trong cách tiếp cận và giảng dạy môn học này.
+      Trong bối cảnh công nghệ phát triển mạnh mẽ, nền giáo dục cũng không ngừng đổi mới để đáp ứng nhu cầu học tập và giảng dạy ngày càng đa dạng. Đặc biệt, đối với môn Khoa học tự nhiên (phần Chất và sự biến đổi của chất, các lớp 6-7- 8- 9) và môn Hoá học (các lớp 10- 11- 12) có tính ứng dụng thực tiễn cao nhưng thường được xem là khó tiếp cận do tính chất lý thuyết phức tạp và hệ thống công thức đa dạng – việc áp dụng các phương pháp dạy và học tiên tiến là điều vô cùng cần thiết. Chính từ thực tế đó, Hachieve (Happy to Achieve) đã ra đời với sứ mệnh mang lại sự đổi mới toàn diện trong cách tiếp cận và giảng dạy môn học này. 
       </p>
       <p>
-        Hachieve là một nền tảng học liệu số chuyên biệt dành riêng cho bộ môn Hóa học, được nghiên cứu và phát triển bởi một nhóm sinh viên đam mê khoa học đến từ khoa Hóa học và khoa Công nghệ Thông tin, Trường Đại học Sư phạm Hà Nội. Với mong muốn hỗ trợ giáo viên và học sinh tiếp cận kiến thức một cách dễ dàng, sáng tạo và hiệu quả hơn, Hachieve không chỉ cung cấp hệ thống tài liệu phong phú mà còn xây dựng một hệ sinh thái học tập hiện đại, ứng dụng công nghệ vào quá trình giảng dạy và ôn luyện. Nhờ đó, việc học Hóa học không còn khô khan, trừu tượng mà trở nên sinh động, trực quan và hấp dẫn hơn bao giờ hết, giúp học sinh không chỉ nắm vững kiến thức mà còn nuôi dưỡng niềm yêu thích với bộ môn này.
+      Hachieve là một nền tảng học liệu chuyên biệt dành riêng cho bộ môn môn KHTN, Hoá học, được nghiên cứu và phát triển bởi một nhóm sinh viên đam mê khoa học đến từ khoa Hóa học và khoa Công nghệ Thông tin, Trường Đại học Sư phạm Hà Nội. Với mong muốn Góp phần hỗ trợ GV trong việc giảng dạy và học sinh tiếp cận kiến thức một cách dễ dàng, sáng tạo và hiệu quả hơn, Hachieve không chỉ cung cấp hệ thống tài liệu phong phú mà còn xây dựng một hệ sinh thái học tập hiện đại, ứng dụng công nghệ vào quá trình giảng dạy ôn tập. Nhờ đó, việc học Hoá học nói riêng và học các môn khoa học nói chung không còn khô khan, vật thể mà trở thành nên sinh động, trực quan và hấp dẫn hơn bao giờ hết, giúp học sinh không chỉ nắm vững kiến thức mà còn nuôi dưỡng niềm yêu thích với bộ môn này.
       </p>
       <h2>Hỗ trợ giảng dạy và học tập toàn diện</h2>
-      <p>Hachieve cung cấp một hệ thống học liệu đa dạng, giúp giáo viên và học sinh củng cố kiến thức một cách hiệu quả thông qua các hoạt động ôn tập sáng tạo và trò chơi tương tác. Nền tảng cho phép:
+      <p>
+      Hachieve cung cấp một hệ thống dữ liệu đa dạng, trợ giúp giáo viên và học sinh xây dựng kiến thức một cách hiệu quả thông qua hoạt động sáng tạo và trò chơi tương tác. Nền tảng hỗ trợ quá trình:
       </p>
       <ul>
-        <li><b>Trải nghiệm học tập phong phú: </b>Người dùng có thể chơi trực tiếp các trò chơi, tải về tài liệu để sử dụng ngoại tuyến, hoặc tùy chỉnh nội dung theo nhu cầu giảng dạy.</li>
-        <li><b>Lập kế hoạch bài dạy: </b> Giáo viên có thể xây dựng và tổ chức các hoạt động học tập theo chủ đề, tích hợp các trò chơi vào bài giảng một cách linh hoạt.</li>
+        <li><b>Trải nghiệm học tập phong phú: </b>Người dùng có thể chơi online trực tiếp trên website, tải tài liệu về và tuỳ chỉnh nội dung theo nhu cầu giảng dạy.</li>
+        <li><b>Lập kế hoạch bài dạy: </b> Giáo viên được cung cấp kế hoạch bài dạy tham khảo theo chương trình mới, tích hợp các trò chơi có sẵn trên web với nội dung, hình thức đa dạng phong phú, có sự liên kết thống nhất với nhau.</li>
         <li><b>Đánh giá và trao đổi: </b>Người dùng có thể để lại đánh giá, nhận xét, chia sẻ kinh nghiệm để cùng nhau phát triển nội dung chất lượng hơn.</li>
       </ul>
       <div className="image-gallery">
