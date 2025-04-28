@@ -22,7 +22,7 @@ const ChemistryOfLife = () => {
   const [showQuestions, setShowQuestions] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Thêm các state mới cho comment
+  // State cho comment
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -36,28 +36,26 @@ const ChemistryOfLife = () => {
   useEffect(() => {
     const fetchLifeData = async () => {
       try {
-        if (!user) {
-          navigate('/login');
-          return;
-        }
-
         const token = localStorage.getItem('token');
         
-        // Fetch classes, life questions và comments
+        // Fetch classes và life questions
         const [classesResponse, lifeResponse] = await Promise.all([
           fetch('https://hachieve.runasp.net/api/Categories/used-classes', {
-            headers: { 'Authorization': `Bearer ${token}` },
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
           }),
           fetch('https://hachieve.runasp.net/api/Life', {
-            headers: { 'Authorization': `Bearer ${token}` },
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {},
           })
         ]);
 
         if (!classesResponse.ok) throw new Error('Failed to fetch classes');
         if (!lifeResponse.ok) {
-          if (lifeResponse.status === 401) {
+          if (lifeResponse.status === 401 && token) {
             localStorage.removeItem('token');
-            navigate('/login');
+            toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+              autoClose: 3000,
+              onClose: () => navigate('/login')
+            });
             return;
           }
           throw new Error('Failed to fetch life questions');
@@ -89,20 +87,29 @@ const ChemistryOfLife = () => {
     };
 
     fetchLifeData();
-  }, [user, navigate]);
+  }, []);
 
-  // Thêm hàm fetchComments
+  // Hàm fetchComments
   const fetchComments = async (questionSet, categoryId) => {
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
         `https://hachieve.runasp.net/api/comment/by-questionset?questionSet=${questionSet}&categoryId=${categoryId}`,
         {
-          headers: { 'Authorization': `Bearer ${token}` },
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {},
         }
       );
       
-      if (!response.ok) throw new Error('Failed to fetch comments');
+      if (!response.ok) {
+        if (response.status === 401 && token) {
+          localStorage.removeItem('token');
+          toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+            autoClose: 3000,
+            onClose: () => navigate('/login')
+          });
+        }
+        throw new Error('Failed to fetch comments');
+      }
       const data = await response.json();
       setComments(data);
     } catch (error) {
@@ -125,10 +132,20 @@ const ChemistryOfLife = () => {
         const token = localStorage.getItem('token');
         const response = await fetch(
           `https://hachieve.runasp.net/api/Categories/by-class/${selectedClass}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: token ? { Authorization: `Bearer ${token}` } : {} }
         );
         
-        if (!response.ok) throw new Error('Failed to fetch categories');
+        if (!response.ok) {
+          if (response.status === 401 && token) {
+            localStorage.removeItem('token');
+            toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+              autoClose: 3000,
+              onClose: () => navigate('/login')
+            });
+            return;
+          }
+          throw new Error('Failed to fetch categories');
+        }
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -167,9 +184,16 @@ const ChemistryOfLife = () => {
     fetchComments(set, parseInt(selectedCategory));
   };
 
-  // Thêm các hàm xử lý comment
+  // Hàm xử lý comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để gửi bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     if (!newComment.trim()) {
       toast.error('Vui lòng nhập nội dung bình luận');
       return;
@@ -192,6 +216,14 @@ const ChemistryOfLife = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+            autoClose: 3000,
+            onClose: () => navigate('/login')
+          });
+          return;
+        }
         throw new Error('Không thể gửi bình luận');
       }
 
@@ -213,12 +245,26 @@ const ChemistryOfLife = () => {
   };
 
   const handleEditComment = (comment) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để sửa bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     setEditingCommentId(comment.comment_id);
     setEditedContent(comment.content);
     setDropdownOpen(null);
   };
 
   const handleUpdateComment = async (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để cập nhật bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}`, {
@@ -234,6 +280,14 @@ const ChemistryOfLife = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+            autoClose: 3000,
+            onClose: () => navigate('/login')
+          });
+          return;
+        }
         throw new Error('Không thể cập nhật bình luận');
       }
 
@@ -248,6 +302,13 @@ const ChemistryOfLife = () => {
   };
 
   const handleDeleteComment = async (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để xóa bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}?userId=${user.id}`, {
@@ -258,6 +319,14 @@ const ChemistryOfLife = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          toast.error('Phiên đăng nhập hết hạn, vui lòng đăng nhập lại', {
+            autoClose: 3000,
+            onClose: () => navigate('/login')
+          });
+          return;
+        }
         throw new Error('Không thể xóa bình luận');
       }
 
@@ -269,6 +338,13 @@ const ChemistryOfLife = () => {
   };
 
   const toggleDropdown = (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để thực hiện hành động này', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     setDropdownOpen(dropdownOpen === commentId ? null : commentId);
   };
 
@@ -305,8 +381,6 @@ const ChemistryOfLife = () => {
   const handleGoBack = () => {
     navigate(location.state?.from || '/resources/');
   };
-
-  if (!user) return null;
 
   if (loading) return (
     <div className="loading-container">
@@ -440,7 +514,6 @@ const ChemistryOfLife = () => {
                 ))}
               </div>
 
-              {/* Thêm phần comment vào đây */}
               <div className="comments-section">
                 <h3>Bình luận về bộ câu hỏi</h3>
                 <div className="comments-list">
@@ -453,7 +526,7 @@ const ChemistryOfLife = () => {
                             <span className="comment-date">
                               {new Date(comment.createdAt).toLocaleString()}
                             </span>
-                            {comment.user_id === user.id && (
+                            {user && comment.user_id === user.id && (
                               <div className="comment-actions">
                                 <button
                                   className="more-options"

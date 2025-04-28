@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import './Resource.css';
 import StarRating from '../../components/StarRating/StarRating';
-// import Pagination from '../../components/Pagination/Pagination';
 import { AuthContext } from '../../Auth/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 
 const Resource = () => {
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [categories, setCategories] = useState([
     {
       name: "Kế hoạch bài dạy",
@@ -79,19 +77,12 @@ const Resource = () => {
           },
         ]);
       } catch (error) {
-        toast.error('Lỗi khi lấy dữ liệu :', error);
+        toast.error('Lỗi khi lấy dữ liệu: ' + error.message);
       }
     };
 
     fetchRandomData();
   }, []);
-
-  const handleCardClick = (e, path) => {
-    if (!user) {
-      e.preventDefault();
-      navigate('/login'); 
-    }
-  };
 
   return (
     <div className="flex-wrap">
@@ -101,23 +92,18 @@ const Resource = () => {
           <div key={index} className="category-section">
             <div className="category-header">
               <h2>{category.name}</h2>
-              <Link 
-                to={category.path} 
-                className="view-all-link"
-                onClick={(e) => !user && handleCardClick(e, category.path)}
-              >
-                Xem tất cả &gt;
+              <Link to={category.path} className="view-all-link">
+                Xem tất cả 
               </Link>
             </div>
 
             <div className="cards-grid">
               {category.items.map((item) => (
-                  <Link
-                    to={`${category.path}/${item.id}`}
-                    key={item.id}
-                    className="card-link"
-                    onClick={(e) => !user && handleCardClick(e, `${category.path}/${item.id}`)}
-                  >
+                <Link
+                  to={`${category.path}/${item.id}`}
+                  key={item.id}
+                  className="card-link"
+                >
                   <div className="card">
                     <div className="card-image">
                       <img
@@ -129,8 +115,6 @@ const Resource = () => {
                       <h3>{item.title}</h3>
                       <p className="text-muted">{item.description || "Không có mô tả"}</p>
                       <p className="card-author">{item.author}</p>
-                      {/* <p className="card-date">Ngày tạo: {new Date(item.date).toLocaleDateString()}</p> */}
-                      
                       <div className="card-footer">
                         <StarRating 
                           averageRating={item.averageRating || 0} 
@@ -146,7 +130,6 @@ const Resource = () => {
             </div>
           </div>
         ))}
-        {/* <Pagination /> */}
       </div>
       <ToastContainer />
     </div>

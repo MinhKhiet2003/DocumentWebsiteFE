@@ -49,29 +49,15 @@ const ResourceDetail = ({ resourceType }) => {
   useEffect(() => {
     const fetchResourceAndComments = async () => {
       try {
-        if (!user) {
-          navigate('/login');
-          return;
-        }
-
-        const token = localStorage.getItem('token');
+        setLoading(true);
         const endpoints = apiEndpoints[resourceType];
-        
+
         const [resourceResponse, commentsResponse] = await Promise.all([
-          fetch(endpoints.resource, {
-            headers: { 'Authorization': `Bearer ${token}` },
-          }),
-          fetch(endpoints.comments, {
-            headers: { 'Authorization': `Bearer ${token}` },
-          }),
+          fetch(endpoints.resource),
+          fetch(endpoints.comments),
         ]);
 
         if (!resourceResponse.ok || !commentsResponse.ok) {
-          if (resourceResponse.status === 401 || commentsResponse.status === 401) {
-            localStorage.removeItem('token');
-            navigate('/login');
-            return;
-          }
           throw new Error('Không thể tải dữ liệu');
         }
 
@@ -112,7 +98,7 @@ const ResourceDetail = ({ resourceType }) => {
     };
 
     fetchResourceAndComments();
-  }, [id, user, navigate, resourceType]);
+  }, [id, resourceType]);
 
   // URL validation functions
   const checkGoogleSlideUrl = (url) => {
@@ -176,7 +162,7 @@ const ResourceDetail = ({ resourceType }) => {
   // Helper functions
   const getEmbedUrl = (url) => {
     if (!url) return '';
-    
+
     if (resourceType === 'experiment-videos') {
       if (url.includes('/embed/')) return url;
       const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -218,6 +204,14 @@ const ResourceDetail = ({ resourceType }) => {
   };
 
   const handleOpenInNewWindow = (e) => {
+    if (!user) {
+      e.preventDefault();
+      toast.error('Vui lòng đăng nhập để mở trong cửa sổ mới', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     if (!isValidUrl) {
       e.preventDefault();
       toast.error('Không thể mở do đường dẫn không hợp lệ');
@@ -225,6 +219,14 @@ const ResourceDetail = ({ resourceType }) => {
   };
 
   const handleDownloadPDF = (e) => {
+    if (!user) {
+      e.preventDefault();
+      toast.error('Vui lòng đăng nhập để tải xuống PDF', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     if (!isValidUrl || !isGoogleSlide) {
       e.preventDefault();
       toast.error('Không thể tải xuống do đường dẫn không hợp lệ');
@@ -233,6 +235,13 @@ const ResourceDetail = ({ resourceType }) => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để gửi bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     if (!newComment.trim()) {
       toast.error('Vui lòng nhập nội dung bình luận');
       return;
@@ -241,13 +250,12 @@ const ResourceDetail = ({ resourceType }) => {
     try {
       const token = localStorage.getItem('token');
       const endpoints = apiEndpoints[resourceType];
-      
+
       const requestBody = {
         content: newComment,
         userId: user.id
       };
-      
-      // Add the appropriate ID field based on resource type
+
       if (resourceType === 'chemistry-comics') {
         requestBody.comicId = parseInt(id);
       } else if (resourceType === 'games') {
@@ -276,7 +284,7 @@ const ResourceDetail = ({ resourceType }) => {
         ...addedComment,
         user: {
           user_id: user.id,
-          username: user.username || 'Người dùng', 
+          username: user.username || 'Người dùng',
         },
         createdAt: new Date().toISOString(),
       };
@@ -289,12 +297,26 @@ const ResourceDetail = ({ resourceType }) => {
   };
 
   const handleEditComment = (comment) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để sửa bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     setEditingCommentId(comment.comment_id);
     setEditedContent(comment.content);
     setDropdownOpen(null);
   };
 
   const handleUpdateComment = async (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để cập nhật bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}`, {
@@ -324,6 +346,13 @@ const ResourceDetail = ({ resourceType }) => {
   };
 
   const handleDeleteComment = async (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để xóa bình luận', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`https://hachieve.runasp.net/api/comment/${commentId}?userId=${user.id}`, {
@@ -345,14 +374,30 @@ const ResourceDetail = ({ resourceType }) => {
   };
 
   const toggleDropdown = (commentId) => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để thực hiện hành động này', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
     setDropdownOpen(dropdownOpen === commentId ? null : commentId);
   };
 
-  if (!user) return null;
+  const handleRatingClick = (e) => {
+    if (!user) {
+      e.preventDefault();
+      toast.error('Vui lòng đăng nhập để đánh giá', {
+        autoClose: 3000,
+        onClose: () => navigate('/login')
+      });
+      return;
+    }
+  };
+
   if (loading) return <p>Đang tải dữ liệu...</p>;
   if (!resource) return <p>Không tìm thấy tài nguyên</p>;
 
-  // Get the appropriate URL field based on resource type
   const resourceUrl = resource.comic_url || resource.gameUrl || resource.file_path || resource.video_url;
   const renderDescription = (description) => {
     if (!description) return null;
@@ -375,7 +420,7 @@ const ResourceDetail = ({ resourceType }) => {
       return <span key={index}>{part}</span>;
     });
   };
-  
+
   return (
     <div className="resource-detail">
       <div className="resource-title">
@@ -386,12 +431,9 @@ const ResourceDetail = ({ resourceType }) => {
       <div className="resource-meta">
         <p><strong>Tác giả:</strong> {resource.username || resource.uploadedByUsername || 'Không xác định'}</p>
         {resource.classify && <p><strong>Phân loại:</strong> {resource.classify}</p>}
-        {/* {resource.categoryName && <p><strong>Chủ đề:</strong> {resource.categoryName}</p>} */}
-        {/* <p><strong>Ngày tạo:</strong> {new Date(resource.createdAt || resource.created_at).toLocaleDateString()}</p>
-        <p><strong>Cập nhật lần cuối:</strong> {new Date(resource.updatedAt || resource.updated_at).toLocaleDateString()}</p> */}
       </div>
 
-      <div className="resource-rating">
+      <div className="resource-rating" onClick={handleRatingClick}>
         <UserRating
           userId={user?.id}
           {...{[apiEndpoints[resourceType].ratingType + 'Id']: parseInt(id)}}
@@ -491,7 +533,6 @@ const ResourceDetail = ({ resourceType }) => {
         </div>
       )}
 
-      {/* Comments Section */}
       <div className="comments-section">
         <h2>Bình luận</h2>
         <div className="comments-list">
@@ -504,7 +545,7 @@ const ResourceDetail = ({ resourceType }) => {
                     <span className="comment-date">
                       {new Date(comment.createdAt).toLocaleString()}
                     </span>
-                    {comment.user_id === user.id && (
+                    {user && comment.user_id === user.id && (
                       <div className="comment-actions">
                         <button
                           className="more-options"

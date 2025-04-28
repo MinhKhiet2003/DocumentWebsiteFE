@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import axios from 'axios';
 import { AuthContext } from '../../Auth/AuthContext';
-// Import icons
 import { 
   FaSearch, 
   FaBook, 
@@ -17,7 +16,7 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState(""); 
@@ -79,23 +78,10 @@ const Sidebar = () => {
     baseURL: 'https://hachieve.runasp.net/'
   });
 
-  // Thêm interceptor để tự động gắn token
-  authAxios.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  }, error => Promise.reject(error));
-
   const searchParams = new URLSearchParams(location.search);
   const classId = searchParams.get('classId');
 
   const fetchCategories = async (resourceType) => {
-    if (!user) {
-      return [];
-    }
-  
     try {
       const params = { resourceType };
       if (classId) params.classId = classId;
@@ -104,10 +90,6 @@ const Sidebar = () => {
       return response.data;
     } catch (error) {
       console.error("Error fetching categories:", error);
-      if (error.response?.status === 401) {
-        logout();
-        navigate('/login');
-      }
       throw error;
     }
   };
@@ -158,7 +140,7 @@ const Sidebar = () => {
             title: cat.name,
             path: buildPath(mi.path, cat.id),
             categoryId: cat.id,
-            icon: mi.icon // Pass down the icon
+            icon: mi.icon
           })),
           loading: false
         } : mi
@@ -203,7 +185,7 @@ const Sidebar = () => {
             title: cat.name,
             path: buildPath(subItem.path, cat.id),
             categoryId: cat.id,
-            icon: subItem.icon // Pass down the icon
+            icon: subItem.icon
           })),
           loading: false
         };
@@ -224,13 +206,11 @@ const Sidebar = () => {
     setExpandedSubMenu(expandedSubMenu === `${menuIndex}-${subItemIndex}` ? null : `${menuIndex}-${subItemIndex}`);
   };
 
-  // Reset expanded menus when classId changes
   useEffect(() => {
     setExpanded(null);
     setExpandedSubMenu(null);
   }, [classId]);
 
-  // Cập nhật chủ đề khi classId thay đổi
   useEffect(() => {
     const updateCategories = async () => {
       const updates = menuItems.map(async (item, index) => {
@@ -390,7 +370,6 @@ const Sidebar = () => {
                         className={`sub-menu-item ${isActive(subItem.path) ? 'active' : ''}`}
                       >
                         <div className="d-flex align-items-center">
-                          {/* {subItem.icon} */}
                           <span>{subItem.title}</span>
                         </div>
                       </Link>
@@ -408,7 +387,6 @@ const Sidebar = () => {
                             onClick={() => navigate(subSubItem.path)}
                           >
                             <div className="d-flex align-items-center">
-                              {/* {subSubItem.icon} */}
                               <span>{subSubItem.title}</span>
                             </div>
                           </li>
@@ -423,7 +401,7 @@ const Sidebar = () => {
         </ul>
       </aside>
       <div className="sidebar-footer">
-        <p className="mt-2 mb-0">&copy; Hachieve - Trường ĐHSP Hà Nội</p>
+        <p className="mt-2 mb-0">© Hachieve - Trường ĐHSP Hà Nội</p>
       </div>
     </div>
   );
