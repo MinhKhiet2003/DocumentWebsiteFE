@@ -20,7 +20,7 @@ const Resource = () => {
       items: [],
     },
     {
-      name: "Video thử nghiệm",
+      name: "Video thí nghiệm",
       path: "/resources/experiment-videos",
       items: [],
     }
