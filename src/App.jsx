@@ -33,10 +33,6 @@ const App = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>Hachieve - Tài liệu hóa học trực tuyến</title>
-        <meta name="description" content="Hachieve cung cấp các tài liệu hóa học trực tuyến chất lượng cao." />
-      </Helmet>
       <Navbar />
       <div className="marquee-container">
         <div className="marquee-text">
