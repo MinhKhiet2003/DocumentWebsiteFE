@@ -5,7 +5,7 @@ const ChemistryComics = () => {
     <CommonResource
       resourceType="chemistry-comics"
       apiEndpoint="https://hachieve.runasp.net/api/Comic/search"
-      title="Chemistry Comics"
+      title="Truyện tranh hóa học"
       titleField="title"
       descriptionField="description"
       authorField="username"
