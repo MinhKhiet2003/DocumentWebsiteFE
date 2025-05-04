@@ -32,6 +32,7 @@
 .news-container h1, .news-container h2 {
   animation: slideInFromLeft 1s ease-out;
 }
+
 .news-list {
   list-style: none;
   padding: 0;
@@ -46,6 +47,7 @@
   background-color: #fff;
   border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer; /* Indicate clickability */
 }
 
 .news-item:hover {
@@ -80,7 +82,6 @@
 
 .news-item:hover .news-title {
   color: var(--primary-color);
-  cursor: pointer;
 }
 
 .news-description {
