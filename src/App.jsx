@@ -3,8 +3,10 @@ import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/index';
 import ScrollToTopButton from './components/ScrollToTopButton/ScrollToTopButton';
+import ChatBotButton from './components/ChatBotButton/ChatBotButton';
 import UnderTestingDialog from './components/UnderTestingDialog/UnderTestingDialog';
 import { AuthContext } from './Auth/AuthContext';
+
 const App = () => {
   const location = useLocation();
   const { user } = useContext(AuthContext);
@@ -12,22 +14,18 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      // Kiểm tra xem dialog đã hiển thị chưa
       const hasShownDialog = localStorage.getItem('hasShownUnderTestingDialog');
       if (!hasShownDialog) {
         setIsDialogOpen(true);
       }
     } else {
-      // Khi đăng xuất, có thể giữ hoặc xóa trạng thái tùy yêu cầu
       setIsDialogOpen(false);
-      // Tùy chọn: Xóa trạng thái khi đăng xuất để dialog hiện lại khi đăng nhập lần sau
       localStorage.removeItem('hasShownUnderTestingDialog');
     }
   }, [user]);
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    // Lưu trạng thái đã hiển thị dialog
     localStorage.setItem('hasShownUnderTestingDialog', 'true');
   };
 
@@ -43,6 +41,7 @@ const App = () => {
         {location.pathname === '/' ? <Home /> : <Outlet />}
       </div>
       <UnderTestingDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
+      <ChatBotButton />
       <ScrollToTopButton />
     </div>
   );
