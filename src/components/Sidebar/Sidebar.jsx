@@ -32,7 +32,7 @@ const Sidebar = () => {
       icon: <FaBook className="menu-icon" />
     },
     {
-      title: "Game",
+      title: "Trò chơi",
       path: "/resources/games",
       resourceType: "game",
       subItems: [],
