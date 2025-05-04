@@ -15,7 +15,7 @@ const Resource = () => {
       items: [],
     },
     {
-      name: "Game",
+      name: "Trò chơi",
       path: "/resources/games",
       items: [],
     },
